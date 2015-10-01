@@ -1,0 +1,5 @@
+<project name="ant makefile invoker" default="cppunit" basedir=".">
+	<target name="cppunit">
+		<exec dir="src/test/c++" executable=C:/Program Files(x86)/GnuWin32/bin/make.exe"/>
+	</target>
+</project>
