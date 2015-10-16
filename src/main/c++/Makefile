@@ -1,25 +1,27 @@
-CC = gcc
-CFLAGS = -Wall -g
-INCLUDES = -I.
-LIBS = -lstdc++
-SRCS = main.cpp
-OBJS = $(SRCS:.cpp=.o)
-TARGET_DIR = ../../../target/bin
-OBJ = $(TARGET_DIR)/main.o
-MAIN = astaro
-RM = rm
+program_NAME := bankSystem
+program_C_SRCS := $(wildcard *.c)
+program_CXX_SRCS := $(wildcard *.cpp)
+program_C_OBJS := ${program_C_SRCS:.c=.o}
+program_CXX_OBJS := ${program_CXX_SRCS:.cpp=.o}
+program_OBJS := $(program_C_OBJS) $(program_CXX_OBJS)
+program_INCLUDE_DIRS :=
+program_LIBRARY_DIRS :=
+program_LIBRARIES := 
+program_DESTDIR := ./
 
-all: $(MAIN)
-	@echo Successfully compiled team-pear project.
+CPPFLAGS += $(foreach includedir,$(program_INCLUDE_DIRS),-I$(includedir))
+LDFLAGS += $(foreach librarydir,$(program_LIBRARY_DIRS),-L$(librarydir))
+LDFLAGS += $(foreach library,$(program_LIBRARIES),-l$(library))
 
-$(MAIN): $(OBJS)
-	$(CC) $(CFLAGS) $(INCUDLES) -o $(TARGET_DIR)/$(MAIN) $(OBJ) $(LIBS)
+.PHONY: all clean distclean
 
-.cpp.o:
-	$(CC) $(CFLAGS) $(INCUDLES) -c $< -o $(TARGET_DIR)/$@
+all: $(program_NAME)
+
+$(program_NAME): $(program_OBJS)
+	$(LINK.cc) $(program_OBJS) -o $(program_DESTDIR)/$(program_NAME)
 
 clean:
-	$(RM) $(TARGET_DIR)/*.o $(TARGET_DIR)/$(MAIN)
+	@- $(RM) $(program_NAME)
+	@- $(RM) $(program_OBJS)
 
-depend: $(SRCS)
-	makedepend $(INCLUDES) $^
+distclean: clean
