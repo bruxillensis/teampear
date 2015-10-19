@@ -4,11 +4,12 @@
 using namespace std;
 
 #include "professor.h"
-class pubProfessor :professor {
+class pubProfessor :public professor {
 private:
 	int abstracts;
 	int journalArticles;
 	int books;
+	int booksEdited;
 	int bookChapters;
 	int editorLetters;
 	int caseReports;
@@ -28,10 +29,10 @@ private:
 	int workingPapers;
 
 public:
-	//get Functions
 	int getAbstracts();
 	int getJournalArticles();
 	int getBooks();
+	int getBooksEdited();
 	int getBookChapters();
 	int getEditorLetters();
 	int getCaseReports();
@@ -44,16 +45,16 @@ public:
 	int getManuals();
 	int getMonographs();
 	int getMultimedia();
-	int getNewsletterArticles();
+	int	getNewsletterArticles();
 	int getNewspaperArticles();
 	int getStudentPubs();
 	int getWebsitesVideos();
 	int getWorkingPapers();
 
-	//increment Functions
 	void incAbstracts();
 	void incJournalArticles();
 	void incBooks();
+	void incBooksEdited();
 	void incBookChapters();
 	void incEditorLetters();
 	void incCaseReports();
@@ -72,10 +73,10 @@ public:
 	void incWebsitesVideos();
 	void incWorkingPapers();
 
-	//decrement functions
 	void decAbstracts();
 	void decJournalArticles();
 	void decBooks();
+	void decBooksEdited();
 	void decBookChapters();
 	void decEditorLetters();
 	void decCaseReports();

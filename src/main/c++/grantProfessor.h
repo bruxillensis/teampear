@@ -1,6 +1,6 @@
 #pragma once
 #include "professor.h"
-class grantProfessor :professor {
+class grantProfessor : public professor {
 private:
 
 public:

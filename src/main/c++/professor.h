@@ -10,8 +10,9 @@ private:
 public:
 	professor();
 	professor(string name);
+	professor(professor& orig);
 	virtual ~professor();
 
 	string getName();
-	string setName();
+	string setName(string name);
 };

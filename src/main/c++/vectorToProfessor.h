@@ -2,17 +2,12 @@
 #include <string>
 #include "csvHolder.h"
 #include "professor.h"
+#include "pubProfessor.h"
+
 using namespace std;
 
-class vectorToProfessor{
-private:
-	csvHolder* Array;
-	professor* Professor;
+class vectorToProfessor {
 public:
-
-	vectorToProfessor();
-	vectorToProfessor(csvHolder* array);
-
 	//Create professor object, filling in all information and pass reference back
-	professor* createProfessor(string professorName);
+	pubProfessor* createProfessor(string professorName, csvHolder& modelArray);
 };
