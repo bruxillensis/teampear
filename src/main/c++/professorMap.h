@@ -12,7 +12,7 @@ class professorMap {
 private:
 	map<string, T*>* professors;
 public:
-	typedef typename vector<T>::iterator iterator;
+	typedef typename map<string, T*>::iterator iterator;
 
 	//Chelsea
 	professorMap();
