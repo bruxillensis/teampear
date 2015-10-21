@@ -1,6 +1,7 @@
 #include <vector>
 #include <string>
 #include <map>
+#include <iterator>
 
 #include "professor.h"
 using namespace std;
@@ -9,12 +10,12 @@ using namespace std;
 template <class T>
 class professorMap {
 private:
-	map<T*>* professors;
+	map<string, T*>* professors;
 public:
+	typedef typename vector<T>::iterator iterator;
+
 	//Chelsea
 	professorMap();
-
-	//Brett
 	professorMap(string fileName);
 	//Really important to clean up dynamic memory because of the size of possible files
 	virtual ~professorMap();
@@ -33,10 +34,10 @@ public:
 	int getProfessorCount();
 	//Chelsea
 	const T* getProfessor(string professorName);
-	//Brett
-	const map<T*>::iterator getIterator();
-	//Brett
+
+	typename map<string, T*>::iterator begin();
+	typename map<string, T*>::iterator end();
+
 	void addProfessor(T& newProfessor);
-	//Brett
 	void removeProfessor(string professorName);
 };
