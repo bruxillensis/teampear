@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "professorMap.h"
+#include <iostream>
 
 using namespace std;
 
@@ -22,13 +23,42 @@ professorMap<T>::~professorMap(){
 }
 
 /*
-Should import csv by creating 'vitualization' of
+Should import csv by creating 'vitualization' of	
 2D array (vector<vector<string>>) then
 calling createProfessor() for each professor entry.
 */
 //Chris
 template <class T>
-void professorMap<T>::importCSV(string fileName){}
+void professorMap<T>::importCSV(string fileName){
+	//read CSV file into 2D array
+	vector<vector<string>> myCSV;
+	vector<string> valueLine;
+	ifstream inFile("database.txt");
+	string temp;
+
+	for (string line; getline(inFile, line); )
+	{
+		istringstream in(line);
+		while (getline(in, temp, ','))
+		{
+			valueLine.push_back(temp);
+		}
+
+		myCSV.push_back(valueLine);
+		valueLine.clear();
+	}
+	for (size_t i = 0; i < myCSV.size(); i++) {
+		for (size_t j = 0; j < myCSV[i].size(); j++) {
+			cout << i << " " << j << " " << myCSV[i][j] << '\n';
+		}
+	}
+	cin >> temp;
+
+	//make professor objects
+}
+
+
+
 //Chelsea
 template <class T>
 vector<string> professorMap<T>::getProfessorNameList(){}

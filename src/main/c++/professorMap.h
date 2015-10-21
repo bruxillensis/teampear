@@ -21,7 +21,7 @@ public:
 	virtual ~professorMap();
 
 	/*
-	Should import csv by creating 'vitualization' of
+	Should import csv by creating 'virtualization' of
 	2D array (vector<vector<string>>) then
 	calling createProfessor() for each professor entry.
 	*/
