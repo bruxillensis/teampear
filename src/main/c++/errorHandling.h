@@ -22,6 +22,7 @@ public:
 	//Henry
 	// Validate the filter of the date range
 	static bool checkYearRange(string date1, string date2);
+
 	//All error checking methods should be implemented in here.
 	//All should be static implementations.
 	//Output should be boolean or corrected value of cell.

@@ -18,7 +18,7 @@ int errorHandling::checkIfPublished(string cellValue){if(cellValue == "")return 
 bool errorHandling::checkRow(vector<string> row, vector<string> columnHeaders, vector<string> mandatoryValues){
 	vector<int> mandatoryNdx; // this will hold the indices of the mandatory column
 
-	for (auto &mandVal : mandatoryValues) // loop through each of the mandatory column names
+	for (string &mandVal : mandatoryValues) // loop through each of the mandatory column names
 	{
 		auto temp = std::find(columnHeaders.begin(), columnHeaders.end(), mandVal); // search through the column headers for the mandatory ones
 		if (temp == columnHeaders.end())
@@ -31,7 +31,7 @@ bool errorHandling::checkRow(vector<string> row, vector<string> columnHeaders, v
 		}
 	}
 
-	for (auto &checkNdx : mandatoryNdx) // Check the mandatory indices of the actual row 
+	for (int &checkNdx : mandatoryNdx) // Check the mandatory indices of the actual row 
 	{
 		if (row[checkNdx] == "")
 		{
