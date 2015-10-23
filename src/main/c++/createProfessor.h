@@ -18,8 +18,8 @@ public:
 	createProfessor();
 	static T* createNewProfessor(string professorName, vector<vector<string>>& csv, int begRow);
 private:
-	//Should create professor objects of particular professor type and pass back
-	static pubProfessor* createNewPubProfessor(string professorName, vector<vector<string>>& csv, int begRow);
+	//Should create professor objects of particular professor type and return a professor of that type
+	static pubProfessor* createNewPubProfessor(string professorName, vector<vector<string>>& csv);
 
 	/** Not currently implemented//
 	static granProfessor* createNewGrantProfessor(string professorName, vector<vector<string>>& csv);
