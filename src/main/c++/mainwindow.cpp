@@ -58,3 +58,63 @@ QString qw = qw.fromStdString(b.first + " " + b.second);
     t->setText(0,qw);
 
 //ui->treeWidget->itemAt(0,0)->addChild(t);
+
+  // FIX
+    if(!pubType.compare("Book Chapters"))
+        ui->treeWidget->itemAt(0,0)->addChild(t);
+    else if(!pubType.compare("Books"))
+        ui->treeWidget->itemAt(0,20)->addChild(t);
+    else if(!pubType.compare("Books Edited"))
+        ui->treeWidget->itemAt(0,40)->addChild(t);
+    else if(!pubType.compare("Case Reports"))
+        ui->treeWidget->itemAt(0,60)->addChild(t);
+    else if(!pubType.compare("Clinical Care Guidelines"))
+        ui->treeWidget->itemAt(0,80)->addChild(t);
+    else if(!pubType.compare("Commentaries"))
+        ui->treeWidget->itemAt(0,100)->addChild(t);
+    else if(!pubType.compare("Conference Precedings"))
+        ui->treeWidget->itemAt(0,120)->addChild(t);
+    else if(!pubType.compare("Editorials"))
+        ui->treeWidget->itemAt(0,140)->addChild(t);
+    else if(!pubType.compare("Invited Articles"))
+        ui->treeWidget->itemAt(0,160)->addChild(t);
+    else if(!pubType.compare("Journal Article"))
+        ui->treeWidget->itemAt(0,180)->addChild(t);
+    else if(!pubType.compare("Letters to Editor"))
+        ui->treeWidget->itemAt(0,200)->addChild(t);
+    else if(!pubType.compare("Magazine Entries"))
+        ui->treeWidget->itemAt(0,220)->addChild(t);
+    else if(!pubType.compare("Manuals"))
+        ui->treeWidget->itemAt(0,240)->addChild(t);
+    else if(!pubType.compare("Monographs"))
+        ui->treeWidget->itemAt(0,260)->addChild(t);
+    else if(!pubType.compare("Multimedia"))
+        ui->treeWidget->itemAt(0,280)->addChild(t);
+    else if(!pubType.compare("Newsletter Articles"))
+        ui->treeWidget->itemAt(0,300)->addChild(t);
+    else if(!pubType.compare("Newspaper Articles"))
+        ui->treeWidget->itemAt(0,320)->addChild(t);
+    else if(!pubType.compare("Published Abstract"))
+        ui->treeWidget->itemAt(0,340)->addChild(t);
+    else if(!pubType.compare("Supervised Student Publications"))
+        ui->treeWidget->itemAt(0,360)->addChild(t);
+    else if(!pubType.compare("Websites / Videos"))
+        ui->treeWidget->itemAt(0,380)->addChild(t);
+    else if(!pubType.compare("Working Papers"))
+        ui->treeWidget->itemAt(0,400)->addChild(t);
+  }
+}
+
+MainWindow::~MainWindow()
+{
+    delete ui;
+}
+
+void MainWindow::on_treeWidget_itemClicked(QTreeWidgetItem *item, int column)
+{
+    //ui->treeWidget->
+
+
+    //qDebug()<<"Item clicked "+item;
+}
+
