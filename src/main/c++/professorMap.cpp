@@ -6,7 +6,9 @@ using namespace std;
 
 //Chelsea
 template <class T>
-professorMap<T>::professorMap() {}
+professorMap<T>::professorMap() {
+    this->professors = new map<string, T*>();
+}
 
 template <class T>
 professorMap<T>::professorMap(string fileName){
@@ -61,13 +63,47 @@ void professorMap<T>::importCSV(string fileName){
 
 //Chelsea
 template <class T>
-vector<string> professorMap<T>::getProfessorNameList(){}
+vector<string> professorMap<T>::getProfessorNameList(){
+
+    vector<string> listOfProfs;
+    
+//iterate through the map
+    for(map<string, T*>::iterator it = professors.begin(); it != professors.end(); ++it){
+        
+        listOfProfs.push_back(it->first);
+    }
+
+    return listOfProfs;
+}
 //Chelsea
 template <class T>
-int professorMap<T>::getProfessorCount() {}
+int professorMap<T>::getProfessorCount() {
+
+    int counter = 0;
+    
+    //iterate through the map and count the entries (number of profs)
+    for(map<string, T*>::iterator it = professors.being(); it != professors.end(); ++it){
+        
+        counter++;
+    }
+    
+    return counter;
+
+}
 //Chelsea
 template <class T>
-const T* professorMap<T>::getProfessor(string professorName){}
+const T* professorMap<T>::getProfessor(string professorName){
+
+    //iterate through the map and compare the professor name
+    for(map<string, T*>::iterator it = professors.begin(); it != professors.end(); ++i){
+        
+        if (it->first == professorName) {
+            return it->second; //return the professor when name matches
+        }
+    }
+    
+    return NULL; //return null if the professor's name is not found in map
+}
 
 template <class T>
 typename std::map<string, T*>::iterator professorMap<T>::begin() { return this->professors->begin(); }
