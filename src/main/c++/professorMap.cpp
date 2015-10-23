@@ -3,6 +3,7 @@
 #include "errorHandling.h"
 #include "createProfessor.h"
 #include <iostream>
+#include <map>
 
 using namespace std;
 
@@ -39,6 +40,9 @@ void professorMap<T>::importCSV(string fileName){
 	vector<string>* valueLine;
 	ifstream inFile("database.txt");
 	string temp;
+	T* tempT;
+	map<T> hashmap;
+	
 
 	//make 2D vector 
 	for (string line; getline(inFile, line); )
@@ -60,11 +64,14 @@ void professorMap<T>::importCSV(string fileName){
 			i--;
 		}
 	}
+	if (T == pubProfessor)
+		cout << "";
 
 	//call createProfessor for each line
 	//createNewProfessor(string professorName, vector<vector<string>>& csv, int begRow);
 	for (size_t i = 0; i < myCSV.size(); i++) {
-		createNewProfessor(myCSV[i][4],myCSV,int(i));
+		tempT = createNewProfessor(myCSV[i][4],myCSV,int(i));
+
 	}
 
 	//data check
