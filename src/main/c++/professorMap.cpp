@@ -1,5 +1,7 @@
 #include "stdafx.h"
 #include "professorMap.h"
+#include "errorHandling.h"
+#include "createProfessor.h"
 #include <iostream>
 
 using namespace std;
@@ -34,29 +36,44 @@ template <class T>
 void professorMap<T>::importCSV(string fileName){
 	//read CSV file into 2D array
 	vector<vector<string>> myCSV;
-	vector<string> valueLine;
+	vector<string>* valueLine;
 	ifstream inFile("database.txt");
 	string temp;
 
+	//make 2D vector 
 	for (string line; getline(inFile, line); )
 	{
 		istringstream in(line);
+		valueLine = new vector<string>();
 		while (getline(in, temp, ','))
 		{
-			valueLine.push_back(temp);
+			valueLine->push_back(temp);
 		}
 
-		myCSV.push_back(valueLine);
-		valueLine.clear();
+		myCSV.push_back(*valueLine);
 	}
+
+	//check every row
+	for (size_t i = 1; i < myCSV.size(); i++) {
+		if (!checkRow(myCSV[i], myCSV[0], ? ? ? ? ? )) {
+			myCSV.erase(myCSV.begin() + i);
+			i--;
+		}
+	}
+
+	//call createProfessor for each line
+	//createNewProfessor(string professorName, vector<vector<string>>& csv, int begRow);
+	for (size_t i = 0; i < myCSV.size(); i++) {
+		createNewProfessor(myCSV[i][4],myCSV,int(i));
+	}
+
+	//data check
 	for (size_t i = 0; i < myCSV.size(); i++) {
 		for (size_t j = 0; j < myCSV[i].size(); j++) {
 			cout << i << " " << j << " " << myCSV[i][j] << '\n';
 		}
 	}
 	cin >> temp;
-
-	//make professor objects
 }
 
 
