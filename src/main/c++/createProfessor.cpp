@@ -15,12 +15,12 @@ createProfessor<T>::createProfessor(){}
 template <class T>
 T* createProfessor<T>::createNewProfessor(string professorName, vector<vector<string>>& csv, int begRow){
     //If type is of pubProfessor do
-    //Requires C++11 to use is_same	
-    if(std::is_same<T, pubProfessor>::value)}
+    //Requires C++11 to use is_same
+    if(std::is_same<T, pubProfessor>::value){
 	return createNewPubProfessor(professorName,csv);
     }
     //If type is of teachProfessor do
-    
+
     //If type is of granProfessor do
 
     //If type is of presProfessor do
@@ -45,11 +45,12 @@ pubProfessor* createProfessor<T>::createNewPubProfessor(string professorName, ve
             pubTitle = csv[currLine][38];
             //Add the new entry to the prof
             newProf.addEntry(pubStatus,pubType,pubRole,pubName,pubAuthors,pubTitle);
-        }
-        //Move to the next entry
-        currLine++;
+
+            //Move to the next entry
+            currLine++;
     }
     //Return the new professor after all entries have been added
     return newProf;
 
 }
+
