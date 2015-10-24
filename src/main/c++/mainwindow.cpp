@@ -5,8 +5,14 @@
 #include <vector>
 #include <stdlib.h>
 #include <stdio.h>
+#include <QTCore>
+#include <QtGui>
+#include <QDialog>
+#include "piedialog.h"
 
 using namespace std;
+
+static std::vector<std::pair<std::string,std::vector<std::pair<std::string,std::string> > > > q;
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -118,3 +124,15 @@ void MainWindow::on_treeWidget_itemClicked(QTreeWidgetItem *item, int column)
     //qDebug()<<"Item clicked "+item;
 }
 
+void MainWindow::on_pushButton_clicked()
+{
+    pair<string, string> output;
+    output.first = ui->startDate->text().toLocal8Bit().constData();
+    output.second = ui->endDate->text().toLocal8Bit().constData();
+}
+
+void MainWindow::on_actionPie_Chart_triggered()
+{
+    PieDialog d(this);
+    d.exec();
+}
