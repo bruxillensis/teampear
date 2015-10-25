@@ -2,6 +2,7 @@
 #include <string>
 #include <vector>
 #include "pubProfessor.h"
+#include "errorHandling.h"
 /** Not currently implemented
 #include "granProfessor.h"
 #include "teacProfessor.h"
@@ -16,10 +17,10 @@ public:
 	//Create professor object, filling in all information and pass reference back
 	//This function should retrieve all relivant rows from csv 2D array and pass to appropriate private construct function
 	createProfessor();
-	static T* createNewProfessor(string professorName, vector<vector<string>>& csv, int begRow);
+	static T* createNewProfessor(vector<vector<string>>& csv);
 private:
 	//Should create professor objects of particular professor type and return a professor of that type
-	static pubProfessor* createNewPubProfessor(string professorName, vector<vector<string>>& csv);
+	static pubProfessor* createNewPubProfessor(vector<vector<string>>& csv);
 
 	/** Not currently implemented//
 	static granProfessor* createNewGrantProfessor(string professorName, vector<vector<string>>& csv);

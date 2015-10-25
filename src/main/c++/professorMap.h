@@ -25,14 +25,10 @@ public:
 	2D array (vector<vector<string>>) then
 	calling createProfessor() for each professor entry.
 	*/
-	//Chris
 	void importCSV(string fileName);
 
-	//Chelsea
-	vector<string> getProfessorNameList();
-	//Chelsea
+	vector<string>* getProfessorNameList();
 	int getProfessorCount();
-	//Chelsea
 	const T* getProfessor(string professorName);
 
 	typename map<string, T*>::iterator begin();

@@ -4,10 +4,10 @@
 #include "createProfessor.h"
 #include <iostream>
 #include <map>
+#include <type_traits>
 
 using namespace std;
 
-//Chelsea
 template <class T>
 professorMap<T>::professorMap() {
     this->professors = new map<string, T*>();
@@ -19,7 +19,6 @@ professorMap<T>::professorMap(string fileName){
 	this->importCSV(fileName);
 }
 
-//Really important to clean up dynamic memory because of the size of possible files
 template <class T>
 professorMap<T>::~professorMap(){
 	for (map<string, T*>::iterator it = this->professors->begin(); it != this->professors->end(); ++it)
@@ -32,16 +31,14 @@ Should import csv by creating 'vitualization' of
 2D array (vector<vector<string>>) then
 calling createProfessor() for each professor entry.
 */
-//Chris
+
 template <class T>
 void professorMap<T>::importCSV(string fileName) {
 	//read CSV file into 2D array
-	vector<vector<string>> myCSV;
+	vector<vector<string>*> myCSV;
 	vector<string>* valueLine;
-	ifstream inFile("database.txt");
+	ifstream inFile(fileName);
 	string temp;
-	T* tempT;
-
 
 	//make 2D vector 
 	for (string line; getline(inFile, line); )
@@ -49,96 +46,60 @@ void professorMap<T>::importCSV(string fileName) {
 		istringstream in(line);
 		valueLine = new vector<string>();
 		while (getline(in, temp, ','))
-		{
 			valueLine->push_back(temp);
+
+		myCSV.push_back(valueLine);
+	}
+
+	map<string, vector<vector<string>>>* orgCSV = new map<string, vector<vector<string>>>();
+	for (int i = 0; i < myCSV.size(); i++) {
+		if (!orgCSV->empty()){
+			map<string, vector<vector<string>>>::iterator it = orgCSV->find(myCSV[i][0]);
+			if ((*it).first == myCSV[i][0])
+				(*it).second.push_back(myCSV[i]);
+			else {
+				vector<vector<string>> professorVector;
+				professorVector.push_back(myCSV[0]);
+				professorVector.push_back(myCSV[i]);
+				orgCSV->insert(pair<string, vector<vector<string>>>(myCSV[i][0], professorVector));
+			}
 		}
-
-		myCSV.push_back(*valueLine);
-	}
-
-	//check what type of professor
-	vector<string>* manFields;
-	if (T == pubProfessor) {
-		manFields = {"Member Name", "Primary Domain", "Publication Status", "Type", "Status Date", "Role", "Journal Name | Published In | Book Title | etc.", "Author(s)", "Title"};
-
-	}
-	else if (T == presProfessor) {
-		//date, member name, type, role
-	}
-	else if (T == teacProfessor) {
-		//start date, member name, program, hours, number of students
-	}
-	else if (T == granProfessor) {
-		//start date, member name, funding type, peer reviewed OR industry sponsored, status, role, amount, title
-	}
-
-	//calls checkrow function to check each row dependent on type of professor
-	for (size_t i = 1; i < myCSV.size(); i++) {
-		if (!checkRow(myCSV[i], myCSV[0], manFields)) {
-			myCSV.erase(myCSV.begin() + i);
-			i--;
+		else {
+			vector<vector<string>> professorVector;
+			professorVector.push_back(myCSV[0]);
+			professorVector.push_back(myCSV[i]);
+			orgCSV->insert(pair<string, vector<vector<string>>>(myCSV[i][0], professorVector));
 		}
 	}
 
-
-
-	//hmmmmmmmmmmm, needs to be something here that combines all of a certain professor's rows
-
-
-
-	//call createProfessor for each line
-	//createNewProfessor(string professorName, vector<vector<string>>& csv, int begRow);
-	for (size_t i = 0; i < myCSV.size(); i++) {
-		tempT = createNewProfessor(myCSV[i][4],myCSV,int(i));
-		professors.insert(pair<string, T*>(tempT->getName(),tempT));
+	for (map<string, vector<vector<string>>>::iterator it = orgCSV->begin(); it != orgCSV->end(); ++it) {
+		T* professor = createNewProfessor((*it).second());
+		this->professors->insert(pair<string, T*>(professor->getName(),professor));
 	}
-
+	for (int i = 0; i < myCSV.size(); i++)
+		delete myCSV[i];
+	delete orgCSV;
 }
 
-
-
-//Chelsea
 template <class T>
-vector<string> professorMap<T>::getProfessorNameList(){
-
-    vector<string> listOfProfs;
-    
-//iterate through the map
-    for(map<string, T*>::iterator it = professors.begin(); it != professors.end(); ++it){
-        
-        listOfProfs.push_back(it->first);
-    }
-
+vector<string>* professorMap<T>::getProfessorNameList(){
+    vector<string>* listOfProfs = new vector<string>;
+	for (map<string, T*>::iterator it = professors.begin(); it != professors.end(); ++it)
+		listOfProfs->push_back(it->first);
     return listOfProfs;
 }
-//Chelsea
+
 template <class T>
-int professorMap<T>::getProfessorCount() {
-
-    int counter = 0;
-    
-    //iterate through the map and count the entries (number of profs)
-    for(map<string, T*>::iterator it = professors.being(); it != professors.end(); ++it){
-        
-        counter++;
-    }
-    
-    return counter;
-
+int professorMap<T>::getProfessorCount() {    
+    return this->professors->size();
 }
-//Chelsea
+
 template <class T>
 const T* professorMap<T>::getProfessor(string professorName){
-
-    //iterate through the map and compare the professor name
-    for(map<string, T*>::iterator it = professors.begin(); it != professors.end(); ++i){
-        
-        if (it->first == professorName) {
-            return it->second; //return the professor when name matches
-        }
-    }
-    
-    return NULL; //return null if the professor's name is not found in map
+	std::map<string, T*>::iterator it = this->professors->find(professorName);
+	if ((*it).first == professorName)
+		return (*it).second;
+	throw new professorNotFoundException();
 }
 
 template <class T>
