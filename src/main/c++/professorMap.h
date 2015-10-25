@@ -1,9 +1,9 @@
+#pragma once
 #include <vector>
 #include <string>
 #include <map>
 #include <iterator>
 
-#include "professor.h"
 using namespace std;
 
 #pragma once

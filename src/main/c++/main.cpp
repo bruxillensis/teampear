@@ -8,7 +8,7 @@ int main(int argc, char *argv[])
 
     QApplication a(argc, argv);
     MainWindow w;
-    w.setVector();
+    //w.setVector();
     w.show();
 
     return a.exec();

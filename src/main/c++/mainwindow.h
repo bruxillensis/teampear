@@ -25,6 +25,8 @@ private slots:
 
     void on_actionPie_Chart_triggered();
 
+    void on_actionAdd_CSV_triggered();
+
 private:
     Ui::MainWindow *ui;
 };

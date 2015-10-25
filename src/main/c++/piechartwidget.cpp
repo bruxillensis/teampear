@@ -1,4 +1,5 @@
 #include "piechartwidget.h"
+#include "mainwindow.h"
 #include <QPainter>
 #include <vector>
 #include <QColor>
@@ -7,9 +8,9 @@ PieChartWidget::PieChartWidget(QWidget *parent): QWidget(parent)
 {
 }
 
-void PieChartWidget::paintEvent(QPaintEvent *,
-                                std::vector<std::pair<std::string, std::vector<std::pair<std::string, std::string> > > > q)
+void PieChartWidget::paintEvent(QPaintEvent *)
 {
+    std::vector<std::pair<std::string, std::vector<std::pair<std::string, std::string> > > > q;
     int i, current, total = 0;
     QPainter painter(this);
     QRectF size = QRectF(10, 10, this->width()-10, this->width()-10);

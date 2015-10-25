@@ -9,6 +9,9 @@
 #include <QtGui>
 #include <QDialog>
 #include "piedialog.h"
+#include <QFileDialog>
+#include <QMessageBox>
+#include "professorMap.h"
 
 using namespace std;
 
@@ -145,4 +148,17 @@ void MainWindow::setVector(std::vector<std::pair<std::string,std::vector<std::pa
 std::vector<std::pair<std::string,std::vector<std::pair<std::string,std::string> > > > MainWindow::getVector()
 {
     return q;
+}
+
+void MainWindow::on_actionAdd_CSV_triggered()
+{
+    QString file_name = QFileDialog::getOpenFileName(
+                this,
+                tr("Open File"),
+                "C://",
+                "Csv files (*.csv)"
+                );
+
+    QMessageBox::information(this,tr("File Name"), file_name);
+    //professorMap::importCSV(file_name.toStdString());
 }
