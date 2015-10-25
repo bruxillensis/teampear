@@ -34,15 +34,14 @@ calling createProfessor() for each professor entry.
 */
 //Chris
 template <class T>
-void professorMap<T>::importCSV(string fileName){
+void professorMap<T>::importCSV(string fileName) {
 	//read CSV file into 2D array
 	vector<vector<string>> myCSV;
 	vector<string>* valueLine;
 	ifstream inFile("database.txt");
 	string temp;
 	T* tempT;
-	map<T> hashmap;
-	
+
 
 	//make 2D vector 
 	for (string line; getline(inFile, line); )
@@ -57,30 +56,43 @@ void professorMap<T>::importCSV(string fileName){
 		myCSV.push_back(*valueLine);
 	}
 
-	//check every row
+	//check what type of professor
+	vector<string>* manFields;
+	if (T == pubProfessor) {
+		manFields = {"Member Name", "Primary Domain", "Publication Status", "Type", "Status Date", "Role", "Journal Name | Published In | Book Title | etc.", "Author(s)", "Title"};
+
+	}
+	else if (T == presProfessor) {
+		//date, member name, type, role
+	}
+	else if (T == teacProfessor) {
+		//start date, member name, program, hours, number of students
+	}
+	else if (T == granProfessor) {
+		//start date, member name, funding type, peer reviewed OR industry sponsored, status, role, amount, title
+	}
+
+	//calls checkrow function to check each row dependent on type of professor
 	for (size_t i = 1; i < myCSV.size(); i++) {
-		if (!checkRow(myCSV[i], myCSV[0], ? ? ? ? ? )) {
+		if (!checkRow(myCSV[i], myCSV[0], manFields)) {
 			myCSV.erase(myCSV.begin() + i);
 			i--;
 		}
 	}
-	if (T == pubProfessor)
-		cout << "";
+
+
+
+	//hmmmmmmmmmmm, needs to be something here that combines all of a certain professor's rows
+
+
 
 	//call createProfessor for each line
 	//createNewProfessor(string professorName, vector<vector<string>>& csv, int begRow);
 	for (size_t i = 0; i < myCSV.size(); i++) {
 		tempT = createNewProfessor(myCSV[i][4],myCSV,int(i));
-
+		professors.insert(pair<string, T*>(tempT->getName(),tempT));
 	}
 
-	//data check
-	for (size_t i = 0; i < myCSV.size(); i++) {
-		for (size_t j = 0; j < myCSV[i].size(); j++) {
-			cout << i << " " << j << " " << myCSV[i][j] << '\n';
-		}
-	}
-	cin >> temp;
 }
 
 
