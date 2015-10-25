@@ -136,7 +136,7 @@ void pubProfessor::addEntry(string publicationStatus, string type, string role, 
         case "Invited Articles":
             this->numberOfInvitedArticles++;
             break;
-        case "Journal Article"
+        case "Journal Article":
             this->numberOfJournalArticles++;
             break;
         case "Letters to Editor":
@@ -214,7 +214,7 @@ void pubProfessor::removeEntry(int indexToRemove){
         case "Invited Articles":
             this->numberOfInvitedArticles--;
             break;
-        case "Journal Article"
+        case "Journal Article":
             this->numberOfJournalArticles--;
             break;
         case "Letters to Editor":

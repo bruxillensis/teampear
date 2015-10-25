@@ -1,5 +1,6 @@
 #pragma once
 #include <string>
+#include <vector>
 
 using namespace std;
 
@@ -16,6 +17,28 @@ private:
     vector<string>* publicationName;
     vector<string>* authors;
     vector<string>* title;
+
+    int numberOfBookChapters;
+    int numberOfBooks;
+    int numberOfBookEdits;
+    int numberOfCaseReports;
+    int numberOfClinicalCareGuides;
+    int numberOfCommentaries;
+    int numberOfConferences;
+    int numberOfEditorials;
+    int numberOfInvitedArticles;
+    int numberOfJournalArticles;
+    int numberOfLetters;
+    int numberOfMagazine;
+    int numberOfManuals;
+    int numberOfMonographs;
+    int numberOfMultimedia;
+    int numberOfNewsletterArticles;
+    int numberOfNewspaperArticles;
+    int numberOfAbstracts;
+    int numberOfStudentPubs;
+    int numberOfWebVids;
+    int numberOfWorkingPapers;
 public:
     pubProfessor();
     pubProfessor(string memberName, string primaryDomain);
@@ -23,7 +46,7 @@ public:
     
     const string getName();
     const string getDomain();
-    const int getNumberOfBookChapters();
+    int getNumberOfBookChapters();
     const int getNumberOfBooks();
     const int getNumberOfBookEdits();
     const int getNumberOfCaseReports();
