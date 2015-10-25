@@ -15,7 +15,8 @@ class MainWindow : public QMainWindow
 public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
-
+    void setVector(std::vector<std::pair<std::string,std::vector<std::pair<std::string,std::string> > > >);
+    std::vector<std::pair<std::string,std::vector<std::pair<std::string,std::string> > > > getVector();
 
 private slots:
     void on_treeWidget_itemClicked(QTreeWidgetItem *item, int column);

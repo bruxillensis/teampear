@@ -136,3 +136,13 @@ void MainWindow::on_actionPie_Chart_triggered()
     PieDialog d(this);
     d.exec();
 }
+
+void MainWindow::setVector(std::vector<std::pair<std::string,std::vector<std::pair<std::string,std::string> > > > p)
+{
+    q = p;
+}
+
+std::vector<std::pair<std::string,std::vector<std::pair<std::string,std::string> > > > MainWindow::getVector()
+{
+    return q;
+}

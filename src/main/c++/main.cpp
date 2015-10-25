@@ -1,10 +1,15 @@
-#include <iostream>
+#include "mainwindow.h"
+#include <QApplication>
+#include <vector>
+#include <utility>
+#include <QPair>
+int main(int argc, char *argv[])
+{
 
-using namespace std;
+    QApplication a(argc, argv);
+    MainWindow w;
+    w.setVector();
+    w.show();
 
-int main(){
-	cout << "Hello Team Pear!" << endl;
-	int x;
-	cin >> x; 
-	return 0;
+    return a.exec();
 }
