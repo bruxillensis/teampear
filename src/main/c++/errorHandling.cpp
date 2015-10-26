@@ -1,11 +1,5 @@
 #include "stdafx.h"
 #include "errorHandling.h"
-#include <string>
-#include <exception>
-#include <vector>
-#include <iostream>
-#include <algorithm>
-#include <time.h>
 
 using namespace std;
 // rather than checkDate, should we convertDate to just year in order to standardize it?
