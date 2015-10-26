@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "pubProfessor.h"
 #include "modelExceptions.h"
+#include <vector>
 
 using namespace std;
 

@@ -3,6 +3,7 @@
 #include <string>
 #include <map>
 #include <iterator>
+#include "pubProfessor.h"
 
 using namespace std;
 

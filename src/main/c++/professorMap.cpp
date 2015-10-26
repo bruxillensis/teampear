@@ -2,6 +2,7 @@
 #include "professorMap.h"
 #include "errorHandling.h"
 #include "createProfessor.h"
+#include "pubProfessor.h"
 #include <iostream>
 #include <map>
 #include <type_traits>
@@ -119,7 +120,7 @@ void professorMap<T>::removeProfessor(string professorName){
     else
         throw new professorNotFoundException();
 }
-
+template <class T>
 vector<pair<string,vector<pair<string,int> > > > callMe(){
     T* prof;
     vector<pair<string,vector<pair<string,int> > > > mainVector;
@@ -153,7 +154,7 @@ vector<pair<string,vector<pair<string,int> > > > callMe(){
                         "Working Papers")
     
     for(map<string, T*>::iterator it = professors.begin(); it != professors.end(); ++it){ // iterate through the professor objects
-        vector <string> pubTypes = it->second->type);
+        vector <string> pubTypes = it->second->type();
         string profName = it->first;
         int countBookChapters = 0;
         int countBooks = 0;
