@@ -51,28 +51,28 @@ void professorMap<T>::importCSV(string fileName) {
 		myCSV.push_back(valueLine);
 	}
 
-	map<string, vector<vector<string>>>* orgCSV = new map<string, vector<vector<string>>>();
+	map<string, vector<vector<string> > >* orgCSV = new map<string, vector<vector<string> > >();
 	for (int i = 0; i < myCSV.size(); i++) {
 		if (!orgCSV->empty()){
-			map<string, vector<vector<string>>>::iterator it = orgCSV->find(myCSV[i][0]);
+			map<string, vector<vector<string> > >::iterator it = orgCSV->find(myCSV[i][4]);
 			if ((*it).first == myCSV[i][0])
 				(*it).second.push_back(myCSV[i]);
 			else {
-				vector<vector<string>> professorVector;
+				vector<vector<string> > professorVector;
 				professorVector.push_back(myCSV[0]);
 				professorVector.push_back(myCSV[i]);
-				orgCSV->insert(pair<string, vector<vector<string>>>(myCSV[i][0], professorVector));
+				orgCSV->insert(pair<string, vector<vector<string> > >(myCSV[i][4], professorVector));
 			}
 		}
 		else {
-			vector<vector<string>> professorVector;
+			vector<vector<string> > professorVector;
 			professorVector.push_back(myCSV[0]);
 			professorVector.push_back(myCSV[i]);
-			orgCSV->insert(pair<string, vector<vector<string>>>(myCSV[i][0], professorVector));
+			orgCSV->insert(pair<string, vector<vector<string> > >(myCSV[i][4], professorVector));
 		}
 	}
 
-	for (map<string, vector<vector<string>>>::iterator it = orgCSV->begin(); it != orgCSV->end(); ++it) {
+	for (map<string, vector<vector<string> > >::iterator it = orgCSV->begin(); it != orgCSV->end(); ++it) {
 		T* professor = createNewProfessor((*it).second());
 		this->professors->insert(pair<string, T*>(professor->getName(),professor));
 	}
@@ -120,31 +120,31 @@ void professorMap<T>::removeProfessor(string professorName){
 		throw new professorNotFoundException();
 }
 
-vector<pair<string,vector<pair<string,int>>>> callMe(){
+vector<pair<string,vector<pair<string,int> > > > callMe(){
 	T* prof;
-	vector<pair<string,vector<pair<string,int>>>> mainVector;
+	vector<pair<string,vector<pair<string,int> > > > mainVector;
 
-	vector<pair<string,int>> vBookChapters;
-	vector<pair<string,int>> vBooks;
-	vector<pair<string,int>> vBookEdits;
-	vector<pair<string,int>> vCaseReports;
-	vector<pair<string,int>> vClinicalCareGuides;
-	vector<pair<string,int>> vCommentaries;
-	vector<pair<string,int>> vConferences;
-	vector<pair<string,int>> vEditorials;
-	vector<pair<string,int>> vInvitedArticles;
-	vector<pair<string,int>> vJournalArticles;
-	vector<pair<string,int>> vLetters;
-	vector<pair<string,int>> vMagazine;
-	vector<pair<string,int>> vManuals;
-	vector<pair<string,int>> vMonograph;
-	vector<pair<string,int>> vMultimedia;
-	vector<pair<string,int>> vNewsletterArt;
-	vector<pair<string,int>> vNewspaperArt;
-	vector<pair<string,int>> vAbstracts;
-	vector<pair<string,int>> vStudentPubs;
-	vector<pair<string,int>> vWebVids;
-	vector<pair<string,int>> vWorkingPapers;
+	vector<pair<string,int> > vBookChapters;
+	vector<pair<string,int> > vBooks;
+	vector<pair<string,int> > vBookEdits;
+	vector<pair<string,int> > vCaseReports;
+	vector<pair<string,int> > vClinicalCareGuides;
+	vector<pair<string,int> > vCommentaries;
+	vector<pair<string,int> > vConferences;
+	vector<pair<string,int> > vEditorials;
+	vector<pair<string,int> > vInvitedArticles;
+	vector<pair<string,int> > vJournalArticles;
+	vector<pair<string,int> > vLetters;
+	vector<pair<string,int> > vMagazine;
+	vector<pair<string,int> > vManuals;
+	vector<pair<string,int> > vMonograph;
+	vector<pair<string,int> > vMultimedia;
+	vector<pair<string,int> > vNewsletterArt;
+	vector<pair<string,int> > vNewspaperArt;
+	vector<pair<string,int> > vAbstracts;
+	vector<pair<string,int> > vStudentPubs;
+	vector<pair<string,int> > vWebVids;
+	vector<pair<string,int> > vWorkingPapers;
 
 	vector<string> type("Book Chapters","Books","Books Edited","Case Reports","Clinical Case Guidelines",\
 		"Commentaries","Conference Proceedings","Editorials","Invited Articles","Journal Articles",\
@@ -288,69 +288,69 @@ vector<pair<string,vector<pair<string,int>>>> callMe(){
 
 	//push 15 publication type vectors into pairs
 
-	pair<string,vector<pair<string,int>>>* temporary;
+	pair<string,vector<pair<string,int> > >* temporary;
 	
-	temporary = new pair<string,vector<pair<string,int>>>(type[0],countBookChapters);
+	temporary = new pair<string,vector<pair<string,int> > >(type[0],countBookChapters);
 	mainVector.push_back(temporary);
 	
-	temporary = new pair<string,vector<pair<string,int>>>(type[1],countBooks);
+	temporary = new pair<string,vector<pair<string,int> > >(type[1],countBooks);
 	mainVector.push_back(temporary);
 	
-	temporary = new pair<string,vector<pair<string,int>>>(type[2],countBookEdits);
+	temporary = new pair<string,vector<pair<string,int> > >(type[2],countBookEdits);
 	mainVector.push_back(temporary);
 	
-	temporary = new pair<string,vector<pair<string,int>>>(type[3],countCaseReports);
+	temporary = new pair<string,vector<pair<string,int> > >(type[3],countCaseReports);
 	mainVector.push_back(temporary);
 	
-	temporary = new pair<string,vector<pair<string,int>>>(type[4],countClinicalCareGuides);
+	temporary = new pair<string,vector<pair<string,int> > >(type[4],countClinicalCareGuides);
+	mainVector.push_back(temporary);
+	 
+	temporary = new pair<string,vector<pair<string,int> > >(type[5],countCommentaries);
 	mainVector.push_back(temporary);
 	
-	temporary = new pair<string,vector<pair<string,int>>>(type[5],countCommentaries);
+	temporary = new pair<string,vector<pair<string,int> > >(type[6],countConferences);
 	mainVector.push_back(temporary);
 	
-	temporary = new pair<string,vector<pair<string,int>>>(type[6],countConferences);
+	temporary = new pair<string,vector<pair<string,int> > >(type[7],countEditorials);
 	mainVector.push_back(temporary);
 	
-	temporary = new pair<string,vector<pair<string,int>>>(type[7],countEditorials);
+	temporary = new pair<string,vector<pair<string,int> > >(type[8],countInvitedArticles);
+	mainVector.push_back(temporary);
+	 
+	temporary = new pair<string,vector<pair<string,int> > >(type[9],countJournalArticles);
 	mainVector.push_back(temporary);
 	
-	temporary = new pair<string,vector<pair<string,int>>>(type[8],countInvitedArticles);
+	temporary = new pair<string,vector<pair<string,int> > >(type[10],countLetters);
 	mainVector.push_back(temporary);
 	
-	temporary = new pair<string,vector<pair<string,int>>>(type[9],countJournalArticles);
+	temporary = new pair<string,vector<pair<string,int> > >(type[11],countMagazine);
 	mainVector.push_back(temporary);
 	
-	temporary = new pair<string,vector<pair<string,int>>>(type[10],countLetters);
+	temporary = new pair<string,vector<pair<string,int> > >(type[12],countManuals);
 	mainVector.push_back(temporary);
 	
-	temporary = new pair<string,vector<pair<string,int>>>(type[11],countMagazine);
+	temporary = new pair<string,vector<pair<string,int> > >(type[13],countMonograph);
 	mainVector.push_back(temporary);
 	
-	temporary = new pair<string,vector<pair<string,int>>>(type[12],countManuals);
+	temporary = new pair<string,vector<pair<string,int> > >(type[14],countMultimedia);
 	mainVector.push_back(temporary);
 	
-	temporary = new pair<string,vector<pair<string,int>>>(type[13],countMonograph);
+	temporary = new pair<string,vector<pair<string,int> > >(type[15],countNewsletterArt);
 	mainVector.push_back(temporary);
 	
-	temporary = new pair<string,vector<pair<string,int>>>(type[14],countMultimedia);
+	temporary = new pair<string,vector<pair<string,int> > >(type[16],countNewspaperArt);
 	mainVector.push_back(temporary);
 	
-	temporary = new pair<string,vector<pair<string,int>>>(type[15],countNewsletterArt);
+	temporary = new pair<string,vector<pair<string,int> > >(type[17],countAbstracts);
 	mainVector.push_back(temporary);
 	
-	temporary = new pair<string,vector<pair<string,int>>>(type[16],countNewspaperArt);
+	temporary = new pair<string,vector<pair<string,int> > >(type[18],countStudentPubs);
 	mainVector.push_back(temporary);
 	
-	temporary = new pair<string,vector<pair<string,int>>>(type[17],countAbstracts);
+	temporary = new pair<string,vector<pair<string,int> > >(type[19],countWebVids);
 	mainVector.push_back(temporary);
 	
-	temporary = new pair<string,vector<pair<string,int>>>(type[18],countStudentPubs);
-	mainVector.push_back(temporary);
-	
-	temporary = new pair<string,vector<pair<string,int>>>(type[19],countWebVids);
-	mainVector.push_back(temporary);
-	
-	temporary = new pair<string,vector<pair<string,int>>>(type[20],countWorkingPapers);
+	temporary = new pair<string,vector<pair<string,int> > >(type[20],countWorkingPapers);
 	mainVector.push_back(temporary);
 
 	return mainVector;
