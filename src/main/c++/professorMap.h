@@ -99,18 +99,22 @@ void professorMap<T>::importCSV(string fileName) {
 	}*/
 	map<string, vector<vector<string> > >* orgCSV = new map<string, vector<vector<string> > >();
 	for (size_t i = 0; i < myCSV.size(); i++) {
-		cout << "orgcsv: " + to_string(i) << "\n";
+		//cout << "orgcsv: " + to_string(i) << "\n";
 
 		if (!orgCSV->empty()){
-			cout << "if: " + to_string(i) << "\n";
+			//cout << "if: " + to_string(i) << "\n";
 			map<string, vector<vector<string> > >::iterator it = orgCSV->find((*myCSV[i])[0]);
-			cout << "past this line";
-			if ((*it).first == (*myCSV[i])[0]){
+			//cout << "past this line\n";
+			//cout << (*myCSV[i])[0];
+			//cout << "\n";
+			/*if (!(*it).first.compare((*myCSV[i])[0])){
 				cout << "asdfsadf: "<< "\n";
+				(*it).second.push_back(*myCSV[i]);
+			}*/
+			if (it != orgCSV->end()) {
 				(*it).second.push_back(*myCSV[i]);
 			}
 			else {
-				cout << "iddddddf: "<< "\n";
 				vector<vector<string> > professorVector;
 				professorVector.push_back(*myCSV[0]);
 				professorVector.push_back(*myCSV[i]);
@@ -118,22 +122,29 @@ void professorMap<T>::importCSV(string fileName) {
 			}
 		}
 		else {
-			cout << "else: " + to_string(i) << "\n";
+			//cout << "else: " + to_string(i) << "\n";
 			vector<vector<string> > professorVector;
 			professorVector.push_back(*myCSV[0]);
 			professorVector.push_back(*myCSV[i]);
 			orgCSV->insert(pair<string, vector<vector<string> > >((*myCSV[i])[0], professorVector));
 		}
 	}
-	cout << "trythis";
+	//cout << "trythis";
 	for (map<string, vector<vector<string> > >::iterator it = orgCSV->begin(); it != orgCSV->end(); ++it) {
 		T* professor = createProfessor<pubProfessor>::createNewProfessor((*it).second);
 		this->professors->insert(pair<string, T*>(professor->getName(),professor));
-		cout << "professors: " << professors->size();
+		//cout << "professors: " << professors->size();
 	}
 	for (size_t i = 0; i < myCSV.size(); i++)
 		delete myCSV[i];
 	delete orgCSV;
+	int counter = 0;
+
+	for (map<string, T*>::iterator it = professors->begin(); it != professors->end(); ++it)
+	{
+		counter++;
+		cout << counter << " " << it->first << "\n";
+	}
 }
 
 template <class T>
@@ -209,10 +220,10 @@ vector<pair<string, vector<pair<string, int> > > > professorMap<T>::callMe(){
 	"Working Papers" };
 
 	vector<string> type(args, args + sizeof(args) / sizeof(args[0]));
-	cout << "chelsea";
+	//cout << "chelsea";
 	map<string, T*>::iterator it;
 	for (it = professors->begin(); it != professors->end(); ++it){ // iterate through the professor objects
-		cout << " is a girl";
+		//cout << " is a girl";
 		const vector <string>* pubTypes = it->second->getType();
 		string profName = it->first;
 		int countBookChapters = 0;
@@ -286,8 +297,8 @@ vector<pair<string, vector<pair<string, int> > > > professorMap<T>::callMe(){
 		pair<string, int>* temp;
 
 		temp = new pair<string, int>(profName, countBookChapters);
-		cout << temp->first;
-		cout << "jas;ldfkjadsf";
+		//cout << temp->first;
+		//cout << "jas;ldfkjadsf";
 		vBookChapters->push_back(*temp);
 		
 		temp = new pair<string, int>(profName, countBooks);
