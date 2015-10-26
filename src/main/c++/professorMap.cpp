@@ -54,21 +54,21 @@ void professorMap<T>::importCSV(string fileName) {
 	map<string, vector<vector<string>>>* orgCSV = new map<string, vector<vector<string>>>();
 	for (int i = 0; i < myCSV.size(); i++) {
 		if (!orgCSV->empty()){
-			map<string, vector<vector<string>>>::iterator it = orgCSV->find(myCSV[i][0]);
-			if ((*it).first == myCSV[i][0])
+			map<string, vector<vector<string>>>::iterator it = orgCSV->find(myCSV[i]4]);
+			if ((*it).first == myCSV[i][4])
 				(*it).second.push_back(myCSV[i]);
 			else {
 				vector<vector<string>> professorVector;
 				professorVector.push_back(myCSV[0]);
 				professorVector.push_back(myCSV[i]);
-				orgCSV->insert(pair<string, vector<vector<string>>>(myCSV[i][0], professorVector));
+				orgCSV->insert(pair<string, vector<vector<string>>>(myCSV[i][4], professorVector));
 			}
 		}
 		else {
 			vector<vector<string>> professorVector;
 			professorVector.push_back(myCSV[0]);
 			professorVector.push_back(myCSV[i]);
-			orgCSV->insert(pair<string, vector<vector<string>>>(myCSV[i][0], professorVector));
+			orgCSV->insert(pair<string, vector<vector<string>>>(myCSV[i][4], professorVector));
 		}
 	}
 
