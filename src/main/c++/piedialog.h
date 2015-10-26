@@ -12,7 +12,7 @@ class PieDialog : public QDialog
     Q_OBJECT
 
 public:
-    explicit PieDialog(QWidget *parent = 0);
+    explicit PieDialog(QWidget *parent,std::vector<std::pair<std::string,std::vector<std::pair<std::string,std::string>>>>);
     ~PieDialog();
 
 private:

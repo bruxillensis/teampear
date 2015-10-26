@@ -8,38 +8,21 @@
 #include <QTCore>
 #include <QtGui>
 #include <QDialog>
-#include "piedialog.h"
 #include <QFileDialog>
 #include <QMessageBox>
-#include "professorMap.h"
+#include "piedialog.h"
 
 using namespace std;
 
-static std::vector<std::pair<std::string,std::vector<std::pair<std::string,std::string> > > > q;
-
-MainWindow::MainWindow(QWidget *parent) :
+MainWindow::MainWindow(QWidget *parent, std::vector<std::pair<std::string,std::vector<std::pair<std::string,std::string> > > > q) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
 {
+    vector = q;
     ui->setupUi(this);
     QTreeWidgetItem *t = new QTreeWidgetItem(0);
     //std::pair<String,Vector<pair<String,int>>> pair;
 
-
-    std::vector<std::pair<std::string,std::vector<std::pair<std::string,std::string> > > > q;
-    std::pair<std::string,std::vector<std::pair<std::string,std::string> > > p;
-    std::pair<std::string,std::string> s;
-
-    s.first = std::string("Nazim the idiot");
-    s.second = std::string("12");
-
-    std::vector<std::pair<std::string,std::string> > p2;
-
-    p2.push_back(s);
-    p.first = std::string("Multimedia");
-    p.second = p2;
-
-    q.push_back(p);
 
     for(int i=0; i<q.size(); i++){
         std::pair<std::string,std::vector<std::pair<std::string,std::string> > > a;
@@ -136,29 +119,25 @@ void MainWindow::on_pushButton_clicked()
 
 void MainWindow::on_actionPie_Chart_triggered()
 {
-    PieDialog d(this);
+    PieDialog d(this, vector);
     d.exec();
 }
 
-void MainWindow::setVector(std::vector<std::pair<std::string,std::vector<std::pair<std::string,std::string> > > > p)
+void MainWindow::on_actionImport_CSV_triggered()
 {
-    q = p;
-}
-
-std::vector<std::pair<std::string,std::vector<std::pair<std::string,std::string> > > > MainWindow::getVector()
-{
-    return q;
-}
-
-void MainWindow::on_actionAdd_CSV_triggered()
-{
-    QString file_name = QFileDialog::getOpenFileName(
+    QString filename = QFileDialog::getOpenFileName(
                 this,
                 tr("Open File"),
                 "C://",
-                "Csv files (*.csv)"
+                "CSV files (*.csv)"
                 );
 
-    QMessageBox::information(this,tr("File Name"), file_name);
-    //professorMap::importCSV(file_name.toStdString());
+    QMessageBox::information(this, tr("File Name"), filename);
+    file_name = filename.toStdString();
+}
+
+string getFileName()
+{
+    string h;
+    return h;
 }
