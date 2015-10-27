@@ -1,29 +1,32 @@
-#include "mainwindow.h"
 #include <QApplication>
 #include <vector>
 #include <utility>
 #include <QPair>
 #include <Controller.h>
-#include <vector>
 #include <string.h>
+#include "mainwindow.h"
+#include "pubProfessor.h"
+#include "professorMap.h"
+
 using namespace std;
 
-Controller::Controller(MainWindow view, professorMap data)
+Controller::Controller(MainWindow* view, professorMap<pubProfessor>* data)
 {
     this->view = view;
-    this->data = data.callMe();
+    this->data = data;
 }
 
-void Controller::dataFilter(string d1, string d2)
+
+void Controller::dataFilter(std::string d1, std::string d2)
 {
 
 }
 
-MainWindow Controller::draw()
+MainWindow* Controller::draw()
 {
-    vector<pair<string,vector<pair<string,string>>>> newPair;
-    newPair = pair;
-    return MainWindow(0,newPair);
+    vector<pair<std::string,vector<pair<std::string,int>>>> newPair;
+    newPair = data->callMe();
+    return new MainWindow(0,newPair);
     //fullData
 //    std::pair<std::string,std::vector<std::pair<std::string,std::string> > > p;
 //    //
@@ -47,12 +50,11 @@ MainWindow Controller::draw()
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
-    MainWindow *newWindow;
-    professorMap newData;
-    string filename = newWindow->getFileName();
-    newData.importCSV(filename);
-    Controller newController = new Controller(newData,newWindow);
-    newWindow = newController.draw();
+    professorMap<pubProfessor>* newData = new professorMap<pubProfessor>();
+    newData->importCSV("C:/Users/Owner/Desktop/TeamPearUI2/TeamPearUI/Publications_sample.csv");
+    MainWindow *newWindow = new MainWindow(0, newData->callMe());
+    Controller *newController = new Controller(newWindow, newData);
+    newWindow = newController->draw();
 
     newWindow->show();
     a.exec();

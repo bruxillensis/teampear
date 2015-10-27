@@ -11,89 +11,105 @@
 #include <QFileDialog>
 #include <QMessageBox>
 #include "piedialog.h"
+#include "qdebug.h"
+#include <iostream>
 
 using namespace std;
 
-MainWindow::MainWindow(QWidget *parent, std::vector<std::pair<std::string,std::vector<std::pair<std::string,std::string> > > > q) :
+MainWindow::MainWindow(QWidget *parent=0) :
+    QMainWindow(parent),
+    ui(new Ui::MainWindow)
+{
+    ui->setupUi(this);
+}
+
+MainWindow::MainWindow(QWidget *parent, std::vector<std::pair<std::string,std::vector<std::pair<std::string,int> > > > q) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
 {
     vector = q;
     ui->setupUi(this);
-    QTreeWidgetItem *t = new QTreeWidgetItem(0);
+
     //std::pair<String,Vector<pair<String,int>>> pair;
+    int g = q.size();
+    for(int i=0; i<g; i++){
+        std::pair<std::string,std::vector<std::pair<std::string,int> > > a;
 
-
-    for(int i=0; i<q.size(); i++){
-        std::pair<std::string,std::vector<std::pair<std::string,std::string> > > a;
-        std::vector<std::pair<std::string,std::string> > a2;
-        std::pair<std::string,std::string> b;
-
+        std::vector<std::pair<std::string,int> > a2;
+        std::pair<std::string,int> b;
+        std::cout << q.size() <<" "<< i <<std::endl;
+        if(q.size() > 0)
+        {
         a =  q.back();
         q.pop_back();
         a2 = a.second;
-        b = a2.back();
-        a2.pop_back();
-
-
-
-
-
+        if(a2.size() > 0)
+        {
+            b = a2.back();
+            a2.pop_back();
+        }
+        }
    // pair.first="Max Ingram";
    // pair.second = "17";
-QString qw = qw.fromStdString(b.first + " " + b.second);
-
-    QTreeWidget * tree = ui->treeWidget;
+    QString qw = QString::fromStdString(b.first + "  " + std::to_string(b.second));
+    std::cout << a.first << " " << b.first << " " << b.second << std::endl;
+    //QTreeWidget * tree = ui->treeWidget;
     std::string pubType = a.first;
+std::cout << pubType << std::endl;
+    //std::cout << qw;
+QTreeWidgetItem *t = new QTreeWidgetItem();
+
+       t->setText(0,qw);
 
 
-    t->setText(0,qw);
 
 //ui->treeWidget->itemAt(0,0)->addChild(t);
 
-  // FIX
+    // FIX
     if(!pubType.compare("Book Chapters"))
         ui->treeWidget->itemAt(0,0)->addChild(t);
-    else if(!pubType.compare("Books"))
-        ui->treeWidget->itemAt(0,20)->addChild(t);
+
+    else if(!pubType.compare("Book"))
+        ui->treeWidget->itemAt(0,15)->addChild(t);
     else if(!pubType.compare("Books Edited"))
-        ui->treeWidget->itemAt(0,40)->addChild(t);
+        ui->treeWidget->itemAt(0,30)->addChild(t);
     else if(!pubType.compare("Case Reports"))
-        ui->treeWidget->itemAt(0,60)->addChild(t);
+        ui->treeWidget->itemAt(0,45)->addChild(t);
     else if(!pubType.compare("Clinical Care Guidelines"))
-        ui->treeWidget->itemAt(0,80)->addChild(t);
+        ui->treeWidget->itemAt(0,60)->addChild(t);
     else if(!pubType.compare("Commentaries"))
-        ui->treeWidget->itemAt(0,100)->addChild(t);
+        ui->treeWidget->itemAt(0,75)->addChild(t);
     else if(!pubType.compare("Conference Precedings"))
-        ui->treeWidget->itemAt(0,120)->addChild(t);
+        ui->treeWidget->itemAt(0,90)->addChild(t);
     else if(!pubType.compare("Editorials"))
-        ui->treeWidget->itemAt(0,140)->addChild(t);
+        ui->treeWidget->itemAt(0,105)->addChild(t);
     else if(!pubType.compare("Invited Articles"))
-        ui->treeWidget->itemAt(0,160)->addChild(t);
+        ui->treeWidget->itemAt(0,120)->addChild(t);
     else if(!pubType.compare("Journal Article"))
-        ui->treeWidget->itemAt(0,180)->addChild(t);
+        ui->treeWidget->itemAt(0,135)->addChild(t);
     else if(!pubType.compare("Letters to Editor"))
-        ui->treeWidget->itemAt(0,200)->addChild(t);
+        ui->treeWidget->itemAt(0,150)->addChild(t);
     else if(!pubType.compare("Magazine Entries"))
-        ui->treeWidget->itemAt(0,220)->addChild(t);
+        ui->treeWidget->itemAt(0,165)->addChild(t);
     else if(!pubType.compare("Manuals"))
-        ui->treeWidget->itemAt(0,240)->addChild(t);
+        ui->treeWidget->itemAt(0,180)->addChild(t);
     else if(!pubType.compare("Monographs"))
-        ui->treeWidget->itemAt(0,260)->addChild(t);
+        ui->treeWidget->itemAt(0,195)->addChild(t);
     else if(!pubType.compare("Multimedia"))
-        ui->treeWidget->itemAt(0,280)->addChild(t);
+        ui->treeWidget->itemAt(0,210)->addChild(t);
     else if(!pubType.compare("Newsletter Articles"))
-        ui->treeWidget->itemAt(0,300)->addChild(t);
+        ui->treeWidget->itemAt(0,225)->addChild(t);
     else if(!pubType.compare("Newspaper Articles"))
-        ui->treeWidget->itemAt(0,320)->addChild(t);
+        ui->treeWidget->itemAt(0,240)->addChild(t);
     else if(!pubType.compare("Published Abstract"))
-        ui->treeWidget->itemAt(0,340)->addChild(t);
+        ui->treeWidget->itemAt(0,255)->addChild(t);
     else if(!pubType.compare("Supervised Student Publications"))
-        ui->treeWidget->itemAt(0,360)->addChild(t);
+        ui->treeWidget->itemAt(0,270)->addChild(t);
     else if(!pubType.compare("Websites / Videos"))
-        ui->treeWidget->itemAt(0,380)->addChild(t);
+        ui->treeWidget->itemAt(0,285)->addChild(t);
     else if(!pubType.compare("Working Papers"))
-        ui->treeWidget->itemAt(0,400)->addChild(t);
+        ui->treeWidget->itemAt(0,300)->addChild(t);
+
   }
 }
 

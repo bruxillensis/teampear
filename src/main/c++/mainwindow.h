@@ -16,10 +16,11 @@ class MainWindow : public QMainWindow
     Q_OBJECT
 
 public:
-    explicit MainWindow(QWidget *parent, std::vector<std::pair<std::string,std::vector<std::pair<std::string,std::string> > > >);
+    explicit MainWindow(QWidget *parent, std::vector<std::pair<std::string,std::vector<std::pair<std::string,int> > > >);
+    explicit MainWindow(QWidget *parent);
     ~MainWindow();
     string getFileName();
-    void setVector(std::vector<std::pair<std::string,std::vector<std::pair<std::string,std::string> > > >);
+    void setVector(std::vector<std::pair<std::string,std::vector<std::pair<std::string,int> > > >);
 
 
 private slots:
@@ -33,7 +34,7 @@ private slots:
 
 private:
     Ui::MainWindow *ui;
-    std::vector<std::pair<std::string,std::vector<std::pair<std::string,std::string> > > > vector;
+    std::vector<std::pair<std::string,std::vector<std::pair<std::string,int> > > > vector;
     string file_name;
 };
 
