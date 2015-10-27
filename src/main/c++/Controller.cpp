@@ -51,7 +51,7 @@ int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
     professorMap<pubProfessor>* newData = new professorMap<pubProfessor>();
-    newData->importCSV("C:/Users/Owner/Desktop/TeamPearUI2/TeamPearUI/Publications_sample.csv");
+    newData->importCSV("./Publications_sample.csv");
     MainWindow *newWindow = new MainWindow(0, newData->callMe());
     Controller *newController = new Controller(newWindow, newData);
     newWindow = newController->draw();
