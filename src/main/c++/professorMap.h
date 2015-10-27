@@ -8,6 +8,7 @@
 #include <fstream>
 #include <iostream>
 #include "createProfessor.h"
+#include "csv.h"
 
 
 using namespace std;
@@ -43,25 +44,75 @@ public:
 		//read CSV file into 2D array
 		vector<vector<string>*> myCSV;
 		vector<string>* valueLine;
-		ifstream inFile(fileName);
-		string temp;
+		io::CSVReader<44, io::trim_chars<' '>, io::double_quote_escape<',', '\"'>> inFile(fileName);
+		string temp1, temp2, temp3, temp4, temp5, temp6, temp7, temp8, temp9, temp10, temp11, temp12, temp13, temp14, temp15, temp16, \
+			temp17, temp18, temp19, temp20, temp21, temp22, temp23, temp24, temp25, temp26, temp27, temp28, temp29, temp30, temp31, temp32, \
+			temp33, temp34, temp35, temp36, temp37, temp38, temp39, temp40, temp41, temp42, temp43, temp44;
 
-		//make 2D vector
-		for (string line; getline(inFile, line);)
-		{
-			istringstream in(line);
+		while (inFile.read_row(temp1, temp2, temp3, temp4, temp5, temp6, temp7, temp8, temp9, temp10, temp11, temp12, temp13, temp14, temp15, temp16, \
+			temp17, temp18, temp19, temp20, temp21, temp22, temp23, temp24, temp25, temp26, temp27, temp28, temp29, temp30, temp31, temp32, \
+			temp33, temp34, temp35, temp36, temp37, temp38, temp39, temp40, temp41, temp42, temp43, temp44)) {
+			//killme
 			valueLine = new vector<string>();
-			while (getline(in, temp, ','))
-				valueLine->push_back(temp);
-
+			valueLine->push_back(temp1);
+			valueLine->push_back(temp2);
+			valueLine->push_back(temp3);
+			valueLine->push_back(temp4);
+			valueLine->push_back(temp5);
+			valueLine->push_back(temp6);
+			valueLine->push_back(temp7);
+			valueLine->push_back(temp8);
+			valueLine->push_back(temp9);
+			valueLine->push_back(temp10);
+			valueLine->push_back(temp11);
+			valueLine->push_back(temp12);
+			valueLine->push_back(temp13);
+			valueLine->push_back(temp14);
+			valueLine->push_back(temp15);
+			valueLine->push_back(temp16);
+			valueLine->push_back(temp17);
+			valueLine->push_back(temp18);
+			valueLine->push_back(temp19);
+			valueLine->push_back(temp20);
+			valueLine->push_back(temp21);
+			valueLine->push_back(temp22);
+			valueLine->push_back(temp23);
+			valueLine->push_back(temp24);
+			valueLine->push_back(temp25);
+			valueLine->push_back(temp26);
+			valueLine->push_back(temp27);
+			valueLine->push_back(temp28);
+			valueLine->push_back(temp29);
+			valueLine->push_back(temp30);
+			valueLine->push_back(temp31);
+			valueLine->push_back(temp32);
+			valueLine->push_back(temp33);
+			valueLine->push_back(temp34);
+			valueLine->push_back(temp35);
+			valueLine->push_back(temp36);
+			valueLine->push_back(temp37);
+			valueLine->push_back(temp38);
+			valueLine->push_back(temp39);
+			valueLine->push_back(temp40);
+			valueLine->push_back(temp41);
+			valueLine->push_back(temp42);
+			valueLine->push_back(temp43);
+			valueLine->push_back(temp44);
 			myCSV.push_back(valueLine);
+		}
+
+		for (size_t i = 0; i < 10; i++) {
+			for (size_t j = 0; j < myCSV[i]->size(); j++) {
+				cout << i << " " << j << ": " << myCSV[i]->at(j);
+				cout << '\n';
+			}
 		}
 
 		map<string, vector<vector<string> > >* orgCSV = new map<string, vector<vector<string> > >();
 		for (size_t i = 1; i < myCSV.size(); i++) {
 
 			if (!orgCSV->empty()) {
-				map<string, vector<vector<string> > >::iterator it = orgCSV->find((*myCSV[i])[0]);
+				map<string, vector<vector<string> > >::iterator it = orgCSV->find((*myCSV[i])[4]);
 				if (it != orgCSV->end()) {
 					(*it).second.push_back(*myCSV[i]);
 				}
@@ -69,14 +120,14 @@ public:
 					vector<vector<string> > professorVector;
 					professorVector.push_back(*myCSV[0]);
 					professorVector.push_back(*myCSV[i]);
-					orgCSV->insert(pair<string, vector<vector<string> > >((*myCSV[i])[0], professorVector));
+					orgCSV->insert(pair<string, vector<vector<string> > >((*myCSV[i])[4], professorVector));
 				}
 			}
 			else {
 				vector<vector<string> > professorVector;
 				professorVector.push_back(*myCSV[0]);
 				professorVector.push_back(*myCSV[i]);
-				orgCSV->insert(pair<string, vector<vector<string> > >((*myCSV[i])[0], professorVector));
+				orgCSV->insert(pair<string, vector<vector<string> > >((*myCSV[i])[4], professorVector));
 			}
 		}
 		for (map<string, vector<vector<string> > >::iterator it = orgCSV->begin(); it != orgCSV->end(); ++it) {
@@ -89,7 +140,7 @@ public:
 		delete orgCSV;
 		int counter = 0;
 
-		for (map<string, T*>::iterator it = professors->begin(); it != professors->end(); ++it)
+		for (map<string, T*>::iterator it = professors->begin(); it != professors->end(); it++)
 		{
 			counter++;
 			cout << counter << " " << it->first << "\n";
