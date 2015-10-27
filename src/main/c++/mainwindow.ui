@@ -1,0 +1,231 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>494</width>
+    <height>441</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>MainWindow</string>
+  </property>
+  <widget class="QWidget" name="centralWidget">
+   <widget class="QTreeWidget" name="treeWidget">
+    <property name="geometry">
+     <rect>
+      <x>30</x>
+      <y>50</y>
+      <width>421</width>
+      <height>431</height>
+     </rect>
+    </property>
+    <column>
+     <property name="text">
+      <string>List</string>
+     </property>
+    </column>
+    <item>
+     <property name="text">
+      <string>Book Chapters</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Books</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Books Edited</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Case Reports</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Clinical Care Guidelines</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Commentaries</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Conference Proceedings</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Editorials</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Invited Articles</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Jounral Article</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Letters to Editor</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Magazine Entries</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Manuals</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Monographs</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Multimedia</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Newsletter Articles</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Newspaper Articles</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Published Abstract</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Supervised Student Publications</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Websites / Videos</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Working Papers</string>
+     </property>
+    </item>
+   </widget>
+   <widget class="QSplitter" name="splitter">
+    <property name="geometry">
+     <rect>
+      <x>30</x>
+      <y>20</y>
+      <width>291</width>
+      <height>22</height>
+     </rect>
+    </property>
+    <property name="orientation">
+     <enum>Qt::Horizontal</enum>
+    </property>
+    <widget class="QLineEdit" name="startDate">
+     <property name="maxLength">
+      <number>4</number>
+     </property>
+    </widget>
+    <widget class="QLineEdit" name="endDate">
+     <property name="maxLength">
+      <number>4</number>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="pushButton">
+     <property name="text">
+      <string>Confirm</string>
+     </property>
+    </widget>
+   </widget>
+   <widget class="QWidget" name="layoutWidget">
+    <property name="geometry">
+     <rect>
+      <x>30</x>
+      <y>0</y>
+      <width>211</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <layout class="QHBoxLayout" name="horizontalLayout">
+     <item>
+      <widget class="QLabel" name="label">
+       <property name="text">
+        <string>Start year</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="label_2">
+       <property name="text">
+        <string>End year</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </widget>
+  </widget>
+  <widget class="QMenuBar" name="menuBar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>494</width>
+     <height>20</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="menuGenerate">
+    <property name="title">
+     <string>Generate</string>
+    </property>
+    <addaction name="actionPie_Chart"/>
+   </widget>
+   <widget class="QMenu" name="menuFile">
+    <property name="title">
+     <string>File</string>
+    </property>
+    <addaction name="actionImport_CSV"/>
+   </widget>
+   <addaction name="menuFile"/>
+   <addaction name="menuGenerate"/>
+  </widget>
+  <widget class="QStatusBar" name="statusBar"/>
+  <action name="actionPie_Chart">
+   <property name="text">
+    <string>Pie Chart</string>
+   </property>
+  </action>
+  <action name="actionImport_CSV">
+   <property name="text">
+    <string>Import CSV</string>
+   </property>
+  </action>
+ </widget>
+ <layoutdefault spacing="6" margin="11"/>
+ <resources/>
+ <connections/>
+</ui>
