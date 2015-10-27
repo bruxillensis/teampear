@@ -49,8 +49,9 @@ private:
 			pubName = csv[currLine][15];
 			pubAuthors = csv[currLine][37];
 			pubTitle = csv[currLine][38];
+			int pubDate = errorHandling::checkYear(csv[currLine][10]);
 			//Add the new entry to the prof
-			newProf->addEntry(pubStatus, pubType, pubRole, pubName, pubAuthors, pubTitle);
+			newProf->addEntry(pubStatus, pubType, pubRole, pubName, pubAuthors, pubTitle, pubDate);
 
 			//Move to the next entry
 			currLine++;

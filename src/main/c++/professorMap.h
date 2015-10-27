@@ -125,7 +125,7 @@ public:
 		else
 			throw new professorNotFoundException();
 	}
-	vector<pair<string,vector<pair<string,int> > > > callMe() {
+	vector<pair<string,vector<pair<string,int> > > > callMe(int begYear, int endYear) {
 		//	T* prof;
 		vector<pair<string, vector<pair<string, int> > > > mainVector;
 
@@ -158,11 +158,10 @@ public:
 			"Working Papers" };
 
 		vector<string> type(args, args + sizeof(args) / sizeof(args[0]));
-		//cout << "chelsea";
 		map<string, T*>::iterator it;
-		for (it = professors->begin(); it != professors->end(); ++it) { // iterate through the professor objects
-																		//cout << " is a girl";
+		for (it = professors->begin(); it != professors->end(); ++it) {
 			const vector <string>* pubTypes = it->second->getType();
+			const vector <int>* pubDates = it->second->getDate();
 			string profName = it->first;
 			int countBookChapters = 0;
 			int countBooks = 0;
@@ -186,57 +185,57 @@ public:
 			int countWebVids = 0;
 			int countWorkingPapers = 0;
 
+			vector<int>::const_iterator it3 = pubDates->begin();
 			for (vector<string>::const_iterator it2 = pubTypes->begin(); it2 != pubTypes->end(); ++it2) { // iterate through the publication types
-				if (!(*it2).compare(type[0]))
+				if ((!(*it2).compare(type[0]))&&((*it3)>begYear&& (*it3)<endYear))
 					countBookChapters++;
-				else if (!(*it2).compare(type[1]))
+				else if ((!(*it2).compare(type[1])) && ((*it3)>begYear && (*it3)<endYear))
 					countBooks++;
-				else if (!(*it2).compare(type[2]))
+				else if ((!(*it2).compare(type[2])) && ((*it3)>begYear && (*it3)<endYear))
 					countBookEdits++;
-				else if (!(*it2).compare(type[3]))
+				else if ((!(*it2).compare(type[3])) && ((*it3)>begYear && (*it3)<endYear))
 					countCaseReports++;
-				else if (!(*it2).compare(type[4]))
+				else if ((!(*it2).compare(type[4])) && ((*it3)>begYear && (*it3)<endYear))
 					countClinicalCareGuides++;
-				else if (!(*it2).compare(type[5]))
+				else if ((!(*it2).compare(type[5])) && ((*it3)>begYear && (*it3)<endYear))
 					countCommentaries++;
-				else if (!(*it2).compare(type[6]))
+				else if ((!(*it2).compare(type[6])) && ((*it3)>begYear && (*it3)<endYear))
 					countConferences++;
-				else if (!(*it2).compare(type[7]))
+				else if ((!(*it2).compare(type[7])) && ((*it3)>begYear && (*it3)<endYear))
 					countEditorials++;
-				else if (!(*it2).compare(type[8]))
+				else if ((!(*it2).compare(type[8])) && ((*it3)>begYear && (*it3)<endYear))
 					countInvitedArticles++;
-				else if (!(*it2).compare(type[9]))
+				else if ((!(*it2).compare(type[9])) && ((*it3)>begYear && (*it3)<endYear))
 					countJournalArticles++;
-				else if (!(*it2).compare(type[10]))
+				else if ((!(*it2).compare(type[10])) && ((*it3)>begYear && (*it3)<endYear))
 					countLetters++;
-				else if (!(*it2).compare(type[11]))
+				else if ((!(*it2).compare(type[11])) && ((*it3)>begYear && (*it3)<endYear))
 					countMagazine++;
-				else if (!(*it2).compare(type[12]))
+				else if ((!(*it2).compare(type[12])) && ((*it3)>begYear && (*it3)<endYear))
 					countManuals++;
-				else if (!(*it2).compare(type[13]))
+				else if ((!(*it2).compare(type[13])) && ((*it3)>begYear && (*it3)<endYear))
 					countMonographs++;
-				else if (!(*it2).compare(type[14]))
+				else if ((!(*it2).compare(type[14])) && ((*it3)>begYear && (*it3)<endYear))
 					countMultimedia++;
-				else if (!(*it2).compare(type[15]))
+				else if ((!(*it2).compare(type[15])) && ((*it3)>begYear && (*it3)<endYear))
 					countNewsletterArticles++;
-				else if (!(*it2).compare(type[16]))
+				else if ((!(*it2).compare(type[16])) && ((*it3)>begYear && (*it3)<endYear))
 					countNewspaperArticles++;
-				else if (!(*it2).compare(type[17]))
+				else if ((!(*it2).compare(type[17])) && ((*it3)>begYear && (*it3)<endYear))
 					countAbstracts++;
-				else if (!(*it2).compare(type[18]))
+				else if ((!(*it2).compare(type[18])) && ((*it3)>begYear && (*it3)<endYear))
 					countStudentPubs++;
-				else if (!(*it2).compare(type[19]))
+				else if ((!(*it2).compare(type[19])) && ((*it3)>begYear && (*it3)<endYear))
 					countWebVids++;
-				else if (!(*it2).compare(type[20]))
+				else if ((!(*it2).compare(type[20])) && ((*it3)>begYear && (*it3)<endYear))
 					countWorkingPapers++;
+				++it3;
 			}
 
 			//make pairs and push into vectors
 			pair<string, int>* temp;
 
 			temp = new pair<string, int>(profName, countBookChapters);
-			//cout << temp->first;
-			//cout << "jas;ldfkjadsf";
 			vBookChapters->push_back(*temp);
 
 			temp = new pair<string, int>(profName, countBooks);

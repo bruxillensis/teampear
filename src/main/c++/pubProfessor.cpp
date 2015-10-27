@@ -14,6 +14,7 @@ pubProfessor::pubProfessor(){
 	this->publicationName = new vector<string>();
 	this->authors = new vector<string>();
 	this->title = new vector<string>();
+	this->date = new vector<int>();
 }
 pubProfessor::pubProfessor(string memberName, string primaryDomain){
 	this->memberName = memberName;	//Member Name
@@ -25,6 +26,7 @@ pubProfessor::pubProfessor(string memberName, string primaryDomain){
 	this->publicationName = new vector<string>();
 	this->authors = new vector<string>();
 	this->title = new vector<string>();
+	this->date = new vector<int>();
 }
 pubProfessor::~pubProfessor(){
 	delete this->publicationStatus;
@@ -33,6 +35,7 @@ pubProfessor::~pubProfessor(){
 	delete this->publicationName;
 	delete this->authors;
 	delete this->title;
+	delete this->date;
 }
 
 const string pubProfessor::getName()						{ return this->memberName; }
@@ -44,10 +47,11 @@ const vector<string>* pubProfessor::getRole()				{ return this->role; }
 const vector<string>* pubProfessor::getPublicationName()	{ return this->publicationName; }
 const vector<string>* pubProfessor::getAuthors()			{ return this->authors; }
 const vector<string>* pubProfessor::getTitle()				{ return this->title; }
+const vector<int>*	  pubProfessor::getDate()				{ return this->date; }
 
 //Add an entry to all vectors
 void pubProfessor::addEntry(string publicationStatus, string type, string role, string publicationName,
-		string authors, string title){
+		string authors, string title, int date){
 	this->numberOfPublications++;
 	this->publicationStatus->push_back(publicationStatus);
 	this->type->push_back(type);
@@ -55,6 +59,7 @@ void pubProfessor::addEntry(string publicationStatus, string type, string role, 
 	this->publicationName->push_back(publicationName);
 	this->authors->push_back(authors);
 	this->title->push_back(title);
+	this->date->push_back(date);
 }
 
 //Remove an entry, based on given index value (0 indexed)
@@ -64,9 +69,10 @@ void pubProfessor::removeEntry(int indexToRemove){
 
 	this->numberOfPublications--;
 	this->publicationStatus->erase(this->publicationStatus->begin() + indexToRemove);
-	this->type->erase(this->publicationStatus->begin() + indexToRemove);
-	this->role->erase(this->publicationStatus->begin() + indexToRemove);
-	this->publicationName->erase(this->publicationStatus->begin() + indexToRemove);
-	this->authors->erase(this->publicationStatus->begin() + indexToRemove);
-	this->title->erase(this->publicationStatus->begin() + indexToRemove);
+	this->type->erase(this->type->begin() + indexToRemove);
+	this->role->erase(this->role->begin() + indexToRemove);
+	this->publicationName->erase(this->publicationName->begin() + indexToRemove);
+	this->authors->erase(this->authors->begin() + indexToRemove);
+	this->title->erase(this->title->begin() + indexToRemove);
+	this->date->erase(this->date->begin() + indexToRemove);
 }

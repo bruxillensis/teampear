@@ -17,6 +17,8 @@ private:
 	vector<string>* publicationName;
 	vector<string>* authors;
 	vector<string>* title;
+	vector<int>* date;
+
 public:
 	pubProfessor();
 	pubProfessor(string memberName, string primaryDomain);
@@ -31,7 +33,8 @@ public:
 	const vector<string>* getPublicationName();
 	const vector<string>* getAuthors();
 	const vector<string>* getTitle();
+	const vector<int>* getDate();
 
-	void addEntry(string publicationStatus, string type, string role, string publicationName, string authors, string title);
+	void addEntry(string publicationStatus, string type, string role, string publicationName, string authors, string title, int date);
 	void removeEntry(int indexToRemove);
 };

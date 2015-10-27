@@ -1,5 +1,7 @@
 #include "stdafx.h"
 #include "errorHandling.h"
+#include <sstream>
+#define _CRT_SECURE_NO_WARNINGS
 
 using namespace std;
 // rather than checkDate, should we convertDate to just year in order to standardize it?
@@ -41,22 +43,16 @@ bool errorHandling::checkRow(vector<string> row, vector<string> columnHeaders, v
 
 //Henry
 // Validate the filter of the date range
-bool errorHandling::checkYearRange(string date1, string date2){
-	int year1 = stoi(date1);
-	int year2 = stoi(date2);
+int errorHandling::checkYear(string date){
+	istringstream dateStream(date);
+	string syear;
+	getline(dateStream, syear, '/');
+	istringstream yearStream(syear);
+	int nyear;
+	yearStream >> nyear;
 
-	// Determine the current year
-	time_t theTime = time(NULL);
-	struct tm *aTime = localtime(&theTime);
-	int currentYear = aTime->tm_year + 1900; // Year is # years since 1900
-
-	// Invalid if: 
-	// - year1 or year2 are above the current year
-	// - year1 is past year 2
-	if ((year1 > currentYear) || (year2 > currentYear) || year1 > year2){
-		return false;
-	}else
-	{
-		return true;
-	}
+	if ((float)nyear / 1000 < 1)
+		return 0;
+	else
+		return nyear;
 }
