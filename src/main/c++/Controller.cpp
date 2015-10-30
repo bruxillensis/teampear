@@ -7,6 +7,9 @@
 #include "mainwindow.h"
 #include "pubProfessor.h"
 #include "professorMap.h"
+#include <QFileDialog>
+#include <QMessageBox>
+#include <QMainWindow>
 
 using namespace std;
 
@@ -47,13 +50,25 @@ MainWindow* Controller::draw()
 //    q.push_back(p);
 }
 
+string Controller::getFileName(){
+    QString filename = QFileDialog::getOpenFileName(
+                0,
+                "Select a CSV file",
+                QDir::homePath(),
+                "CSV files (*.csv)"
+                );
+    return filename.toStdString();
+}
+
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
+    Controller *newController;
+    string filename = newController->getFileName();
     professorMap<pubProfessor>* newData = new professorMap<pubProfessor>();
-    newData->importCSV("./Publications_sample.csv");
+    newData->importCSV(filename);
     MainWindow *newWindow = new MainWindow(0, newData->callMe());
-    Controller *newController = new Controller(newWindow, newData);
+   newController = new Controller(newWindow, newData);
     newWindow = newController->draw();
 
     newWindow->show();

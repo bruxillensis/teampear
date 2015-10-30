@@ -16,5 +16,6 @@ class Controller
         //Controller();
         Controller(MainWindow*, professorMap<pubProfessor>*);//constructor
         void dataFilter(string, string); //check whether the two dates are correct
+        string getFileName();
         MainWindow* draw();
 };
