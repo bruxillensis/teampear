@@ -13,7 +13,8 @@
 #include "piedialog.h"
 #include "qdebug.h"
 #include <iostream>
-
+#include "qcustomplot.h"
+#include "bardialog.h"
 using namespace std;
 
 MainWindow::MainWindow(QWidget *parent=0) :
@@ -150,6 +151,16 @@ void MainWindow::on_actionImport_CSV_triggered()
 
     QMessageBox::information(this, tr("File Name"), filename);
     file_name = filename.toStdString();
+}
+
+void MainWindow::on_actionBar_Chart_triggered()
+{
+    if (vector.size() != 0)
+    {
+        BarDialog bar(this, vector);
+        bar.exec();
+    }
+    
 }
 
 string getFileName()

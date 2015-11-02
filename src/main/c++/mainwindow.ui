@@ -195,7 +195,7 @@
      <x>0</x>
      <y>0</y>
      <width>494</width>
-     <height>20</height>
+     <height>21</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuGenerate">
@@ -203,6 +203,7 @@
      <string>Generate</string>
     </property>
     <addaction name="actionPie_Chart"/>
+    <addaction name="actionBar_Chart"/>
    </widget>
    <widget class="QMenu" name="menuFile">
     <property name="title">
@@ -222,6 +223,11 @@
   <action name="actionImport_CSV">
    <property name="text">
     <string>Import CSV</string>
+   </property>
+  </action>
+  <action name="actionBar_Chart">
+   <property name="text">
+    <string>Bar Chart</string>
    </property>
   </action>
  </widget>

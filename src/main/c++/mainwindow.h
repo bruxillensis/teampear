@@ -32,6 +32,7 @@ private slots:
 
     void on_actionImport_CSV_triggered();
 
+    void on_actionBar_Chart_triggered();
 private:
     Ui::MainWindow *ui;
     std::vector<std::pair<std::string,std::vector<std::pair<std::string,int> > > > vector;
