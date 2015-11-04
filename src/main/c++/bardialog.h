@@ -20,7 +20,7 @@ public:
 
 private:
     Ui::BarDialog *ui;
-    vector<pair<string,vector<pair<string,int> > > > data;
+    vector<pair<string,vector<pair<string,int> > > > data1;
 };
 
 #endif // BARDIALOG_H

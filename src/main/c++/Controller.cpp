@@ -28,7 +28,7 @@ void Controller::dataFilter(std::string d1, std::string d2)
 MainWindow* Controller::draw()
 {
     vector<pair<std::string,vector<pair<std::string,int>>>> newPair;
-    newPair = data->callMe();
+    newPair = data->callMe(0,2015);// temp hardcode date (Henry)
     return new MainWindow(0,newPair);
     //fullData
 //    std::pair<std::string,std::vector<std::pair<std::string,std::string> > > p;
@@ -67,7 +67,7 @@ int main(int argc, char *argv[])
     string filename = newController->getFileName();
     professorMap<pubProfessor>* newData = new professorMap<pubProfessor>();
     newData->importCSV(filename);
-    MainWindow *newWindow = new MainWindow(0, newData->callMe());
+    MainWindow *newWindow = new MainWindow(0, newData->callMe(0,2015)); // temp hard code date (Henry)
    newController = new Controller(newWindow, newData);
     newWindow = newController->draw();
 

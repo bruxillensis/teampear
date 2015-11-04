@@ -3,7 +3,7 @@
 #include "piechartwidget.h"
 #include <QGridLayout>
 
-PieDialog::PieDialog(QWidget *parent, std::vector<std::pair<std::string,std::vector<std::pair<std::string,std::string> > > > vector) :
+PieDialog::PieDialog(QWidget *parent, std::vector<std::pair<std::string,std::vector<std::pair<std::string,int> > > > vector) :
     QDialog(parent),
     ui(new Ui::PieDialog)
 {

@@ -46,7 +46,7 @@ void PieChartWidget::paintEvent(QPaintEvent *)
 
 }
 
-void PieChartWidget::setData(std::vector<std::pair<std::string,std::vector<std::pair<std::string,std::string> > > > vector)
+void PieChartWidget::setData(std::vector<std::pair<std::string,std::vector<std::pair<std::string,int> > > > vector)
 {
     data = vector;
     repaint();

@@ -7,23 +7,33 @@
 
 using namespace std;
 BarDialog::BarDialog(QWidget *parent, vector<pair<string, vector<pair<string, int> > > > inData) :
-    QDialog(parent),
-    ui(new Ui::BarDialog)
+QDialog(parent),
+ui(new Ui::BarDialog)
 {
-    ui->setupUi(this);
-    data1 = inData;
-    // Grab Data and prepare x axis with professor Name labels:
-    QVector<double> ticks;
-    QVector<QString> profNames;
+	ui->setupUi(this);
+	data1 = inData;
+	// Grab Data and prepare x axis with professor Name labels:
+	QVector<double> ticks;
+	QVector<QString> profNames;
+	// Create vectors to hold the counts of each type
 	QVector<double> bookChaptersData, booksData, booksEditedData, caseReportsData, clinicalCareGuidesData, commentariesData, \
 		conferencesData, editorialsData, invitedArticlesData, journalArticlesData, lettersData, magazinesData, manualsData, \
 		monographsData, multimediaData, newletterArticlesData, newspaperArticlesData, abstractsData, studentPubsData, \
 		webVidsData, workingPapersData, othersData;
-    int size = data1.size();
-	while (data1.size()>0) 
-    {
+
+	// Create a vector to store the type names
+	const char* args[] = { "Book Chapters", "Books", "Books Edited", "Case Reports", "Clinical Case Guidelines", \
+		"Commentaries", "Conference Proceedings", "Editorials", "Invited Articles", "Journal Article", \
+		"Letters to Editor", "Magazine Entries", "Manuals", "Monographs", "Multimedia", "Newsletter Articles", \
+		"Newspaper Articles", "Published Abstracts", "Supervised Student Publications", "Websites / Videos", \
+		"Working Papers", "Others" };
+	vector<string> typeString(args, args + sizeof(args) / sizeof(args[0]));
+
+	int size = data1.size();
+	while (data1.size() > 0)
+	{
 		pair<string, vector<pair<string, int>>> pair1 = data1.back(); // everything within a type
-        data1.pop_back(); // remove that type from the data
+		data1.pop_back(); // remove that type from the data
 		vector<pair<string, int>> vector2 = pair1.second; // hold the vectors of profs for that type
 		while (vector2.size() > 0) // Iterate through the profs
 		{
@@ -36,197 +46,61 @@ BarDialog::BarDialog(QWidget *parent, vector<pair<string, vector<pair<string, in
 			int Ndx = profNames.indexOf(QString::fromStdString(pair2.first));
 			// resize all of the vectors of data counters, respective to the number of profs
 			// that way you can access it through the same index
-			
-			if (pair1.first == "Book Chapters")							{ bookChaptersData.resize(profNames.size()); bookChaptersData.insert(Ndx, pair2.second); }
-			else if (pair1.first == "Books")							{ booksData.resize(profNames.size()); booksData.insert(Ndx, pair2.second); }
-			else if (pair1.first == "Books Edited")						{ booksEditedData.resize(profNames.size()); booksEditedData.insert(Ndx, pair2.second); }
-			else if (pair1.first == "Case Reports")						{ caseReportsData.resize(profNames.size()); caseReportsData.insert(Ndx, pair2.second); }
-			else if (pair1.first == "Clinical Case Guidelines")			{ clinicalCareGuidesData.resize(profNames.size()); clinicalCareGuidesData.insert(Ndx, pair2.second); }
-			else if (pair1.first == "Commentaries")						{ commentariesData.resize(profNames.size()); commentariesData.insert(Ndx, pair2.second); }
-			else if (pair1.first == "Conference Proceedings")			{ conferencesData.resize(profNames.size()); conferencesData.insert(Ndx, pair2.second); }
-			else if (pair1.first == "Editorials")						{ editorialsData.resize(profNames.size()); editorialsData.insert(Ndx, pair2.second); }
-			else if (pair1.first == "Invited Articles")					{ invitedArticlesData.resize(profNames.size()); invitedArticlesData.insert(Ndx, pair2.second); }
-			else if (pair1.first == "Journal Article")					{ journalArticlesData.resize(profNames.size()); journalArticlesData.insert(Ndx, pair2.second); }
-			else if (pair1.first == "Letters to Editor")				{ lettersData.resize(profNames.size()); lettersData.insert(Ndx, pair2.second); }
-			else if (pair1.first == "Magazine Entries")					{ magazinesData.resize(profNames.size()); magazinesData.insert(Ndx, pair2.second); }
-			else if (pair1.first == "Manuals")							{ manualsData.resize(profNames.size()); manualsData.insert(Ndx, pair2.second); }
-			else if (pair1.first == "Monographs")						{ monographsData.resize(profNames.size()); monographsData.insert(Ndx, pair2.second); }
-			else if (pair1.first == "Multimedia")						{ multimediaData.resize(profNames.size()); multimediaData.insert(Ndx, pair2.second); }
-			else if (pair1.first == "Newsletter Articles")				{ newletterArticlesData.resize(profNames.size()); newletterArticlesData.insert(Ndx, pair2.second); }
-			else if (pair1.first == "Newspaper Articles")				{ newspaperArticlesData.resize(profNames.size()); newspaperArticlesData.insert(Ndx, pair2.second); }
-			else if (pair1.first == "Published Abstracts")				{ abstractsData.resize(profNames.size()); abstractsData.insert(Ndx, pair2.second); }
-			else if (pair1.first == "Supervised Student Publications")	{ studentPubsData.resize(profNames.size()); studentPubsData.insert(Ndx, pair2.second); }
-			else if (pair1.first == "Websites / Videos")				{ webVidsData.resize(profNames.size()); webVidsData.insert(Ndx, pair2.second); }
-			else if (pair1.first == "Working Papers")					{ workingPapersData.resize(profNames.size()); workingPapersData.insert(Ndx, pair2.second); }
-			else if (pair1.first == "Others")							{ othersData.resize(profNames.size()); othersData.insert(Ndx, pair2.second); }
+
+
+			if (pair1.first == typeString[0])		{ bookChaptersData.resize(profNames.size()); bookChaptersData.insert(Ndx, pair2.second); }
+			else if (pair1.first == typeString[1])	{ booksData.resize(profNames.size()); booksData.insert(Ndx, pair2.second); }
+			else if (pair1.first == typeString[2])	{ booksEditedData.resize(profNames.size()); booksEditedData.insert(Ndx, pair2.second); }
+			else if (pair1.first == typeString[3])	{ caseReportsData.resize(profNames.size()); caseReportsData.insert(Ndx, pair2.second); }
+			else if (pair1.first == typeString[4])	{ clinicalCareGuidesData.resize(profNames.size()); clinicalCareGuidesData.insert(Ndx, pair2.second); }
+			else if (pair1.first == typeString[5])	{ commentariesData.resize(profNames.size()); commentariesData.insert(Ndx, pair2.second); }
+			else if (pair1.first == typeString[6])	{ conferencesData.resize(profNames.size()); conferencesData.insert(Ndx, pair2.second); }
+			else if (pair1.first == typeString[7])	{ editorialsData.resize(profNames.size()); editorialsData.insert(Ndx, pair2.second); }
+			else if (pair1.first == typeString[8])	{ invitedArticlesData.resize(profNames.size()); invitedArticlesData.insert(Ndx, pair2.second); }
+			else if (pair1.first == typeString[9])	{ journalArticlesData.resize(profNames.size()); journalArticlesData.insert(Ndx, pair2.second); }
+			else if (pair1.first == typeString[10])	{ lettersData.resize(profNames.size()); lettersData.insert(Ndx, pair2.second); }
+			else if (pair1.first == typeString[11])	{ magazinesData.resize(profNames.size()); magazinesData.insert(Ndx, pair2.second); }
+			else if (pair1.first == typeString[12])	{ manualsData.resize(profNames.size()); manualsData.insert(Ndx, pair2.second); }
+			else if (pair1.first == typeString[13])	{ monographsData.resize(profNames.size()); monographsData.insert(Ndx, pair2.second); }
+			else if (pair1.first == typeString[14])	{ multimediaData.resize(profNames.size()); multimediaData.insert(Ndx, pair2.second); }
+			else if (pair1.first == typeString[15])	{ newletterArticlesData.resize(profNames.size()); newletterArticlesData.insert(Ndx, pair2.second); }
+			else if (pair1.first == typeString[16])	{ newspaperArticlesData.resize(profNames.size()); newspaperArticlesData.insert(Ndx, pair2.second); }
+			else if (pair1.first == typeString[17])	{ abstractsData.resize(profNames.size()); abstractsData.insert(Ndx, pair2.second); }
+			else if (pair1.first == typeString[18])	{ studentPubsData.resize(profNames.size()); studentPubsData.insert(Ndx, pair2.second); }
+			else if (pair1.first == typeString[19])	{ webVidsData.resize(profNames.size()); webVidsData.insert(Ndx, pair2.second); }
+			else if (pair1.first == typeString[20])	{ workingPapersData.resize(profNames.size()); workingPapersData.insert(Ndx, pair2.second); }
+			else if (pair1.first == typeString[21])	{ othersData.resize(profNames.size()); othersData.insert(Ndx, pair2.second); }
 			vector2.pop_back(); // remove prof
-            
-        }
-    }
-    for (int i=1; i<=profNames.count(); i++)
-    {
-        ticks.append(i);
-    }
+
+		}
+	}
+	for (int i = 1; i <= profNames.count(); i++)
+	{
+		ticks.append(i);
+	}
 
 	// create empty bar chart objects:
-	// This is a mess right now... I don't know how to iterate through a variable names
 	vector<QCPBars*> bars;
-	if (bookChaptersData.count(0) != bookChaptersData.size())		{ 
-		QCPBars *bookChapters = new QCPBars(ui->customPlot->xAxis, ui->customPlot->yAxis);
-		bookChapters->setName("Book Chapters");
-		bookChapters->setData(ticks, bookChaptersData);
-		bars.push_back(bookChapters);
-		ui->customPlot->addPlottable(bookChapters);
-	}
-	if (booksData.count(0) != booksData.size())				{
-		QCPBars *books = new QCPBars(ui->customPlot->xAxis, ui->customPlot->yAxis);
-		books->setName("Books");
-		books->setData(ticks, booksData);
-		bars.push_back(books);
-		ui->customPlot->addPlottable(books);
-	}
-	if (booksEditedData.count(0) != booksEditedData.size())			{
-		QCPBars *booksEdited = new QCPBars(ui->customPlot->xAxis, ui->customPlot->yAxis);
-		booksEdited->setName("Books Edited");
-		booksEdited->setData(ticks, booksEditedData);
-		bars.push_back(booksEdited);
-		ui->customPlot->addPlottable(booksEdited);
-	}
-	if (caseReportsData.count(0) != caseReportsData.size())			{
-		QCPBars *caseReports = new QCPBars(ui->customPlot->xAxis, ui->customPlot->yAxis);
-		caseReports->setName("Case Reports");
-		caseReports->setData(ticks, caseReportsData);
-		bars.push_back(caseReports);
-		ui->customPlot->addPlottable(caseReports);
-	}
-	if (clinicalCareGuidesData.count(0) != clinicalCareGuidesData.size())	{
-		QCPBars *clinicalCareGuides = new QCPBars(ui->customPlot->xAxis, ui->customPlot->yAxis);
-		clinicalCareGuides->setName("Clinical Case Guidelines");
-		clinicalCareGuides->setData(ticks, clinicalCareGuidesData);
-		bars.push_back(clinicalCareGuides);
-		ui->customPlot->addPlottable(clinicalCareGuides);
-	}
-	if (commentariesData.count(0) != commentariesData.size())		{
-		QCPBars *commentaries = new QCPBars(ui->customPlot->xAxis, ui->customPlot->yAxis);
-		commentaries->setName("Commentaries");
-		commentaries->setData(ticks, commentariesData);
-		bars.push_back(commentaries);
-		ui->customPlot->addPlottable(commentaries);
-	}
-	if (conferencesData.count(0) != conferencesData.size())			{
-		QCPBars *conferences = new QCPBars(ui->customPlot->xAxis, ui->customPlot->yAxis);
-		conferences->setName("Conference Proceedings");
-		conferences->setData(ticks, conferencesData);
-		bars.push_back(conferences);
-		ui->customPlot->addPlottable(conferences);
-	}
-	if (editorialsData.count(0) != editorialsData.size())			{
-		QCPBars *editorials = new QCPBars(ui->customPlot->xAxis, ui->customPlot->yAxis);
-		editorials->setName("Editorials");
-		editorials->setData(ticks, editorialsData);
-		bars.push_back(editorials);
-		ui->customPlot->addPlottable(editorials);
-	}
-	if (invitedArticlesData.count(0) != invitedArticlesData.size())		{
-		QCPBars *invitedArticles = new QCPBars(ui->customPlot->xAxis, ui->customPlot->yAxis);
-		invitedArticles->setName("Invited Articles");
-		invitedArticles->setData(ticks, invitedArticlesData);
-		bars.push_back(invitedArticles);
-		ui->customPlot->addPlottable(invitedArticles);
-	}
-	if (journalArticlesData.count(0) != journalArticlesData.size())		{
-		QCPBars *journalArticles = new QCPBars(ui->customPlot->xAxis, ui->customPlot->yAxis);
-		journalArticles->setName("Journal Articles");
-		journalArticles->setData(ticks, journalArticlesData);
-		bars.push_back(journalArticles);
-		ui->customPlot->addPlottable(journalArticles);
-	}
-	if (lettersData.count(0) != lettersData.size())				{
-		QCPBars *letters = new QCPBars(ui->customPlot->xAxis, ui->customPlot->yAxis);
-		letters->setName("Letters to Editor");
-		letters->setData(ticks, lettersData);
-		bars.push_back(letters);
-		ui->customPlot->addPlottable(letters);
-	}
-	if (magazinesData.count(0) != magazinesData.size())			{
-		QCPBars *magazines = new QCPBars(ui->customPlot->xAxis, ui->customPlot->yAxis);
-		magazines->setName("Magazine Entries");
-		magazines->setData(ticks, magazinesData);
-		bars.push_back(magazines);
-		ui->customPlot->addPlottable(magazines);
-	}
-	if (manualsData.count(0) != manualsData.size())				{
-		QCPBars *manuals = new QCPBars(ui->customPlot->xAxis, ui->customPlot->yAxis);
-		manuals->setName("Manuals");
-		manuals->setData(ticks, manualsData);
-		bars.push_back(manuals);
-		ui->customPlot->addPlottable(manuals);
-	}
-	if (monographsData.count(0) != monographsData.size())			{
-		QCPBars *monographs = new QCPBars(ui->customPlot->xAxis, ui->customPlot->yAxis);
-		monographs->setName("Monographs");
-		monographs->setData(ticks, monographsData);
-		bars.push_back(monographs);
-		ui->customPlot->addPlottable(monographs);
-	}
-	if (multimediaData.count(0) != multimediaData.size())			{
-		QCPBars *multimedia = new QCPBars(ui->customPlot->xAxis, ui->customPlot->yAxis);
-		multimedia->setName("Multimedia");
-		multimedia->setData(ticks, multimediaData);
-		bars.push_back(multimedia);
-		ui->customPlot->addPlottable(multimedia);
-	}
-	if (newletterArticlesData.count(0) != newletterArticlesData.size())	{
-		QCPBars *newletterArticles = new QCPBars(ui->customPlot->xAxis, ui->customPlot->yAxis);
-		newletterArticles->setName("Newsletter Articles");
-		newletterArticles->setData(ticks, newletterArticlesData);
-		bars.push_back(newletterArticles);
-		ui->customPlot->addPlottable(newletterArticles);
-	}
-	if (newspaperArticlesData.count(0) != newspaperArticlesData.size())	{
-		QCPBars *newspaperArticles = new QCPBars(ui->customPlot->xAxis, ui->customPlot->yAxis);
-		newspaperArticles->setName("Newspaper Articles");
-		newspaperArticles->setData(ticks, newspaperArticlesData);
-		bars.push_back(newspaperArticles);
-		ui->customPlot->addPlottable(newspaperArticles);
-	}
-	if (abstractsData.count(0) != abstractsData.size())			{
-		QCPBars *abstracts = new QCPBars(ui->customPlot->xAxis, ui->customPlot->yAxis);
-		abstracts->setName("Published Abstracts");
-		abstracts->setData(ticks, abstractsData);
-		bars.push_back(abstracts);
-		ui->customPlot->addPlottable(abstracts);
-	}
-	if (studentPubsData.count(0) != studentPubsData.size())			{
-		QCPBars *studentPubs = new QCPBars(ui->customPlot->xAxis, ui->customPlot->yAxis);
-		studentPubs->setName("Supervised Student Publications");
-		studentPubs->setData(ticks, studentPubsData);
-		bars.push_back(studentPubs);
-		ui->customPlot->addPlottable(studentPubs);
-	}
-	if (webVidsData.count(0) != webVidsData.size())				{
-		QCPBars *webVids = new QCPBars(ui->customPlot->xAxis, ui->customPlot->yAxis);
-		webVids->setName("Websites / Videos");
-		webVids->setData(ticks, webVidsData);
-		bars.push_back(webVids);
-		ui->customPlot->addPlottable(webVids);
-	}
-	if (workingPapersData.count(0) != workingPapersData.size())		{
-		QCPBars *workingPapers = new QCPBars(ui->customPlot->xAxis, ui->customPlot->yAxis);
-		workingPapers->setName("Working Papers");
-		workingPapers->setData(ticks, workingPapersData);
-		bars.push_back(workingPapers);
-		ui->customPlot->addPlottable(workingPapers);
-	}
-	if (othersData.count(0) != othersData.size())				{
-		QCPBars *others = new QCPBars(ui->customPlot->xAxis, ui->customPlot->yAxis);
-		others->setName("Others");
-		others->setData(ticks, othersData);
-		bars.push_back(others);
-		ui->customPlot->addPlottable(others);
+	// Create a vector to hold the vectors of Data
+	vector<QVector<double>> typeData = { bookChaptersData, booksData, booksEditedData, caseReportsData, clinicalCareGuidesData, commentariesData, \
+		conferencesData, editorialsData, invitedArticlesData, journalArticlesData, lettersData, magazinesData, manualsData, \
+		monographsData, multimediaData, newletterArticlesData, newspaperArticlesData, abstractsData, studentPubsData, \
+		webVidsData, workingPapersData, othersData };
 	
+	// loop through each of the data types
+	for (int i = 0; i < typeData.size(); i++)
+	{
+		// if there is an instance of a count that is not 0, create a plot for it with the respective data 
+		// and the respective data type string name
+		if (typeData[i].count(0) != typeData[i].size())
+		{
+			QCPBars *temp = new QCPBars(ui->customPlot->xAxis, ui->customPlot->yAxis);
+			temp->setName(QString::fromStdString(typeString[i]));
+			temp->setData(ticks, typeData[i]);
+			bars.push_back(temp);
+			ui->customPlot->addPlottable(temp);
+		}
 	}
-
 
 	// stack bars ontop of each other:
 	// loop through each of the QCPBar objects in the list bars
