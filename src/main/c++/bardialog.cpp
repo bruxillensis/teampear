@@ -11,7 +11,7 @@ BarDialog::BarDialog(QWidget *parent, vector<pair<string, vector<pair<string, in
     ui(new Ui::BarDialog)
 {
     ui->setupUi(this);
-    data = inData;
+    data1 = inData;
     // Grab Data and prepare x axis with professor Name labels:
     QVector<double> ticks;
     QVector<QString> profNames;
@@ -19,11 +19,11 @@ BarDialog::BarDialog(QWidget *parent, vector<pair<string, vector<pair<string, in
 		conferencesData, editorialsData, invitedArticlesData, journalArticlesData, lettersData, magazinesData, manualsData, \
 		monographsData, multimediaData, newletterArticlesData, newspaperArticlesData, abstractsData, studentPubsData, \
 		webVidsData, workingPapersData, othersData;
-    int size = data.size();
-	while (data.size()>0) 
+    int size = data1.size();
+	while (data1.size()>0) 
     {
-		pair<string, vector<pair<string, int>>> pair1 = data.back(); // everything within a type
-        data.pop_back(); // remove that type from the data
+		pair<string, vector<pair<string, int>>> pair1 = data1.back(); // everything within a type
+        data1.pop_back(); // remove that type from the data
 		vector<pair<string, int>> vector2 = pair1.second; // hold the vectors of profs for that type
 		while (vector2.size() > 0) // Iterate through the profs
 		{
@@ -71,154 +71,154 @@ BarDialog::BarDialog(QWidget *parent, vector<pair<string, vector<pair<string, in
 	// create empty bar chart objects:
 	// This is a mess right now... I don't know how to iterate through a variable names
 	vector<QCPBars*> bars;
-	if (!(bookChaptersData.empty()))		{ 
+	if (bookChaptersData.count(0) != bookChaptersData.size())		{ 
 		QCPBars *bookChapters = new QCPBars(ui->customPlot->xAxis, ui->customPlot->yAxis);
 		bookChapters->setName("Book Chapters");
 		bookChapters->setData(ticks, bookChaptersData);
 		bars.push_back(bookChapters);
 		ui->customPlot->addPlottable(bookChapters);
 	}
-	if (!(booksData.empty()))				{ 
+	if (booksData.count(0) != booksData.size())				{
 		QCPBars *books = new QCPBars(ui->customPlot->xAxis, ui->customPlot->yAxis);
 		books->setName("Books");
 		books->setData(ticks, booksData);
 		bars.push_back(books);
 		ui->customPlot->addPlottable(books);
 	}
-	if (!(booksEditedData.empty()))			{ 
+	if (booksEditedData.count(0) != booksEditedData.size())			{
 		QCPBars *booksEdited = new QCPBars(ui->customPlot->xAxis, ui->customPlot->yAxis);
 		booksEdited->setName("Books Edited");
 		booksEdited->setData(ticks, booksEditedData);
 		bars.push_back(booksEdited);
 		ui->customPlot->addPlottable(booksEdited);
 	}
-	if (!(caseReportsData.empty()))			{ 
+	if (caseReportsData.count(0) != caseReportsData.size())			{
 		QCPBars *caseReports = new QCPBars(ui->customPlot->xAxis, ui->customPlot->yAxis);
 		caseReports->setName("Case Reports");
 		caseReports->setData(ticks, caseReportsData);
 		bars.push_back(caseReports);
 		ui->customPlot->addPlottable(caseReports);
 	}
-	if (!(clinicalCareGuidesData.empty()))	{ 
+	if (clinicalCareGuidesData.count(0) != clinicalCareGuidesData.size())	{
 		QCPBars *clinicalCareGuides = new QCPBars(ui->customPlot->xAxis, ui->customPlot->yAxis);
 		clinicalCareGuides->setName("Clinical Case Guidelines");
 		clinicalCareGuides->setData(ticks, clinicalCareGuidesData);
 		bars.push_back(clinicalCareGuides);
 		ui->customPlot->addPlottable(clinicalCareGuides);
 	}
-	if (!(commentariesData.empty()))		{ 
+	if (commentariesData.count(0) != commentariesData.size())		{
 		QCPBars *commentaries = new QCPBars(ui->customPlot->xAxis, ui->customPlot->yAxis);
 		commentaries->setName("Commentaries");
 		commentaries->setData(ticks, commentariesData);
 		bars.push_back(commentaries);
 		ui->customPlot->addPlottable(commentaries);
 	}
-	if (!(conferencesData.empty()))			{ 
+	if (conferencesData.count(0) != conferencesData.size())			{
 		QCPBars *conferences = new QCPBars(ui->customPlot->xAxis, ui->customPlot->yAxis);
 		conferences->setName("Conference Proceedings");
 		conferences->setData(ticks, conferencesData);
 		bars.push_back(conferences);
 		ui->customPlot->addPlottable(conferences);
 	}
-	if (!(editorialsData.empty()))			{ 
+	if (editorialsData.count(0) != editorialsData.size())			{
 		QCPBars *editorials = new QCPBars(ui->customPlot->xAxis, ui->customPlot->yAxis);
 		editorials->setName("Editorials");
 		editorials->setData(ticks, editorialsData);
 		bars.push_back(editorials);
 		ui->customPlot->addPlottable(editorials);
 	}
-	if (!(invitedArticlesData.empty()))		{ 
+	if (invitedArticlesData.count(0) != invitedArticlesData.size())		{
 		QCPBars *invitedArticles = new QCPBars(ui->customPlot->xAxis, ui->customPlot->yAxis);
 		invitedArticles->setName("Invited Articles");
 		invitedArticles->setData(ticks, invitedArticlesData);
 		bars.push_back(invitedArticles);
 		ui->customPlot->addPlottable(invitedArticles);
 	}
-	if (!(journalArticlesData.empty()))		{ 
+	if (journalArticlesData.count(0) != journalArticlesData.size())		{
 		QCPBars *journalArticles = new QCPBars(ui->customPlot->xAxis, ui->customPlot->yAxis);
 		journalArticles->setName("Journal Articles");
 		journalArticles->setData(ticks, journalArticlesData);
 		bars.push_back(journalArticles);
 		ui->customPlot->addPlottable(journalArticles);
 	}
-	if (!(lettersData.empty()))				{ 
+	if (lettersData.count(0) != lettersData.size())				{
 		QCPBars *letters = new QCPBars(ui->customPlot->xAxis, ui->customPlot->yAxis);
 		letters->setName("Letters to Editor");
 		letters->setData(ticks, lettersData);
 		bars.push_back(letters);
 		ui->customPlot->addPlottable(letters);
 	}
-	if (!(magazinesData.empty()))			{ 
+	if (magazinesData.count(0) != magazinesData.size())			{
 		QCPBars *magazines = new QCPBars(ui->customPlot->xAxis, ui->customPlot->yAxis);
 		magazines->setName("Magazine Entries");
 		magazines->setData(ticks, magazinesData);
 		bars.push_back(magazines);
 		ui->customPlot->addPlottable(magazines);
 	}
-	if (!(manualsData.empty()))				{ 
+	if (manualsData.count(0) != manualsData.size())				{
 		QCPBars *manuals = new QCPBars(ui->customPlot->xAxis, ui->customPlot->yAxis);
 		manuals->setName("Manuals");
 		manuals->setData(ticks, manualsData);
 		bars.push_back(manuals);
 		ui->customPlot->addPlottable(manuals);
 	}
-	if (!(monographsData.empty()))			{ 
+	if (monographsData.count(0) != monographsData.size())			{
 		QCPBars *monographs = new QCPBars(ui->customPlot->xAxis, ui->customPlot->yAxis);
 		monographs->setName("Monographs");
 		monographs->setData(ticks, monographsData);
 		bars.push_back(monographs);
 		ui->customPlot->addPlottable(monographs);
 	}
-	if (!(multimediaData.empty()))			{ 
+	if (multimediaData.count(0) != multimediaData.size())			{
 		QCPBars *multimedia = new QCPBars(ui->customPlot->xAxis, ui->customPlot->yAxis);
 		multimedia->setName("Multimedia");
 		multimedia->setData(ticks, multimediaData);
 		bars.push_back(multimedia);
 		ui->customPlot->addPlottable(multimedia);
 	}
-	if (!(newletterArticlesData.empty()))	{ 
+	if (newletterArticlesData.count(0) != newletterArticlesData.size())	{
 		QCPBars *newletterArticles = new QCPBars(ui->customPlot->xAxis, ui->customPlot->yAxis);
 		newletterArticles->setName("Newsletter Articles");
 		newletterArticles->setData(ticks, newletterArticlesData);
 		bars.push_back(newletterArticles);
 		ui->customPlot->addPlottable(newletterArticles);
 	}
-	if (!(newspaperArticlesData.empty()))	{ 
+	if (newspaperArticlesData.count(0) != newspaperArticlesData.size())	{
 		QCPBars *newspaperArticles = new QCPBars(ui->customPlot->xAxis, ui->customPlot->yAxis);
 		newspaperArticles->setName("Newspaper Articles");
 		newspaperArticles->setData(ticks, newspaperArticlesData);
 		bars.push_back(newspaperArticles);
 		ui->customPlot->addPlottable(newspaperArticles);
 	}
-	if (!(abstractsData.empty()))			{ 
+	if (abstractsData.count(0) != abstractsData.size())			{
 		QCPBars *abstracts = new QCPBars(ui->customPlot->xAxis, ui->customPlot->yAxis);
 		abstracts->setName("Published Abstracts");
 		abstracts->setData(ticks, abstractsData);
 		bars.push_back(abstracts);
 		ui->customPlot->addPlottable(abstracts);
 	}
-	if (!(studentPubsData.empty()))			{ 
+	if (studentPubsData.count(0) != studentPubsData.size())			{
 		QCPBars *studentPubs = new QCPBars(ui->customPlot->xAxis, ui->customPlot->yAxis);
 		studentPubs->setName("Supervised Student Publications");
 		studentPubs->setData(ticks, studentPubsData);
 		bars.push_back(studentPubs);
 		ui->customPlot->addPlottable(studentPubs);
 	}
-	if (!(webVidsData.empty()))				{ 
+	if (webVidsData.count(0) != webVidsData.size())				{
 		QCPBars *webVids = new QCPBars(ui->customPlot->xAxis, ui->customPlot->yAxis);
 		webVids->setName("Websites / Videos");
 		webVids->setData(ticks, webVidsData);
 		bars.push_back(webVids);
 		ui->customPlot->addPlottable(webVids);
 	}
-	if (!(workingPapersData.empty()))		{ 
+	if (workingPapersData.count(0) != workingPapersData.size())		{
 		QCPBars *workingPapers = new QCPBars(ui->customPlot->xAxis, ui->customPlot->yAxis);
 		workingPapers->setName("Working Papers");
 		workingPapers->setData(ticks, workingPapersData);
 		bars.push_back(workingPapers);
 		ui->customPlot->addPlottable(workingPapers);
 	}
-	if (!(othersData.empty()))				{ 
+	if (othersData.count(0) != othersData.size())				{
 		QCPBars *others = new QCPBars(ui->customPlot->xAxis, ui->customPlot->yAxis);
 		others->setName("Others");
 		others->setData(ticks, othersData);
@@ -230,10 +230,12 @@ BarDialog::BarDialog(QWidget *parent, vector<pair<string, vector<pair<string, in
 
 	// stack bars ontop of each other:
 	// loop through each of the QCPBar objects in the list bars
+	
 	if (bars.size() > 1){
+		
 		for (int i = 0; i < (bars.size() - 1); i++)
 		{
-			(bars[i])->moveAbove(bars[i + 1]);
+			bars[i+1]->moveAbove(bars[i]);
 		}
 	}
 	// set the colors
