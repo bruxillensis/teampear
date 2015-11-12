@@ -10,7 +10,6 @@ private:
 	string primaryDomain;	//Primary Domain
 	int numberOfPublications;	//Number of entries in all vectors
 
-	//All vectors can be identifed by array operations (ex. getType()[i];)
 	vector<string>* publicationStatus;
 	vector<string>* type;
 	vector<string>* role;
@@ -18,6 +17,7 @@ private:
 	vector<string>* authors;
 	vector<string>* title;
 	vector<int>* date;
+	const vector<string>* typesOfPubs;
 
 public:
 	pubProfessor();
@@ -37,4 +37,5 @@ public:
 
 	void addEntry(string publicationStatus, string type, string role, string publicationName, string authors, string title, int date);
 	void removeEntry(int indexToRemove);
+	vector<pair<string, int>*>* getStatistics();
 };

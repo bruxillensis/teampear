@@ -15,6 +15,11 @@ pubProfessor::pubProfessor(){
 	this->authors = new vector<string>();
 	this->title = new vector<string>();
 	this->date = new vector<int>();
+	this->typesOfPubs = new vector<string>{ "Book Chapters", "Books", "Books Edited", "Case Reports", "Clinical Case Guidelines", \
+		"Commentaries", "Conference Proceedings", "Editorials", "Invited Articles", "Journal Article", \
+		"Letters to Editor", "Magazine Entries", "Manuals", "Monographs", "Multimedia", "Newsletter Articles", \
+		"Newspaper Articles", "Published Abstracts", "Supervised Student Publications", "Websites / Videos", \
+		"Working Papers", "Other" };
 }
 pubProfessor::pubProfessor(string memberName, string primaryDomain){
 	this->memberName = memberName;	//Member Name
@@ -27,6 +32,11 @@ pubProfessor::pubProfessor(string memberName, string primaryDomain){
 	this->authors = new vector<string>();
 	this->title = new vector<string>();
 	this->date = new vector<int>();
+	this->typesOfPubs = new vector<string>{ "Book Chapters", "Books", "Books Edited", "Case Reports", "Clinical Case Guidelines", \
+		"Commentaries", "Conference Proceedings", "Editorials", "Invited Articles", "Journal Article", \
+		"Letters to Editor", "Magazine Entries", "Manuals", "Monographs", "Multimedia", "Newsletter Articles", \
+		"Newspaper Articles", "Published Abstracts", "Supervised Student Publications", "Websites / Videos", \
+		"Working Papers", "Other" };
 }
 pubProfessor::~pubProfessor(){
 	delete this->publicationStatus;
@@ -75,4 +85,28 @@ void pubProfessor::removeEntry(int indexToRemove){
 	this->authors->erase(this->authors->begin() + indexToRemove);
 	this->title->erase(this->title->begin() + indexToRemove);
 	this->date->erase(this->date->begin() + indexToRemove);
+}
+
+vector<pair<string, int>*>* pubProfessor::getStatistics(){
+	//Number of publication types
+	vector<int> typeCount(this->typesOfPubs->size(), 0);
+	for (int i = 0; i < this->getNumberOfPubs(); i++){
+		//Compare publication type, if it is found add to count
+		for (int j = 0; j < typeCount.size(); j++){
+			if (this->getType()->at(i) == this->typesOfPubs->at(j)){
+				typeCount[j]++;
+				break;
+			}
+		}
+		//If publication is not found, break does not execute and type is "Other"
+		typeCount[typeCount.size() - 1]++;
+	}
+	
+	//Create new pairs, only create pairs that had counts that are non-zero
+	vector<pair<string, int>*>* returnVector = new vector<pair<string, int>*>();
+	for (int j = 0; j < typeCount.size(); j++){
+		if (typeCount[j] != 0)
+			returnVector->push_back(new pair<string, int>(this->typesOfPubs->at(j), typeCount[j]));
+	}
+	return returnVector;
 }
