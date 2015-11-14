@@ -42,7 +42,7 @@ public:
 	const vector<string>* getPrincipalInvestigator();
 	const vector<string>* getCoInvestigators();
 	const vector<float>* getFundingAmount();
-	void addEntry(string type, int startDate, int endDate, string grantStatus, bool peerReviewed, bool industryGrant, string role,
+	void addEntry(int startDate, int endDate, string type, string grantStatus, bool peerReviewed, bool industryGrant, string role,
 		string title, string principalInvestigator, string coInvestigator, float fundingAmount);
 	void removeEntry(int indexToRemove);
 	vector<pair<string, int>*>* getStatistics();

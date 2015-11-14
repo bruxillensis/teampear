@@ -35,7 +35,8 @@ public:
 	const vector<string>* getTitle();
 	const vector<int>* getDate();
 
-	void addEntry(string publicationStatus, string type, string role, string publicationName, string authors, string title, int date);
+	void addEntry(string publicationStatus, string type, int date, string role, string publicationName,
+		string authors, string title);
 	void removeEntry(int indexToRemove);
-	vector<pair<string, int>*>* getStatistics();
+	vector<pair<string, int>*>* getStatistics(int begin, int end);
 };

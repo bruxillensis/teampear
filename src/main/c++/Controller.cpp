@@ -2,7 +2,7 @@
 #include <vector>
 #include <utility>
 #include <QPair>
-#include <Controller.h>
+#include "controller.h"
 #include <string.h>
 #include "mainwindow.h"
 #include "pubProfessor.h"

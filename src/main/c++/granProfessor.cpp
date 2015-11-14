@@ -55,7 +55,7 @@ const vector<string>* granProfessor::getCoInvestigators(){ return this->coInvest
 const vector<float>* granProfessor::getFundingAmount(){ return this->fundingAmount; }
 
 //Add an entry to all vectors
-void granProfessor::addEntry(string type, int startDate, int endDate, string grantStatus, bool peerReviewed,
+void granProfessor::addEntry(int startDate, int endDate, string type, string grantStatus, bool peerReviewed,
 		bool industryGrant, string role, string title, string principalInvestigator, string coInvestigator, float fundingAmount){
 	this->numberOfGrants++;
 	this->type->push_back(type);
@@ -69,7 +69,6 @@ void granProfessor::addEntry(string type, int startDate, int endDate, string gra
 	this->principalInvestigator->push_back(principalInvestigator);
 	this->coInvestigators->push_back(coInvestigator);
 	this->fundingAmount->push_back(fundingAmount);
-
 }
 
 //Remove an entry, based on given index value (0 indexed)

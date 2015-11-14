@@ -178,7 +178,7 @@ public:
 		//Iterate through professors
         for (typename map<string, T*>::iterator it = professors->begin(); it != professors->end(); ++it) {
 			//Get statistics of professor
-			vector<pair<string, int>*>* profStats = it->second->getStatistics();
+			vector<pair<string, int>*>* profStats = it->second->getStatistics(begYear,endYear);
 			//Iterate through statistics
 			for (int i = 0; i < profStats->size(); i++){
 				//Search through return vector, if type is found add this prof to it and break

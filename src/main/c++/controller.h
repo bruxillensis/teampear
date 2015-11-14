@@ -2,7 +2,7 @@
 #include "professorMap.h"
 #include "mainwindow.h"
 #include "pubprofessor.h"
-#include <string.h>
+#include <string>
 
 using namespace std;
 

@@ -60,8 +60,8 @@ const vector<string>* pubProfessor::getTitle()				{ return this->title; }
 const vector<int>*	  pubProfessor::getDate()				{ return this->date; }
 
 //Add an entry to all vectors
-void pubProfessor::addEntry(string publicationStatus, string type, string role, string publicationName,
-		string authors, string title, int date){
+void pubProfessor::addEntry(string publicationStatus, string type, int date, string role, string publicationName,
+		string authors, string title){
 	this->numberOfPublications++;
 	this->publicationStatus->push_back(publicationStatus);
 	this->type->push_back(type);
@@ -87,15 +87,17 @@ void pubProfessor::removeEntry(int indexToRemove){
 	this->date->erase(this->date->begin() + indexToRemove);
 }
 
-vector<pair<string, int>*>* pubProfessor::getStatistics(){
+vector<pair<string, int>*>* pubProfessor::getStatistics(int begin, int end){
 	//Number of publication types
 	vector<int> typeCount(this->typesOfPubs->size(), 0);
 	for (int i = 0; i < this->getNumberOfPubs(); i++){
 		//Compare publication type, if it is found add to count
 		for (int j = 0; j < typeCount.size(); j++){
 			if (this->getType()->at(i) == this->typesOfPubs->at(j)){
-				typeCount[j]++;
-				break;
+				if ((this->getDate()->at(i) < end) && (this->getDate()->at(i) > begin)){
+					typeCount[j]++;
+					break;
+				}
 			}
 		}
 		//If publication is not found, break does not execute and type is "Other"

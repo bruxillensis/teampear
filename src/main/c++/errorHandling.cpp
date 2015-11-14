@@ -15,7 +15,7 @@ bool errorHandling::checkRow(vector<string> row, vector<string> columnHeaders, v
 		//Search through the column headers for the mandatory ones
 		auto found = find(columnHeaders.begin(), columnHeaders.end(), mandVal);
 		if (found == columnHeaders.end()){
-			throw new manditoryHeaderNotFoundException();
+			throw manditoryHeaderNotFoundException();
 		}else{
 			//Set the proper index by subtracting it from the beginning
 			auto index = distance(columnHeaders.begin(), found);
@@ -28,7 +28,7 @@ bool errorHandling::checkRow(vector<string> row, vector<string> columnHeaders, v
 	for (int &checkNdx : mandatoryNdx){
 		if (row[checkNdx] == ""){
 			//There is an empty mandatory cell!
-			throw new emptyManditoryCellException();
+			throw emptyManditoryCellException();
 		}
 	}
 	//There are no empty mandatory cells
@@ -53,4 +53,20 @@ int errorHandling::checkYear(string date){
 		throw new yearNotSpecifiedException();
 	else
 		return nyear;
+}
+
+bool errorHandling::checkFilter(int date){
+	return true;
+}
+
+bool errorHandling::toBool(string boolValue){
+	return true;
+}
+
+float errorHandling::toFloat(string floatValue){
+	return 0.0;
+}
+
+int errorHandling::toInt(string intValue){
+	return 0;
 }
