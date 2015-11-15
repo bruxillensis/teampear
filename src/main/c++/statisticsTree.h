@@ -95,7 +95,7 @@ private:
 				}
 			}
 			//Add the professor stats to the tree
-			for (int i = 0; i < pubTypes.size(); i++){
+			for (int i = 0; i < teachTypes.size(); i++){
 				root->getChildren()->at(i)->addChild(new node(it->second->getName(), typeCount[i]));
 			}
 		}
@@ -221,7 +221,7 @@ private:
 				}
 			}
 			//Add the professor stats to the tree
-			for (int i = 0; i < pubTypes.size(); i++){
+			for (int i = 0; i < presTypes.size(); i++){
 				root->getChildren()->at(i)->addChild(new node(it->second->getName(), typeCount[i]));
 			}
 		}
