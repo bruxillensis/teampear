@@ -4,8 +4,6 @@
 
 using namespace std;
 
-
-
 granProfessor::granProfessor(){
 	this->memberName = "";	//Member Name
 	this->primaryDomain = "";	//Primary Domain
@@ -41,6 +39,10 @@ granProfessor::~granProfessor(){
 	delete this->coInvestigators;
 	delete this->fundingAmount;
 }
+
+const string granProfessor::getName(){ return this->memberName; }
+const string granProfessor::getDomain(){ return this->primaryDomain; }
+const int granProfessor::getNumberOfGrants(){ return this->numberOfGrants; }
 
 const vector<string>* granProfessor::getType() { return this->type; }
 const vector<int>* granProfessor::getStartDate(){ return this->startDate; }

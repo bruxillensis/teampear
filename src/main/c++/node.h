@@ -29,6 +29,8 @@ public:
 
 	//Return the location of children vector
 	vector<node*>* getChildren();
+	//Organize children alphabetically (can also contain numbers)
+	void organizeChildren();
 	//Add a child to the tree
 	void addChild(node* child);
 	//Removes a child from the tree. As this is not a tree that can be reorganized

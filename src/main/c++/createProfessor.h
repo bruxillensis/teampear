@@ -92,6 +92,10 @@ private:
 				//Produce error message when implemented
 				cerr << e.what();
 			}
+			catch (failedTypeChangeException& e){
+				//Produce error message when implemented
+				cerr << e.what();
+			}
 		}
 		//Return the new professor after all entries have been added
 		return newProf;
@@ -123,6 +127,10 @@ private:
 				//Produce error message when implemented
 				cerr << e.what();
 			}
+			catch (failedTypeChangeException& e){
+				//Produce error message when implemented
+				cerr << e.what();
+			}
 		}
 		//Return the new professor after all entries have been added
 		return newProf;
@@ -144,6 +152,10 @@ private:
 				cerr << e.what();
 			}
 			catch (manditoryHeaderNotFoundException& e){
+				//Produce error message when implemented
+				cerr << e.what();
+			}
+			catch (failedTypeChangeException& e){
 				//Produce error message when implemented
 				cerr << e.what();
 			}

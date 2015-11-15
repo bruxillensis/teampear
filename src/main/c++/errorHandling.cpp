@@ -55,18 +55,51 @@ int errorHandling::checkYear(string date){
 		return nyear;
 }
 
+//Implement
 bool errorHandling::checkFilter(int date){
 	return true;
 }
 
 bool errorHandling::toBool(string boolValue){
-	return true;
+	if (boolValue.compare("TRUE"))
+		return true;
+	if (boolValue.compare("FALSE"))
+		return false;
+	throw new failedTypeChangeException();
 }
 
 float errorHandling::toFloat(string floatValue){
-	return 0.0;
+	vector<char> s;
+	//Convert string to vector to iterate through
+	for (char& i : vector<char>(floatValue.begin(), floatValue.end())){
+		//If value is a number or period add to output string vector
+		if (((i<57) && (i>48)) || (i == 46))
+			s.push_back(i);
+	}
+	try{
+		//Convert to string and attempt to convert to float
+		return std::stof(string(s.begin(), s.end()));
+	}
+	catch (const std::invalid_argument& ia){
+		//If no meaningful output throw exception
+		throw new failedTypeChangeException();
+	}
 }
 
 int errorHandling::toInt(string intValue){
-	return 0;
+	vector<char> s;
+	//Convert string to vector to iterate through
+	for (char& i : vector<char>(intValue.begin(), intValue.end())){
+		//If value is a number or period add to output string vector
+		if (((i<57) && (i>48)) || (i == 46))
+			s.push_back(i);
+	}
+	try{
+		//Convert to string and attempt to convert to int
+		return std::stoi(string(s.begin(), s.end()));
+	}
+	catch (const std::invalid_argument& ia){
+		//If no meaningful output throw exception
+		throw new failedTypeChangeException();
+	}
 }

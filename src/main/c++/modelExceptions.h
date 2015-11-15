@@ -27,4 +27,9 @@ class yearNotSpecifiedException : public exception {
 public:
 	virtual const char* what() const throw() { return "Year was not specified"; }
 };
+
+class failedTypeChangeException : public exception {
+public:
+	virtual const char* what() const throw() { return "Type could not be converted from string"; }
+};
 //CAN ADD ALL EXCEPTION CLASSES HERE
