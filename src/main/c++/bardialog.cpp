@@ -4,102 +4,53 @@
 #include <string.h>
 #include <iostream>
 #include <QString>
+#include "statisticsTree.h"
+#include "node.h"
 
 using namespace std;
-BarDialog::BarDialog(QWidget *parent, vector<pair<string, vector<pair<string, int> > > > inData) :
+
+BarDialog::BarDialog(QWidget *parent,  node* rootNode) :
 QDialog(parent),
 ui(new Ui::BarDialog)
 {
 	ui->setupUi(this);
-	data1 = inData;
+	treeData = rootNode; // Data is given in a tree with the root node being the type of .csv
+
+	// The first element of the root node will distinguish what type of data it is
+	// Either: "Publications","Programs","Presentations", OR NULL(empty) 
+	// empty == granProfessor; which branches into two other nodes "Grants" and "Clinical Funding" ... and so forth
+	string dataType = treeData->getFirst; 
+
+	// I'm just going to try and figure out publication.csv for now
 	// Grab Data and prepare x axis with professor Name labels:
 	QVector<double> ticks;
 	QVector<QString> profNames;
-	// Create vectors to hold the counts of each type
-	QVector<double> bookChaptersData, booksData, booksEditedData, caseReportsData, clinicalCareGuidesData, commentariesData, \
-		conferencesData, editorialsData, invitedArticlesData, journalArticlesData, lettersData, magazinesData, manualsData, \
-		monographsData, multimediaData, newletterArticlesData, newspaperArticlesData, abstractsData, studentPubsData, \
-		webVidsData, workingPapersData, othersData;
 
-	// Create a vector to store the type names
-	const char* args[] = { "Book Chapters", "Books", "Books Edited", "Case Reports", "Clinical Case Guidelines", \
-		"Commentaries", "Conference Proceedings", "Editorials", "Invited Articles", "Journal Article", \
-		"Letters to Editor", "Magazine Entries", "Manuals", "Monographs", "Multimedia", "Newsletter Articles", \
-		"Newspaper Articles", "Published Abstracts", "Supervised Student Publications", "Websites / Videos", \
-		"Working Papers", "Others" };
-	vector<string> typeString(args, args + sizeof(args) / sizeof(args[0]));
+	// get the child nodes of the root node to get the publication types
+	vector<node*>* pubTypes = treeData->getChildren();
 
-	int size = data1.size();
-	while (data1.size() > 0)
-	{
-		pair<string, vector<pair<string, int>>> pair1 = data1.back(); // everything within a type
-		data1.pop_back(); // remove that type from the data
-		vector<pair<string, int>> vector2 = pair1.second; // hold the vectors of profs for that type
-		while (vector2.size() > 0) // Iterate through the profs
-		{
-
-			pair<string, int> pair2 = vector2.back(); // hold the prof name
-			if (!(profNames.contains(QString::fromStdString(pair2.first))))// check if its already in profname list
-			{
-				profNames.append(QString::fromStdString(pair2.first));
-			}
-			int Ndx = profNames.indexOf(QString::fromStdString(pair2.first));
-			// resize all of the vectors of data counters, respective to the number of profs
-			// that way you can access it through the same index
-
-
-			if (pair1.first == typeString[0])		{ bookChaptersData.resize(profNames.size()); bookChaptersData.insert(Ndx, pair2.second); }
-			else if (pair1.first == typeString[1])	{ booksData.resize(profNames.size()); booksData.insert(Ndx, pair2.second); }
-			else if (pair1.first == typeString[2])	{ booksEditedData.resize(profNames.size()); booksEditedData.insert(Ndx, pair2.second); }
-			else if (pair1.first == typeString[3])	{ caseReportsData.resize(profNames.size()); caseReportsData.insert(Ndx, pair2.second); }
-			else if (pair1.first == typeString[4])	{ clinicalCareGuidesData.resize(profNames.size()); clinicalCareGuidesData.insert(Ndx, pair2.second); }
-			else if (pair1.first == typeString[5])	{ commentariesData.resize(profNames.size()); commentariesData.insert(Ndx, pair2.second); }
-			else if (pair1.first == typeString[6])	{ conferencesData.resize(profNames.size()); conferencesData.insert(Ndx, pair2.second); }
-			else if (pair1.first == typeString[7])	{ editorialsData.resize(profNames.size()); editorialsData.insert(Ndx, pair2.second); }
-			else if (pair1.first == typeString[8])	{ invitedArticlesData.resize(profNames.size()); invitedArticlesData.insert(Ndx, pair2.second); }
-			else if (pair1.first == typeString[9])	{ journalArticlesData.resize(profNames.size()); journalArticlesData.insert(Ndx, pair2.second); }
-			else if (pair1.first == typeString[10])	{ lettersData.resize(profNames.size()); lettersData.insert(Ndx, pair2.second); }
-			else if (pair1.first == typeString[11])	{ magazinesData.resize(profNames.size()); magazinesData.insert(Ndx, pair2.second); }
-			else if (pair1.first == typeString[12])	{ manualsData.resize(profNames.size()); manualsData.insert(Ndx, pair2.second); }
-			else if (pair1.first == typeString[13])	{ monographsData.resize(profNames.size()); monographsData.insert(Ndx, pair2.second); }
-			else if (pair1.first == typeString[14])	{ multimediaData.resize(profNames.size()); multimediaData.insert(Ndx, pair2.second); }
-			else if (pair1.first == typeString[15])	{ newletterArticlesData.resize(profNames.size()); newletterArticlesData.insert(Ndx, pair2.second); }
-			else if (pair1.first == typeString[16])	{ newspaperArticlesData.resize(profNames.size()); newspaperArticlesData.insert(Ndx, pair2.second); }
-			else if (pair1.first == typeString[17])	{ abstractsData.resize(profNames.size()); abstractsData.insert(Ndx, pair2.second); }
-			else if (pair1.first == typeString[18])	{ studentPubsData.resize(profNames.size()); studentPubsData.insert(Ndx, pair2.second); }
-			else if (pair1.first == typeString[19])	{ webVidsData.resize(profNames.size()); webVidsData.insert(Ndx, pair2.second); }
-			else if (pair1.first == typeString[20])	{ workingPapersData.resize(profNames.size()); workingPapersData.insert(Ndx, pair2.second); }
-			else if (pair1.first == typeString[21])	{ othersData.resize(profNames.size()); othersData.insert(Ndx, pair2.second); }
-			vector2.pop_back(); // remove prof
-
-		}
-	}
-	for (int i = 1; i <= profNames.count(); i++)
+	// Assuming each pubType has the same amount and order of child nodes (i.e. for each existing prof)
+	for (int i = 1; i <= pubTypes->at(0)->getChildren()->size(); i++)
 	{
 		ticks.append(i);
+		profNames.append(QString::fromStdString(pubTypes->at(0)->getChildren()->at(i)->getFirst));
 	}
-
-	// create empty bar chart objects:
+		
+	// create a vector of bar plots. This way you can iteratively stack them ontop of one another
 	vector<QCPBars*> bars;
-	// Create a vector to hold the vectors of Data
-	vector<QVector<double>> typeData = { bookChaptersData, booksData, booksEditedData, caseReportsData, clinicalCareGuidesData, commentariesData, \
-		conferencesData, editorialsData, invitedArticlesData, journalArticlesData, lettersData, magazinesData, manualsData, \
-		monographsData, multimediaData, newletterArticlesData, newspaperArticlesData, abstractsData, studentPubsData, \
-		webVidsData, workingPapersData, othersData };
-	
-	// loop through each of the data types
-	for (int i = 0; i < typeData.size(); i++)
+	// create a new plottable area for each type of publication
+	for (int i = 0; i < pubTypes->size(); i++)
 	{
-		// if there is an instance of a count that is not 0, create a plot for it with the respective data 
-		// and the respective data type string name
-		if (typeData[i].count(0) != typeData[i].size())
+		QVector<double> pubCount;
+		for (int j = 0; j < pubTypes->at(i)->getChildren()->size(); j++)
 		{
-			QCPBars *temp = new QCPBars(ui->customPlot->xAxis, ui->customPlot->yAxis);
-			temp->setName(QString::fromStdString(typeString[i]));
-			temp->setData(ticks, typeData[i]);
-			bars.push_back(temp);
-			ui->customPlot->addPlottable(temp);
+			pubCount.push_back(pubTypes->at(i)->getChildren()->at(j)->getSecond);
 		}
+		QCPBars *temp = new QCPBars(ui->customPlot->xAxis, ui->customPlot->yAxis);
+		temp->setName(QString::fromStdString(pubTypes->at(i)->getFirst));
+		temp->setData(ticks, pubCount);
+		bars.push_back(temp);
+		ui->customPlot->addPlottable(temp);
 	}
 
 	// stack bars ontop of each other:
@@ -116,30 +67,31 @@ ui(new Ui::BarDialog)
 	QPen pen;
 	pen.setWidthF(1.2);
 	int hue1 = 0;
-	int hue2 = 100;
-	int hue3 = 200;
+	int hue2 = 210;
+	int hue3 = 255;
 	for (int i = 0; i < bars.size(); i++)
 	{
 		pen.setColor(QColor(hue1 % 255, hue2 % 255, hue3 % 255));
 		bars[i]->setPen(pen);
-		bars[i]->setBrush((QColor(hue1 % 255, hue2 % 255, hue3 % 255, 50)));
+		bars[i]->setBrush((QColor(hue1 % 255, hue2 % 255, hue3 % 255, 75)));
 		hue1 += 17;
-		hue2 += 97;
-		hue3 += 79;
+		//hue2 += 97;
+		//hue3 += 79;
 	}
 
+	// prepare x axis:
     ui->customPlot->xAxis->setAutoTicks(false);
     ui->customPlot->xAxis->setAutoTickLabels(false);
     ui->customPlot->xAxis->setTickVector(ticks);
     ui->customPlot->xAxis->setTickVectorLabels(profNames);
     ui->customPlot->xAxis->setTickLabelRotation(60);
     ui->customPlot->xAxis->setSubTickCount(0);
-    ui->customPlot->xAxis->setTickLength(0, 4);
+    ui->customPlot->xAxis->setTickLength(0, 3);
     ui->customPlot->xAxis->grid()->setVisible(true);
-    ui->customPlot->xAxis->setRange(0, 8);
+    ui->customPlot->xAxis->setRange(0, 10);
 
     // prepare y axis:
-    ui->customPlot->yAxis->setRange(0, 12.1);
+    ui->customPlot->yAxis->setRange(0, 20);
     ui->customPlot->yAxis->setPadding(5); // a bit more space to the left border
     ui->customPlot->yAxis->setLabel("Publication Count");
     ui->customPlot->yAxis->grid()->setSubGridVisible(true);
