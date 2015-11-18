@@ -3,24 +3,28 @@
 
 #include <QDialog>
 #include "qcustomplot.h"
+#include "statisticsTree.h"
+#include "node.h"
 
 using namespace std;
-
+	
 namespace Ui {
 class BarDialog;
 }
+
 
 class BarDialog : public QDialog
 {
     Q_OBJECT
 
 public:
-    explicit BarDialog(QWidget *parent, vector<pair<string,vector<pair<string,int> > > > );
+	explicit BarDialog(QWidget *parent, node* rootNode);
     ~BarDialog();
 
 private:
     Ui::BarDialog *ui;
-    vector<pair<string,vector<pair<string,int> > > > data1;
+	node* treeData;
+	string dataType;
 };
 
 #endif // BARDIALOG_H
