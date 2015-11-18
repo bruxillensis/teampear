@@ -6,228 +6,121 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>494</width>
-    <height>441</height>
+    <width>837</width>
+    <height>535</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>MainWindow</string>
   </property>
   <widget class="QWidget" name="centralWidget">
-   <widget class="QTreeWidget" name="treeWidget">
-    <property name="geometry">
-     <rect>
-      <x>30</x>
-      <y>50</y>
-      <width>421</width>
-      <height>431</height>
-     </rect>
-    </property>
-    <column>
-     <property name="text">
-      <string>List</string>
-     </property>
-    </column>
+   <property name="enabled">
+    <bool>true</bool>
+   </property>
+   <layout class="QVBoxLayout" name="verticalLayout_2">
     <item>
-     <property name="text">
-      <string>Book Chapters</string>
-     </property>
+     <layout class="QVBoxLayout" name="verticalLayout">
+      <item>
+       <layout class="QHBoxLayout" name="horizontalLayout">
+        <item>
+         <widget class="QPushButton" name="newTabButton">
+          <property name="text">
+           <string>New Tab</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="deleteTabButton">
+          <property name="text">
+           <string>Delete Tab</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <spacer name="horizontalSpacer">
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>40</width>
+            <height>20</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+       </layout>
+      </item>
+      <item>
+       <widget class="QTabWidget" name="tabWidget">
+        <property name="currentIndex">
+         <number>-1</number>
+        </property>
+       </widget>
+      </item>
+     </layout>
     </item>
-    <item>
-     <property name="text">
-      <string>Books</string>
-     </property>
-    </item>
-    <item>
-     <property name="text">
-      <string>Books Edited</string>
-     </property>
-    </item>
-    <item>
-     <property name="text">
-      <string>Case Reports</string>
-     </property>
-    </item>
-    <item>
-     <property name="text">
-      <string>Clinical Care Guidelines</string>
-     </property>
-    </item>
-    <item>
-     <property name="text">
-      <string>Commentaries</string>
-     </property>
-    </item>
-    <item>
-     <property name="text">
-      <string>Conference Proceedings</string>
-     </property>
-    </item>
-    <item>
-     <property name="text">
-      <string>Editorials</string>
-     </property>
-    </item>
-    <item>
-     <property name="text">
-      <string>Invited Articles</string>
-     </property>
-    </item>
-    <item>
-     <property name="text">
-      <string>Jounral Article</string>
-     </property>
-    </item>
-    <item>
-     <property name="text">
-      <string>Letters to Editor</string>
-     </property>
-    </item>
-    <item>
-     <property name="text">
-      <string>Magazine Entries</string>
-     </property>
-    </item>
-    <item>
-     <property name="text">
-      <string>Manuals</string>
-     </property>
-    </item>
-    <item>
-     <property name="text">
-      <string>Monographs</string>
-     </property>
-    </item>
-    <item>
-     <property name="text">
-      <string>Multimedia</string>
-     </property>
-    </item>
-    <item>
-     <property name="text">
-      <string>Newsletter Articles</string>
-     </property>
-    </item>
-    <item>
-     <property name="text">
-      <string>Newspaper Articles</string>
-     </property>
-    </item>
-    <item>
-     <property name="text">
-      <string>Published Abstract</string>
-     </property>
-    </item>
-    <item>
-     <property name="text">
-      <string>Supervised Student Publications</string>
-     </property>
-    </item>
-    <item>
-     <property name="text">
-      <string>Websites / Videos</string>
-     </property>
-    </item>
-    <item>
-     <property name="text">
-      <string>Working Papers</string>
-     </property>
-    </item>
-   </widget>
-   <widget class="QSplitter" name="splitter">
-    <property name="geometry">
-     <rect>
-      <x>30</x>
-      <y>20</y>
-      <width>291</width>
-      <height>22</height>
-     </rect>
-    </property>
-    <property name="orientation">
-     <enum>Qt::Horizontal</enum>
-    </property>
-    <widget class="QLineEdit" name="startDate">
-     <property name="maxLength">
-      <number>4</number>
-     </property>
-    </widget>
-    <widget class="QLineEdit" name="endDate">
-     <property name="maxLength">
-      <number>4</number>
-     </property>
-    </widget>
-    <widget class="QPushButton" name="pushButton">
-     <property name="text">
-      <string>Confirm</string>
-     </property>
-    </widget>
-   </widget>
-   <widget class="QWidget" name="layoutWidget">
-    <property name="geometry">
-     <rect>
-      <x>30</x>
-      <y>0</y>
-      <width>211</width>
-      <height>16</height>
-     </rect>
-    </property>
-    <layout class="QHBoxLayout" name="horizontalLayout">
-     <item>
-      <widget class="QLabel" name="label">
-       <property name="text">
-        <string>Start year</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QLabel" name="label_2">
-       <property name="text">
-        <string>End year</string>
-       </property>
-      </widget>
-     </item>
-    </layout>
-   </widget>
+   </layout>
   </widget>
   <widget class="QMenuBar" name="menuBar">
    <property name="geometry">
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>494</width>
-     <height>21</height>
+     <width>837</width>
+     <height>22</height>
     </rect>
    </property>
-   <widget class="QMenu" name="menuGenerate">
+   <widget class="QMenu" name="menuTeam_pear_example_UI">
     <property name="title">
-     <string>Generate</string>
+     <string>Menu</string>
     </property>
-    <addaction name="actionPie_Chart"/>
-    <addaction name="actionBar_Chart"/>
-   </widget>
-   <widget class="QMenu" name="menuFile">
-    <property name="title">
-     <string>File</string>
-    </property>
+    <widget class="QMenu" name="menuGenerate_New_Graph">
+     <property name="title">
+      <string>Generate New Graph</string>
+     </property>
+     <addaction name="actionGenerate_Pie_Chart"/>
+     <addaction name="actionGenerate_Bar_Graph"/>
+    </widget>
     <addaction name="actionImport_CSV"/>
+    <addaction name="menuGenerate_New_Graph"/>
+    <addaction name="actionSave_Graph"/>
+    <addaction name="actionPrint_Graph"/>
    </widget>
-   <addaction name="menuFile"/>
-   <addaction name="menuGenerate"/>
+   <addaction name="menuTeam_pear_example_UI"/>
+  </widget>
+  <widget class="QToolBar" name="mainToolBar">
+   <attribute name="toolBarArea">
+    <enum>TopToolBarArea</enum>
+   </attribute>
+   <attribute name="toolBarBreak">
+    <bool>false</bool>
+   </attribute>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
-  <action name="actionPie_Chart">
-   <property name="text">
-    <string>Pie Chart</string>
-   </property>
-  </action>
   <action name="actionImport_CSV">
    <property name="text">
     <string>Import CSV</string>
    </property>
   </action>
-  <action name="actionBar_Chart">
+  <action name="actionGenerate_Pie_Chart">
    <property name="text">
-    <string>Bar Chart</string>
+    <string>Generate Pie Chart</string>
+   </property>
+  </action>
+  <action name="actionGenerate_Bar_Graph">
+   <property name="text">
+    <string>Generate Bar Graph</string>
+   </property>
+  </action>
+  <action name="actionSave_Graph">
+   <property name="text">
+    <string>Save Graph</string>
+   </property>
+  </action>
+  <action name="actionPrint_Graph">
+   <property name="text">
+    <string>Print Graph</string>
    </property>
   </action>
  </widget>
