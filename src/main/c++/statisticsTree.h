@@ -6,6 +6,7 @@
 #include "granProfessor.h"
 #include "teacProfessor.h"
 #include "presProfessor.h"
+#include "professorMap.h"
 
 using namespace std;
 

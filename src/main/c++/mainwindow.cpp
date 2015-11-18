@@ -17,9 +17,6 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-
-
-
 }
 
 
@@ -32,7 +29,7 @@ MainWindow::~MainWindow()
 void MainWindow::on_newTabButton_clicked()
 {
     ui->tabWidget->insertTab(ui->tabWidget->count(), new tabLayoutWidget(), QIcon(QString("")), "New Tab");
-ui->tabWidget->setCurrentIndex(ui->tabWidget->count()-1);
+	ui->tabWidget->setCurrentIndex(ui->tabWidget->count()-1);
 }
 
 void MainWindow::on_deleteTabButton_clicked()
@@ -42,8 +39,6 @@ void MainWindow::on_deleteTabButton_clicked()
 
 void MainWindow::on_actionImport_CSV_triggered()
 {
-
-
     QString filename = QFileDialog::getOpenFileName(
                     this,
                     tr("Open File"),
@@ -53,29 +48,26 @@ void MainWindow::on_actionImport_CSV_triggered()
 
         QMessageBox::information(this, tr("File Name"), filename);
         file_name = filename.toStdString();
-
-
-
 }
 
 //make widget that appears in mdiarea of the tab
 void MainWindow::on_actionGenerate_Pie_Chart_triggered()
 {
-
+	return;
 }
 
 //make widget that appears in mdiarea of the tab
 void MainWindow::on_actionGenerate_Bar_Graph_triggered()
 {
-
+	return;
 }
 
 void MainWindow::on_actionSave_Graph_triggered()
 {
-
+	return;
 }
 
 void MainWindow::on_actionPrint_Graph_triggered()
 {
-
+	return;
 }

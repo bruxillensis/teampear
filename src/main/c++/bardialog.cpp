@@ -19,7 +19,7 @@ ui(new Ui::BarDialog)
 	// The first element of the root node will distinguish what type of data it is
 	// Either: "Publications","Programs","Presentations", OR NULL(empty) 
 	// empty == granProfessor; which branches into two other nodes "Grants" and "Clinical Funding" ... and so forth
-	string dataType = treeData->getFirst; 
+	string dataType = treeData->getFirst(); 
 
 	// I'm just going to try and figure out publication.csv for now
 	// Grab Data and prepare x axis with professor Name labels:
@@ -33,7 +33,7 @@ ui(new Ui::BarDialog)
 	for (int i = 1; i <= pubTypes->at(0)->getChildren()->size(); i++)
 	{
 		ticks.append(i);
-		profNames.append(QString::fromStdString(pubTypes->at(0)->getChildren()->at(i)->getFirst));
+		profNames.append(QString::fromStdString(pubTypes->at(0)->getChildren()->at(i)->getFirst()));
 	}
 		
 	// create a vector of bar plots. This way you can iteratively stack them ontop of one another
@@ -44,10 +44,10 @@ ui(new Ui::BarDialog)
 		QVector<double> pubCount;
 		for (int j = 0; j < pubTypes->at(i)->getChildren()->size(); j++)
 		{
-			pubCount.push_back(pubTypes->at(i)->getChildren()->at(j)->getSecond);
+			pubCount.push_back(pubTypes->at(i)->getChildren()->at(j)->getSecond());
 		}
 		QCPBars *temp = new QCPBars(ui->customPlot->xAxis, ui->customPlot->yAxis);
-		temp->setName(QString::fromStdString(pubTypes->at(i)->getFirst));
+		temp->setName(QString::fromStdString(pubTypes->at(i)->getFirst()));
 		temp->setData(ticks, pubCount);
 		bars.push_back(temp);
 		ui->customPlot->addPlottable(temp);
