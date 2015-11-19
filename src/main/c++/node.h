@@ -17,6 +17,7 @@ private:
 	int third;
 	float fourth;
 	vector<node*>* children;
+	bool visible;
 public:
 	//Constructor
 	node(){
@@ -25,6 +26,7 @@ public:
 		third = 0;
 		fourth = 0;
 		children = new vector<node*>();
+		visible = false;
 	}
 	
 	//Constructor for all known values
@@ -34,6 +36,7 @@ public:
 		this->third = third;
 		this->fourth = fourth;
 		children = new vector<node*>();
+		visible = false;
 	}
 	
 	//Constructor with another tree as argument
@@ -42,6 +45,7 @@ public:
 		this->second = orig.getSecond();
 		this->third = orig.getThird();
 		this->fourth = orig.getFourth();
+		this->visible = orig.getVisible();
 	}
 
 	//Should delete node and all of this children recursively
@@ -51,13 +55,11 @@ public:
 		delete &third;
 		delete &fourth;
 		delete children;
+		delete &visible;
 	}
 
 	//Return the location of children vector
 	vector<node*>* getChildren(){ return children; }
-
-	//Organize children alphabetically (can also contain numbers)
-	void organizeChildren();
 	
 	//return index of the child with the name as a parameter
 	int findChildPosition(node* child){
@@ -130,4 +132,5 @@ public:
 	int getSecond(){ return second; }
 	int getThird(){ return third; }
 	float getFourth(){ return fourth; }
+	bool getVisible(){ return visible };
 };
