@@ -1,6 +1,6 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
-
+#include "pubTree.h"
 
 #include <utility>
 #include <string>
@@ -48,6 +48,9 @@ void MainWindow::on_actionImport_CSV_triggered()
 
         QMessageBox::information(this, tr("File Name"), filename);
         file_name = filename.toStdString();
+		//Hardcode
+		this->data->importCSV(file_name, professorMap::profType::Publication);
+		pubTree* test = new pubTree(this->data);
 }
 
 //make widget that appears in mdiarea of the tab

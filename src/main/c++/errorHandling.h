@@ -2,6 +2,7 @@
 #include <string>
 #include <exception>
 #include <vector>
+#include "boost/date_time/gregorian/gregorian.hpp"
 
 using namespace std;
 
@@ -13,7 +14,7 @@ public:
 	static bool checkRow(vector<string> row, vector<string> columnHeaders, vector<string> mandatoryValues);
 
 	// Validate the filter of the date range
-	static int checkYear(string date);
+	static boost::gregorian::date checkYear(string date);
 	static bool checkFilter(int date);
 	static bool toBool(string boolValue);
 	static float toFloat(string floatValue);

@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "errorHandling.h"
 #include "modelExceptions.h"
+#include "boost/date_time/gregorian/gregorian.hpp"
 #include <sstream>
 #define _CRT_SECURE_NO_WARNINGS
 
@@ -36,23 +37,39 @@ bool errorHandling::checkRow(vector<string> row, vector<string> columnHeaders, v
 }
 
 // Validate the filter of the date range
-int errorHandling::checkYear(string date){
-	//Get year from date string
+boost::gregorian::date errorHandling::checkYear(string date){
+	//Get date values from date string
 	istringstream ss(date);
-	string syear;
+	string syear, smonth, sday;
 	getline(ss, syear, '/');
-	
-	//Reset stringstream and convert year to integer
-	ss.str(syear);
-	ss.clear();
-	int nyear;
-	ss >> nyear;
-
-	//Type cast to float to check if it is a year and return
-	if ((float)nyear / 1000 < 1)
-		throw new yearNotSpecifiedException();
-	else
-		return nyear;
+	getline(ss, smonth, '/');
+	getline(ss, sday);
+	//Reset stringstream and convert date to int values
+	int nyear, nmonth, nday;
+	if (syear != ""){
+		ss.str(syear);
+		ss.clear();
+		ss >> nyear;
+	}
+	else{ nyear = 1900; }
+	if (smonth != ""){
+		ss.str(smonth);
+		ss.clear();
+		ss >> nmonth;
+	}
+	else{ nmonth = 1; }
+	if (sday != ""){
+		ss.str(sday);
+		ss.clear();
+		ss >> nday;
+	}
+	else{ nday = 1; }
+	try{
+		return boost::gregorian::date(nyear, nmonth, nday);
+	}
+	catch (...){
+		throw new invalidDateException();
+	}
 }
 
 //Implement

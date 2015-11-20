@@ -23,9 +23,9 @@ public:
 	virtual const char* what() const throw() { return "Manditory cell is empty"; }
 };
 
-class yearNotSpecifiedException : public exception {
+class invalidDateException : public exception {
 public:
-	virtual const char* what() const throw() { return "Year was not specified"; }
+	virtual const char* what() const throw() { return "Date is not valid"; }
 };
 
 class failedTypeChangeException : public exception {

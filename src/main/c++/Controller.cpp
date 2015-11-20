@@ -5,15 +5,18 @@
 #include "controller.h"
 #include <string.h>
 #include "mainwindow.h"
-#include "pubProfessor.h"
 #include "professorMap.h"
 #include <QFileDialog>
 #include <QMessageBox>
 #include <QMainWindow>
+#include "pubTree.h"
+#include "presTree.h"
+#include "granTree.h"
+#include "teacTree.h"
 
 using namespace std;
 
-Controller::Controller(MainWindow* view, professorMap<pubProfessor>* data)
+Controller::Controller(MainWindow* view, professorMap* data)
 {
     this->view = view;
     this->data = data;
@@ -45,15 +48,10 @@ string Controller::getFileName(){
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
-    Controller *newController;
-    string filename = newController->getFileName();
-    professorMap<pubProfessor>* newData = new professorMap<pubProfessor>();
-    newData->importCSV(filename);
-    MainWindow *newWindow = new MainWindow(); // temp hard code date (Henry)
-	newController = new Controller(newWindow, newData);
-    newWindow = newController->draw();
-
-    newWindow->show();
+    Controller *controller;
+	controller = new Controller(new MainWindow(), new professorMap());
+	controller->getWindow()->addModel(controller->getModel());
+    controller->getWindow()->show();
     a.exec();
 
     return 0;

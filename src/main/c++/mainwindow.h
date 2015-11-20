@@ -10,7 +10,7 @@
 #include <QString>
 #include <stdlib.h>
 #include "tablayoutwidget.h"
-
+#include "professorMap.h"
 
 namespace Ui {
 class MainWindow;
@@ -23,7 +23,7 @@ class MainWindow : public QMainWindow
 public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
-
+	void addModel(professorMap* data){ this->data = data; }
 private slots:
     void on_newTabButton_clicked();
 
@@ -42,8 +42,7 @@ private slots:
 private:
     Ui::MainWindow *ui;
     std::string file_name;
-
-
+	professorMap* data;
 };
 
 #endif // MAINWINDOW_H

@@ -50,30 +50,16 @@ public:
 
 	//Should delete node and all of this children recursively
 	~node(){
-		delete &first;
-		delete &second;
-		delete &third;
-		delete &fourth;
-		delete children;
-		delete &visible;
+		for (int i = 0; i < children->size(); i++)
+			delete children->at(i);
 	}
 
 	//Return the location of children vector
 	vector<node*>* getChildren(){ return children; }
-	
+
 	//return index of the child with the name as a parameter
 	int findChildPosition(node* child){
-		for (size_t i = 0; i < children->size(); i++){
-			if (child->getFirst() == children->at(i)->getFirst()){
-				if (child->getSecond() == children->at(i)->getSecond()){
-					if (child->getThird() == children->at(i)->getThird()){
-						if (child->getFourth() == children->at(i)->getFourth()){
-							return i;
-						}
-					}
-				}
-			}
-		}
+		return std::distance(children->begin(),std::find(children->begin(), children->end(), child));
 	}
 	
 	//Add a child to the tree
@@ -102,8 +88,9 @@ public:
 	//Removes a child from the tree. As this is not a tree that can be reorganized
 	//the children of the removed child are also removed recusively
 	void removeChild(node* child){
-		int index = findChildPosition(child);
-		children->erase(children->begin() + index);
+		int i = findChildPosition(child);
+		delete children->at(i);
+		children->erase(children->begin() + i);
 	}
 
 	//Set the string of the node
@@ -128,9 +115,17 @@ public:
 	}
 
 	//Get functions
-	string getFirst(){ return first; }
-	int getSecond(){ return second; }
-	int getThird(){ return third; }
-	float getFourth(){ return fourth; }
-	bool getVisible(){ return visible };
+	const string getFirst(){ return first; }
+	const int getSecond(){ return second; }
+	const int getThird(){ return third; }
+	const float getFourth(){ return fourth; }
+	const bool getVisible(){ return visible; }
 };
+
+inline bool operator==(node& lhs, node& rhs){
+	return (lhs.getFirst() == rhs.getFirst()) &&
+		(lhs.getSecond() == rhs.getSecond()) &&
+		(lhs.getThird() == rhs.getThird()) &&
+		(lhs.getFourth() == rhs.getFourth()) &&
+		(lhs.getVisible() == rhs.getVisible());
+}
