@@ -2,8 +2,7 @@
 #define TABLAYOUTWIDGET_H
 
 #include <QWidget>
-#include <QDateEdit>
-#include <QDateTimeEdit>
+#include "filterdialog.h"
 
 namespace Ui {
 class tabLayoutWidget;
@@ -18,13 +17,12 @@ public:
     ~tabLayoutWidget();
 
 private slots:
-    void on_dateEdit_dateChanged(const QDate &date);
 
-    void on_dateEdit_2_dateChanged(const QDate &date);
+
+    void on_filterDataButton_clicked();
 
 private:
     Ui::tabLayoutWidget *ui;
-    QDate starting, ending;
 };
 
 #endif // TABLAYOUTWIDGET_H

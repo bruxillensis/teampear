@@ -14,16 +14,10 @@ tabLayoutWidget::~tabLayoutWidget()
 }
 
 
-//starting date
-void tabLayoutWidget::on_dateEdit_dateChanged(const QDate &date)
-{
-ui->dateEdit->setDate(date);
-starting = ui->dateEdit->date();
-}
 
-//ending date
-void tabLayoutWidget::on_dateEdit_2_dateChanged(const QDate &date)
+void tabLayoutWidget::on_filterDataButton_clicked()
 {
-ui->dateEdit_2->setDate(date);
-ending = ui->dateEdit->date();
+filterDialog d;
+d.setModal(true);
+d.exec();
 }
