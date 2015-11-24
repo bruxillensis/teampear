@@ -18,6 +18,7 @@ private:
 	float fourth;
 	vector<node*>* children;
 	bool visible;
+	node* parent;
 public:
 	//Constructor
 	node(){
@@ -27,6 +28,7 @@ public:
 		fourth = 0;
 		children = new vector<node*>();
 		visible = false;
+		parent = NULL;
 	}
 	
 	//Constructor for all known values
@@ -37,6 +39,7 @@ public:
 		this->fourth = fourth;
 		children = new vector<node*>();
 		visible = false;
+		parent = NULL;
 	}
 	
 	//Constructor with another tree as argument
@@ -46,6 +49,8 @@ public:
 		this->third = orig.getThird();
 		this->fourth = orig.getFourth();
 		this->visible = orig.getVisible();
+		children = new vector<node*>();
+		parent = NULL;
 	}
 
 	//Should delete node and all of this children recursively
@@ -76,10 +81,12 @@ public:
 				if (child->getFirst().compare(children->at(i)->getFirst()) < 0){
 					children->insert(it + i, child);
 					i = children->size();
+					child->setParent(this);
 				}
 				else if (i == (children->size() - 1)){
 					children->push_back(child);
 					i = children->size();
+					child->setParent(this);
 				}
 			}
 		}
@@ -112,6 +119,10 @@ public:
 	//Only used for leaves that need to store a float (grant money etc.)
 	void setFourth(float fourth){
 		this->fourth = fourth;
+	}
+	//set parent of the node
+	void setParent(node* parent){
+		this->parent = parent;
 	}
 
 	//Get functions
