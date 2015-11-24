@@ -131,6 +131,7 @@ public:
 	const int getThird(){ return third; }
 	const float getFourth(){ return fourth; }
 	const bool getVisible(){ return visible; }
+	const node* getParent(){ return parent; }
 };
 
 inline bool operator==(node& lhs, node& rhs){
