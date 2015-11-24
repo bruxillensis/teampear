@@ -66,11 +66,15 @@ public:
 		}
 
 		map<string, vector<vector<string> > >* orgCSV = new map<string, vector<vector<string> > >();
+		vector<string> mName;
+		mName.push_back("Member Name");
+		vector<int> indexMemberName = createProfessor::findHeaders(mName, *(myCSV.at(0)));
+
 		for (size_t i = 1; i < myCSV.size(); i++) {
 			if (!orgCSV->empty()) {
-				if (myCSV[i]->at(4) == "")
+				if (myCSV[i]->at(indexMemberName.front()) == "")
 					continue;
-				map<string, vector<vector<string> > >::iterator it = orgCSV->find(myCSV[i]->at(4));
+				map<string, vector<vector<string> > >::iterator it = orgCSV->find(myCSV[i]->at(indexMemberName.front()));
 				if (it != orgCSV->end()) {
 					it->second.push_back(*myCSV[i]);
 				}
@@ -78,14 +82,14 @@ public:
 					vector<vector<string> > professorVector;
 					professorVector.push_back(*myCSV[0]);
 					professorVector.push_back(*myCSV[i]);
-					orgCSV->insert(pair<string, vector<vector<string> > >((*myCSV[i])[4], professorVector));
+					orgCSV->insert(pair<string, vector<vector<string> > >((*myCSV[i])[indexMemberName.front()], professorVector));
 				}
 			}
 			else {
 				vector<vector<string> > professorVector;
 				professorVector.push_back(*myCSV[0]);
 				professorVector.push_back(*myCSV[i]);
-				orgCSV->insert(pair<string, vector<vector<string> > >((*myCSV[i])[4], professorVector));
+				orgCSV->insert(pair<string, vector<vector<string> > >((*myCSV[i])[indexMemberName.front()], professorVector));
 			}
 		}
 
