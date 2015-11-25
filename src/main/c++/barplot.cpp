@@ -5,7 +5,6 @@
 #include <QString>
 #include "statisticsTree.h"
 #include "node.h"
-#include "tablayoutwidget.h"
 
 
 using namespace std;

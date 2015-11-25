@@ -1,6 +1,9 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include "pubTree.h"
+#include "granTree.h"
+#include "teacTree.h"
+#include "presTree.h"
 #include "barplot.h"
 
 #include <utility>
@@ -83,14 +86,34 @@ void MainWindow::on_actionImport_CSV_triggered()
 
         QMessageBox::information(this, tr("File Name"), filename);
         file_name = filename.toStdString();
-		//Hardcode
-		this->data->importCSV(file_name, professorMap::profType::Publication);
+
+		//import the csv file and get the professor type
+		professorMap::profType type = this->data->importCSV(file_name);
+		
 
 		if (data->getProfessorCount() > 0){
 			csv = true;
-			pubTree* test = new pubTree(this->data); // hardcoded type of csv (temp)
-			this->rootNode = test->getStatistics();
-			generateTree(); // generate tree with the data
+			statisticsTree* tree;
+
+			switch (type){
+			case professorMap::profType::Publication:
+				tree = new pubTree(this->data);
+				break;
+			case professorMap::profType::Presentation:
+				tree = new presTree(this->data);
+				break;
+			case professorMap::profType::GrantClinical:
+				tree = new granTree(this->data);
+				break;
+			case professorMap::profType::Teaching:
+				tree = new teacTree(this->data);
+				break;
+			default:
+				//didn't find the type of professor
+				break;
+			}
+			this->rootNode = tree->getStatistics();
+			generateList(this->rootNode); // generate tree with the data
 		}
 		else
 		{
@@ -143,7 +166,7 @@ void MainWindow::on_actionGenerate_Pie_Chart_triggered()
 	}
 }
 
-void MainWindow::generateTree()
+void MainWindow::generateList(node* root)
 {
 	// Andy and Max should fill this out
 	//create a new list view
