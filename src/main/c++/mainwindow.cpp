@@ -40,18 +40,12 @@ MainWindow::MainWindow(QWidget *parent) :
 	// remove their window flags, set fixed dimensions
 	this->tree = new QMdiSubWindow(m_area);
 	this->tree->setWindowFlags(Qt::CustomizeWindowHint);
-	this->tree->setFixedWidth(w / 2);
-	this->tree->setFixedHeight(h - 120);
 
 	this->bar = new QMdiSubWindow(m_area);
 	this->bar->setWindowFlags(Qt::CustomizeWindowHint);
-	this->bar->setFixedWidth(w / 2);
-	this->bar->setFixedHeight(h - 120);
 
 	this->pie = new QMdiSubWindow(m_area);
 	this->pie->setWindowFlags(Qt::CustomizeWindowHint);
-	this->pie->setFixedWidth(w / 2);
-	this->pie->setFixedHeight(h - 120);
 
 	//hide subwindows until called on plot
 	this->tree->hide();
@@ -59,6 +53,7 @@ MainWindow::MainWindow(QWidget *parent) :
 	this->pie->hide();
 
 	// set the location and size of the plot subwindows
+	this->tree->setGeometry(0, 0, w / 2, h - 120);
 	this->pie->setGeometry(w / 2, 0, w / 2, h - 120);
 	this->bar->setGeometry(w/2, 0, w / 2, h - 120);
 
@@ -89,11 +84,11 @@ void MainWindow::on_actionImport_CSV_triggered()
         QMessageBox::information(this, tr("File Name"), filename);
         file_name = filename.toStdString();
 
+        if (!(file_name.empty())){
 		//import the csv file and get the professor type
-		professorMap::profType type = this->data->importCSV(file_name);
+			professorMap::profType type = this->data->importCSV(file_name);
 		
 
-		//if (data->getProfessorCount() > 0){
 			csv = true;
 			statisticsTree* tree;
 
@@ -116,12 +111,12 @@ void MainWindow::on_actionImport_CSV_triggered()
 			}
 			this->rootNode = tree->getStatistics();
 			generateList(this->rootNode); // generate tree with the data
-		//}
-	/*	else
+		}
+		else
 		{
 			QErrorMessage* noCSV = new QErrorMessage();;
 			noCSV->showMessage(QString("ERROR: No CSV was chosen."));
-		}*/
+		}
 }
 
 //make widget that appears in mdiarea of the tab
