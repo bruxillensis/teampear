@@ -5,7 +5,6 @@
 #include "teacTree.h"
 #include "presTree.h"
 #include "barplot.h"
-
 #include <utility>
 #include <string>
 #include <vector>
@@ -18,6 +17,7 @@
 #include <QRect>
 #include <QObject>
 #include <QErrorMessage>
+#include "listview.h"
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -61,7 +61,7 @@ MainWindow::MainWindow(QWidget *parent) :
 	this->bar->setGeometry(w/2, 0, w / 2, h - 120);
 
 	// prevent user from moving the windows
-	this->tree->setDisabled(true);
+	//this->tree->setDisabled(true);
 	this->bar->setDisabled(true);
 	this->pie->setDisabled(true);
 
@@ -91,7 +91,7 @@ void MainWindow::on_actionImport_CSV_triggered()
 		professorMap::profType type = this->data->importCSV(file_name);
 		
 
-		if (data->getProfessorCount() > 0){
+		//if (data->getProfessorCount() > 0){
 			csv = true;
 			statisticsTree* tree;
 
@@ -114,12 +114,12 @@ void MainWindow::on_actionImport_CSV_triggered()
 			}
 			this->rootNode = tree->getStatistics();
 			generateList(this->rootNode); // generate tree with the data
-		}
-		else
+		//}
+	/*	else
 		{
 			QErrorMessage* noCSV = new QErrorMessage();;
 			noCSV->showMessage(QString("ERROR: No CSV was chosen."));
-		}
+		}*/
 }
 
 //make widget that appears in mdiarea of the tab
@@ -170,10 +170,11 @@ void MainWindow::generateList(node* root)
 {
 	// Andy and Max should fill this out
 	//create a new list view
+	ListView *view = new ListView(this);
+	view->makeList(root);
 	// call the thing that populates it
 	this->tree->setVisible(true);
-	
-	//this->tree->setWidget(listview);
+	this->tree->setWidget(view);
 }
 
 void MainWindow::on_actionSave_Graph_triggered()
