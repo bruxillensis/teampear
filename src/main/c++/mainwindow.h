@@ -9,8 +9,15 @@
 #include <QLabel>
 #include <QString>
 #include <stdlib.h>
-#include "tablayoutwidget.h"
+#include <QMdiArea>
+#include <QMdiSubWindow>
+//#include "tablayoutwidget.h"
 #include "professorMap.h"
+#include "node.h"
+#include "statisticsTree.h"
+
+class QMdiArea;
+class QMdiSubWindow;
 
 namespace Ui {
 class MainWindow;
@@ -25,9 +32,6 @@ public:
     ~MainWindow();
 	void addModel(professorMap* data){ this->data = data; }
 private slots:
-    void on_newTabButton_clicked();
-
-    void on_deleteTabButton_clicked();
 
     void on_actionImport_CSV_triggered();
 
@@ -39,10 +43,20 @@ private slots:
 
     void on_actionPrint_Graph_triggered();
 
+	void populateTree();
+
+
 private:
     Ui::MainWindow *ui;
     std::string file_name;
 	professorMap* data;
+	node* rootNode;
+	QMdiArea *m_area;
+	QMdiSubWindow *bar;
+	QMdiSubWindow *pie;
+	QMdiSubWindow *tree;
+	bool csv = false;
+	//tabLayoutWidget *tabLayout;
 };
 
 #endif // MAINWINDOW_H

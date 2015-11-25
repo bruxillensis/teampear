@@ -18,13 +18,14 @@ class BarDialog : public QDialog
     Q_OBJECT
 
 public:
-	explicit BarDialog(QWidget *parent, node* rootNode);
+	explicit BarDialog(QWidget *parent);//, node* root);
     ~BarDialog();
 
 private:
     Ui::BarDialog *ui;
-	node* treeData;
+	node* Node;
 	string dataType;
 };
+
 
 #endif // BARDIALOG_H
