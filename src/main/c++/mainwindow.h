@@ -43,7 +43,7 @@ private slots:
 
     void on_actionPrint_Graph_triggered();
 
-	void populateTree();
+	void generateTree();
 
 
 private:

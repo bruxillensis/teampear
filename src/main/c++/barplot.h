@@ -1,31 +1,33 @@
-#ifndef BARDIALOG_H
-#define BARDIALOG_H
+#ifndef BARPLOT_H
+#define BARPLOT_H
 
-#include <QDialog>
 #include "qcustomplot.h"
 #include "statisticsTree.h"
 #include "node.h"
 
+
 using namespace std;
 	
 namespace Ui {
-class BarDialog;
+class BarPlot;
 }
 
 
-class BarDialog : public QDialog
+class BarPlot : public QCustomPlot
 {
     Q_OBJECT
 
 public:
-	explicit BarDialog(QWidget *parent);//, node* root);
-    ~BarDialog();
+	explicit BarPlot(QWidget *parent);
+    ~BarPlot();
+
+	void plotBar(node* root);
 
 private:
-    Ui::BarDialog *ui;
+    Ui::BarPlot *ui;
 	node* Node;
 	string dataType;
 };
 
 
-#endif // BARDIALOG_H
+#endif // BARPLOT_H

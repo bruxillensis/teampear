@@ -1,7 +1,7 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include "pubTree.h"
-#include "bardialog.h"
+#include "barplot.h"
 
 #include <utility>
 #include <string>
@@ -85,11 +85,12 @@ void MainWindow::on_actionImport_CSV_triggered()
         file_name = filename.toStdString();
 		//Hardcode
 		this->data->importCSV(file_name, professorMap::profType::Publication);
+
 		if (data->getProfessorCount() > 0){
 			csv = true;
 			pubTree* test = new pubTree(this->data); // hardcoded type of csv (temp)
 			this->rootNode = test->getStatistics();
-			populateTree();
+			generateTree(); // generate tree with the data
 		}
 		else
 		{
@@ -101,12 +102,15 @@ void MainWindow::on_actionImport_CSV_triggered()
 //make widget that appears in mdiarea of the tab
 void MainWindow::on_actionGenerate_Bar_Graph_triggered()
 {
-	QCustomPlot *customPlot = new QCustomPlot;
+
 	if (csv){
+		//display the right subwindow
 		this->pie->hide();
 		this->bar->setVisible(true);
-		this->bar->setWidget(customPlot);
-		//BarDialog barPlot(
+
+		BarPlot *barPlot = new BarPlot(this);
+		barPlot->plotBar(this->rootNode);
+		this->bar->setWidget(barPlot);
 	}
 	else
 	{
@@ -118,11 +122,19 @@ void MainWindow::on_actionGenerate_Bar_Graph_triggered()
 //make widget that appears in mdiarea of the tab
 void MainWindow::on_actionGenerate_Pie_Chart_triggered()
 {
-	QWidget *piePlot = new QWidget;
 	if (csv){
+		QWidget *piePlot = new QWidget;
+		QTableWidget *legend = new QTableWidget;
+		QSplitter *splitter = new QSplitter;
+
+		// display the right subwindow
 		this->bar->hide();
 		this->pie->setVisible(true);
-		this->pie->setWidget(piePlot);
+
+		// add a plottable area and legend
+		splitter->addWidget(piePlot);
+		splitter->addWidget(legend);
+		this->pie->setWidget(splitter);
 	}
 	else
 	{
@@ -131,10 +143,14 @@ void MainWindow::on_actionGenerate_Pie_Chart_triggered()
 	}
 }
 
-void MainWindow::populateTree()
+void MainWindow::generateTree()
 {
 	// Andy and Max should fill this out
+	//create a new list view
+	// call the thing that populates it
 	this->tree->setVisible(true);
+	
+	//this->tree->setWidget(listview);
 }
 
 void MainWindow::on_actionSave_Graph_triggered()

@@ -1,26 +1,27 @@
-#include "bardialog.h"
-#include "ui_bardialog.h"
+#include "barplot.h"
 #include <vector>
 #include <string.h>
 #include <iostream>
 #include <QString>
 #include "statisticsTree.h"
 #include "node.h"
+#include "tablayoutwidget.h"
+
 
 using namespace std;
-
-BarDialog::BarDialog(QWidget *parent)://,  node *root) :
-QDialog(parent),
-ui(new Ui::BarDialog)
+BarPlot::BarPlot(QWidget *parent) : QCustomPlot(parent)
 {
-	ui->setupUi(this);
-	// create empty bar chart objects:
-	QCPBars *regen = new QCPBars(ui->customPlot->xAxis, ui->customPlot->yAxis);
-	QCPBars *nuclear = new QCPBars(ui->customPlot->xAxis, ui->customPlot->yAxis);
-	QCPBars *fossil = new QCPBars(ui->customPlot->xAxis, ui->customPlot->yAxis);
-	ui->customPlot->addPlottable(regen);
-	ui->customPlot->addPlottable(nuclear);
-	ui->customPlot->addPlottable(fossil);
+}
+
+void BarPlot::plotBar(node *root)
+{	
+	
+	QCPBars *regen = new QCPBars(this->xAxis, this->yAxis);
+	QCPBars *nuclear = new QCPBars(this->xAxis, this->yAxis);
+	QCPBars *fossil = new QCPBars(this->xAxis, this->yAxis);
+	this->addPlottable(regen);
+	this->addPlottable(nuclear);
+	this->addPlottable(fossil);
 	// set names and colors:
 	QPen pen;
 	pen.setWidthF(1.2);
@@ -45,27 +46,27 @@ ui(new Ui::BarDialog)
 	QVector<QString> labels;
 	ticks << 1 << 2 << 3 << 4 << 5 << 6 << 7;
 	labels << "USA" << "Japan" << "Germany" << "France" << "UK" << "Italy" << "Canada";
-	ui->customPlot->xAxis->setAutoTicks(false);
-	ui->customPlot->xAxis->setAutoTickLabels(false);
-	ui->customPlot->xAxis->setTickVector(ticks);
-	ui->customPlot->xAxis->setTickVectorLabels(labels);
-	ui->customPlot->xAxis->setTickLabelRotation(60);
-	ui->customPlot->xAxis->setSubTickCount(0);
-	ui->customPlot->xAxis->setTickLength(0, 4);
-	ui->customPlot->xAxis->grid()->setVisible(true);
-	ui->customPlot->xAxis->setRange(0, 8);
+	this->xAxis->setAutoTicks(false);
+	this->xAxis->setAutoTickLabels(false);
+	this->xAxis->setTickVector(ticks);
+	this->xAxis->setTickVectorLabels(labels);
+	this->xAxis->setTickLabelRotation(60);
+	this->xAxis->setSubTickCount(0);
+	this->xAxis->setTickLength(0, 4);
+	this->xAxis->grid()->setVisible(true);
+	this->xAxis->setRange(0, 8);
 
 	// prepare y axis:
-	ui->customPlot->yAxis->setRange(0, 12.1);
-	ui->customPlot->yAxis->setPadding(5); // a bit more space to the left border
-	ui->customPlot->yAxis->setLabel("Power Consumption in\nKilowatts per Capita (2007)");
-	ui->customPlot->yAxis->grid()->setSubGridVisible(true);
+	this->yAxis->setRange(0, 12.1);
+	this->yAxis->setPadding(5); // a bit more space to the left border
+	this->yAxis->setLabel("Power Consumption in\nKilowatts per Capita (2007)");
+	this->yAxis->grid()->setSubGridVisible(true);
 	QPen gridPen;
 	gridPen.setStyle(Qt::SolidLine);
 	gridPen.setColor(QColor(0, 0, 0, 25));
-	ui->customPlot->yAxis->grid()->setPen(gridPen);
+	this->yAxis->grid()->setPen(gridPen);
 	gridPen.setStyle(Qt::DotLine);
-	ui->customPlot->yAxis->grid()->setSubGridPen(gridPen);
+	this->yAxis->grid()->setSubGridPen(gridPen);
 
 	// Add data:
 	QVector<double> fossilData, nuclearData, regenData;
@@ -77,24 +78,30 @@ ui(new Ui::BarDialog)
 	regen->setData(ticks, regenData);
 
 	// setup legend:
-	ui->customPlot->legend->setVisible(true);
-	ui->customPlot->axisRect()->insetLayout()->setInsetAlignment(0, Qt::AlignTop | Qt::AlignHCenter);
-	ui->customPlot->legend->setBrush(QColor(255, 255, 255, 200));
+	//
+    QCPLayoutGrid *subLayout = new QCPLayoutGrid;
+	QCPLayoutElement *dummyElement = new QCPLayoutElement;
+	this->plotLayout()->addElement(0, 1, subLayout); // add sub-layout in the cell to the right of the main axis rect
+	subLayout->addElement(0, 0, this->legend); // add legend
+	subLayout->addElement(1, 0, dummyElement); // add dummy element below legend
+	subLayout->setRowStretchFactor(0, 0.01); // make legend cell (in row 0) take up as little vertical space as possible
+	//
+	this->plotLayout()->setColumnStretchFactor(1, 0.01);
+	this->legend->setVisible(true);
+	//this->axisRect()->insetLayout()->setInsetAlignment(0, Qt::AlignTop | Qt::AlignHCenter);
+	this->legend->setBrush(QColor(255, 255, 255, 200));
 	QPen legendPen;
 	legendPen.setColor(QColor(130, 130, 130, 200));
-	ui->customPlot->legend->setBorderPen(legendPen);
+	this->legend->setBorderPen(legendPen);
 	QFont legendFont = font();
 	legendFont.setPointSize(10);
-	ui->customPlot->legend->setFont(legendFont);
-	ui->customPlot->setInteractions(QCP::iRangeDrag | QCP::iRangeZoom);
+	this->legend->setFont(legendFont);
+	this->rescaleAxes();
+	//this->setInteractions(QCP::iRangeDrag | QCP::iRangeZoom);
 	/*
-	Node = root; // Data is given in a tree with the root node being the type of .csv
+	Node = root; // Data is passed through as a node
 
-	// ###
-	// THIS WONT WORK FOR GRANT PROFS ... I'LL FIGURE IT OUT DW DW. (HENRY)
-	// ###
-
-
+	//node* csvRoot;// Determine the pare
 	// The first element of the root node will distinguish what type of data it is
 	// Ie.: "Publications","Programs","Presentations", "Grants and Clinical Funding"
 	string dataType = Node->getFirst();
@@ -111,7 +118,6 @@ ui(new Ui::BarDialog)
 	else {
 		types->push_back(Node);
 	}
-	// I think the above should work???
 
 	// Grab Data and prepare x axis with professor Name labels:
 	QVector<double> ticks;
@@ -206,7 +212,7 @@ ui(new Ui::BarDialog)
 	*/
 }
 
-BarDialog::~BarDialog()
+BarPlot::~BarPlot()
 {
     delete ui;
 }
