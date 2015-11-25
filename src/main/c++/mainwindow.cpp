@@ -5,6 +5,8 @@
 #include "teacTree.h"
 #include "presTree.h"
 #include "barplot.h"
+#include "piechartwidget.h"
+#include "legendwidget.h"
 #include <utility>
 #include <string>
 #include <vector>
@@ -146,17 +148,23 @@ void MainWindow::on_actionGenerate_Bar_Graph_triggered()
 void MainWindow::on_actionGenerate_Pie_Chart_triggered()
 {
 	if (csv){
-		QWidget *piePlot = new QWidget;
-		QTableWidget *legend = new QTableWidget;
+		PieChartWidget *piechart = new PieChartWidget;
+		LegendWidget *legend = new LegendWidget;
 		QSplitter *splitter = new QSplitter;
 
 		// display the right subwindow
 		this->bar->hide();
 		this->pie->setVisible(true);
 
+		//draw piechart and legend
+		piechart->setData(this->rootNode);
+		legend->drawLegend(this->rootNode);
+
 		// add a plottable area and legend
-		splitter->addWidget(piePlot);
+		splitter->addWidget(piechart);
 		splitter->addWidget(legend);
+		splitter->setStretchFactor(0, 0);
+		splitter->setStretchFactor(1, 2);
 		this->pie->setWidget(splitter);
 	}
 	else
