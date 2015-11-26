@@ -23,7 +23,8 @@ void PieChartWidget::paintEvent(QPaintEvent *)
     int i, current, total;
     QPainter painter(this);
     QRectF size = QRectF(EDGE, EDGE, this->width()-EDGE, this->width()-EDGE);
-    int currentHue = 0, last_slice = 0, current_slice;
+	int currentHue = 0, last_slice = 0;
+	double current_slice;
 
 	//check if csv data is of grants and clinical funding type
 	bool money = false;
@@ -48,8 +49,8 @@ void PieChartWidget::paintEvent(QPaintEvent *)
 	
             color.setHsv(currentHue,C_SAT,C_VAL);						//gen new color
             painter.setBrush(color);									//set brush as new color
-            current_slice = ((double)current/total)*DEGREES;					//generate slice
-            painter.drawPie(size, last_slice*PIE_MULT, current_slice*PIE_MULT);	//draw slice
+            current_slice = ceil(((double)current/(double)total)*DEGREES);					//generate slice
+            painter.drawPie(size, last_slice*PIE_MULT, (int)current_slice*PIE_MULT);	//draw slice
 
             last_slice += current_slice;		//increment tracker of last slice place
 
