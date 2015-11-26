@@ -17,7 +17,7 @@ public:
 	}
 	void createStatistics(professorMap* professors) override {
 		//Create Initial Tree
-		root = new node("Grants and Clinicl Funding", 0, 0, 0);
+		root = new node("Grants and Clinical Funding", 0, 0, 0);
 		root->addChild(new node("Grants", 0, 0, 0));
 		root->addChild(new node("Clinical Funding", 0, 0, 0));
 		for (auto &i : *root->getChildren()){
@@ -39,9 +39,10 @@ public:
 			}
 			
 			
-			
+			//christian: i think something is wrong with the at(i), i don't think it's always a string
 			for (int i = 0; i < it.second->getNumberOfEntries(); i++){
 				int j;
+				//grants
 				if (boost::get<string>(it.second->getField(0)->at(i)) == "Grants"){
 					if (boost::get<bool>(it.second->getField(4)->at(i))){
 						if (boost::get<bool>(it.second->getField(5)->at(i))){ j = 0; }
@@ -52,6 +53,7 @@ public:
 						else												{ j = 4; }
 					}
 				}
+				//clinical funding
 				else{
 					if (boost::get<bool>(it.second->getField(4)->at(i))){
 						if (boost::get<bool>(it.second->getField(5)->at(i))){ j = 5; }

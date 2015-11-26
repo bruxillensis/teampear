@@ -36,6 +36,12 @@ bool errorHandling::checkRow(vector<string> row, vector<string> columnHeaders, v
 	return true; 
 }
 
+bool is_number(const std::string& s)
+{
+	return !s.empty() && std::find_if(s.begin(),
+		s.end(), [](char c) { return !std::isdigit(c); }) == s.end();
+}
+
 // Validate the filter of the date range
 boost::gregorian::date errorHandling::checkYear(string date){
 	//Get date values from date string
@@ -48,20 +54,51 @@ boost::gregorian::date errorHandling::checkYear(string date){
 	int nyear, nmonth, nday;
 	if (syear != ""){
 		ss.str(syear);
-		ss.clear();
-		ss >> nyear;
+		ss.clear(); 
+		bool temp = is_number(syear);
+		if (temp){
+			try{
+				ss >> nyear;
+			}
+			catch (...){
+				throw new invalidDateException();
+			}
+		}
+		else{
+			throw new invalidDateException();
+		}
 	}
 	else{ nyear = 1900; }
 	if (smonth != ""){
 		ss.str(smonth);
 		ss.clear();
-		ss >> nmonth;
+		if (is_number(smonth)){
+			try{
+				ss >> nmonth;
+			}
+			catch (...){
+				throw new invalidDateException();
+			}
+		}
+		else{
+			throw new invalidDateException();
+		}
 	}
 	else{ nmonth = 1; }
 	if (sday != ""){
 		ss.str(sday);
 		ss.clear();
-		ss >> nday;
+		if (is_number(sday)){
+			try{
+				ss >> nday;
+			}
+			catch (...){
+				throw new invalidDateException();
+			}
+		}
+		else{
+			throw new invalidDateException();
+		}
 	}
 	else{ nday = 1; }
 	try{

@@ -112,11 +112,14 @@ public:
 			catch (failedTypeChangeException& e){
 				//Produce error message when implemented
 				cerr << e.what();
+			}
+			catch (invalidDateException& e){
+				//fuck this shit
+				cerr << e.what();
 			}*/
 			catch (...){
 				//fuck this shit
-				count++;
-				cout << "here";
+				cerr << "qq";
 			}
 		}
 		return prof;
@@ -135,11 +138,11 @@ public:
 		//Define manditory fields for a teaching csv
 		vector<string> manFields = { "Member Name", "Primary Domain", "Start Date", "End Date", "Program", "Type of Course / Activity",
 			"Course / Activity", "Geographical Scope", "Hours per Teaching Session or Week",
-			"Number of Teaching Sessions or Weeks", "Total Amount" };
+			"Number of Teaching Sessions or Weeks", "Total Hours" };
 		vector<int> headerNumbers = findHeaders(manFields, csv[0]);
 
 		//Create professor
-		professor* prof = new professor(findValue(csv, headerNumbers[0]), findValue(csv, headerNumbers[1]), 8);
+		professor* prof = new professor(findValue(csv, headerNumbers[0]), findValue(csv, headerNumbers[1]), 9);
 		for (int i = 1; i < csv.size(); i++) {
 			//Add the new entry to the prof
 			try{
