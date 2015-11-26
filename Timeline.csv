@@ -1,0 +1,55 @@
+,Dashboard Project ,,,
+,Team Pear Timeline,,,
+,,,,
+,,,,
+,,,,
+,DATE,ACHIEVEMENTS,NOTES,ALLOCATION OF RESPONSIBILITIES
+,STAGE 1 TIMELINE,,,
+,"September 30th, 2015",Met group members,"Met members, exchanged contact info",
+,"September 30th, 2015",Came up with meeting times,Used Doodle poll ,
+,"September 30th, 2015",Set up Git repository for team,,
+,"September 30th, 2015",Came up with questions,decided on requirements questions to ask,
+,"October 1st, 2015",Submitted requirements questions,submitted them on OWL,
+,"October 6th, 2015",Development tasks + initial plans determined ,decided to present publications using pie chart visualization,
+,"October 7th, 2015",Presented initial plans ,presented design plans and task allocation to Professor Madhavji,
+,"October 13th, 2015",Decided on system design for project,decided to use the MVC model for the project,
+,"October 13th, 2015",Decided on roles according to design,"assigned members to view, model, controller",
+,"October 14th, 2015",Wrote header files,ie professorMap.h,
+,"October 15th, 2015",Came up with and submitted questions,came up with systems question and submitted them on OWL,
+,"October 17th, 2015",Assigned functions and files to people,,
+,"October 18th, 2015",Came up with use case diagrams and UML diagrams,,
+,"October 23rd, 2015 ",Implemented functions and files ,ie professorMap.cpp,
+,"October 25th, 2015",Debugged the project files ,,
+,"October 26th, 2015",Integrated the project and tested ,"put together the model, view, controller parts of the project",
+,"October 26th, 2015",Finshed deliverables ,,
+,"October 26th, 2015",Submitted stage 1 ,,
+,STAGE 2 TIMELINE,,,
+,"October 27th, 2015",Team meeting - decided next steps,decided to improve GUI and debug project ,"CSV parser: Chris Tam, UI design: Jaidonn Freeland, Chelsea Xu, Max Ingram,   Unit Testing: Curtis Vermeeren, Jeremy Huang, Bar graph: Henry Pun    , Pie chart James Allen, Tree widget: Andy Pham, professor classes: Brett Poulsen "
+,"November 4th, 2015 ",CSV Parser finished ,,by Chris Tam
+,"November 4th, 2015 ",Bar graph finished,,by Henry Pun
+,"November 4th, 2015 ",Initial File dialog finished,,by James Allen
+,"November 4th, 2015 ",UI design proposed,design made in Visio,by Jaidonn Freeland
+,"November 10th, 2015",Group meeting and assigned tasks,decided to switch to using a tree for holding the data,"tree structure: Chris, Brett; UI: James, Henry, Max, Andy, Chelsea; error handling: Henry; compiling with Qmake: Jaidonn; unit testing: Curtis, Jeremy "
+,"November 16th, 2015",Demo 1 feedback,presented demo 1 and discussed feedback,
+,"November 17th, 2015",Overall GUI with tab layout done,,by Chelsea Xu 
+,"November 17th, 2015",Integrated old project with new GUI design,,by Brett Poulsen
+,"November 17th, 2015",Group meeting and assigned tasks,decided to implement a filter class,"filter gui: Chelsea; Node class: Chris; filter class: Chris, Brett; Transfer list and make changes to GUI: James, Max, Andy, Henry; finish and test tree: Brett; "
+,"November 19th, 2015",Discussed demo 1 feedback from client,,
+,"November 20th, 2015",Changed to tree structure ,major changes to model ,by Brett Poulsen
+,"November 22nd, 2015",Filter dialog done,,by Chelsea Xu 
+,"November 22nd, 2015",Unit testing implemented,,"by Curtis Vermeeren, Jeremy Huang"
+,"November 23rd, 2015",Node class done,,by Chris Tam
+,"November 23rd, 2015",UML diagram finished,,by Curtis Vermeeren
+,"November 24th, 2015",Decided to change GUI to a simpler one,just use one QMdiArea and put graphs and tree widget in it,"by James Allen, Henry Pun"
+,"November 24th, 2015",finished documentation deliverables,"ie task agent table, timeline, diagrams","by Jaidonn Freeland, Jeremy Huang, Chelsea Xu, Curtis Vermeeren"
+,"November 25th, 2015 ",Submitted Stage 2,,
+,FINAL SUBMISSION ABSTRACT PLAN,,,
+,,Finish any unfinished implementations,,
+,,Unit testing and document test cases,,
+,,Finish system design,"update case, class, sequence, and package diagrams",
+,,Inspect program using OO metrics,,
+,,Write  retrospective analysis,,
+,,Create title page,,
+,,Create table of contents,,
+,,Update development plans from stage 2,,
+,"December 9th, 2015",Submit project for the final submission,,
