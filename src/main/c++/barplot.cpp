@@ -11,7 +11,6 @@
 #define BAR_ALPHA	220		// colour transparency
 #define HUE_MAX		359
 
-
 using namespace std;
 BarPlot::BarPlot(QWidget *parent) : QCustomPlot(parent)
 {
@@ -30,51 +29,53 @@ void BarPlot::plotBar(node *root)
 	// Get the types
 	// Note the type is not always going to be the within the children of the node (depending on what node is passed)
 	// It will be possible to pass in a different node (say a publication type node) when implemented
-	vector<node*>* temptypes;
-	vector<node*>* types = new vector<node*>();
+	vector<node*> types;
 	if (Node->getParent() == NULL){
-		temptypes = Node->getChildren();
+		vector<node*>* temptypes = Node->getChildren();
 		for (int i = 0; i < temptypes->size(); i++){
-			if (temptypes->at(i)->getSecond() > 0){
-				node *temp = temptypes->at(i);
-				types->push_back(temp);
+			if (temptypes->at(i)->getSecond() > 0)
+				types.push_back(temptypes->at(i));
+		}
+	}
+	else{	types.push_back(Node);	}
+
+	// Grab Data and prepare x axis with professor Name labels:
+	QVector<QString> labels;
+	// Search for the prof names if not grant type
+	if (!(grantType)){
+		for (int i = 0; i < types.size(); i++){
+			for (int j = 0; j < types.at(i)->getChildren()->size(); j++){
+				QString name = QString::fromStdString(types.at(i)->getChildren()->at(j)->getFirst());
+				if (!(labels.contains(name)))
+					labels.push_back(name);
 			}
 		}
 	}
+	// if grant type, display the types only
 	else{
-		types->push_back(Node);
+		for (int i = 0; i < Node->getChildren()->size(); i++)
+			labels.push_back(QString::fromStdString(Node->getChildren()->at(i)->getFirst()));
 	}
-	// Grab Data and prepare x axis with professor Name labels:
+
 	QVector<double> ticks;
-	QVector<QString> labels;
+	for (int i = 1; i <= labels.size(); i++)
+		ticks.push_back(i);
 
-	// Search for the leave nodes to get the labels
-	if (!(grantType)){
-		while (Node->getChildren()->at(0)->getChildren()->size() > 0){
-			Node = Node->getChildren()->at(0);
-		}
-	}
-	// append the labels to a QVector so that they can be displayed later
-	for (int i = 0; i < Node->getChildren()->size(); i++){
-		ticks.append(i+1);
-		labels.append(QString::fromStdString(Node->getChildren()->at(i)->getFirst()));
-	}
 
-	// create a vector of bar plots. This way you can iteratively stack them ontop of one another
 	vector<QCPBars*> bars;
 	// create a new plottable area for each type of publication
-	for (int i = 0; i < types->size(); i++)
+	for (int i = 0; i < types.size(); i++)
 	{
 		QVector<double> count;
-		for (int j = 0; j < types->at(i)->getChildren()->size(); j++)
+		for (int j = 0; j < types.at(i)->getChildren()->size(); j++)
 		{
 			if (grantType)
-				count.push_back(types->at(i)->getChildren()->at(j)->getFourth());
+				count.push_back(types.at(i)->getChildren()->at(j)->getFourth());
 			else
-				count.push_back(types->at(i)->getChildren()->at(j)->getSecond());
+				count.push_back(types.at(i)->getChildren()->at(j)->getSecond());
 		}
 		QCPBars *temp = new QCPBars(this->xAxis, this->yAxis);
-		temp->setName(QString::fromStdString(types->at(i)->getFirst()));
+		temp->setName(QString::fromStdString(types.at(i)->getFirst()));
 		temp->setData(ticks, count);
 		bars.push_back(temp);
 		this->addPlottable(temp);
@@ -82,11 +83,8 @@ void BarPlot::plotBar(node *root)
 	// stack bars ontop of each other:
 	// loop through each of the QCPBar objects in the list bars
 	if (bars.size() > 1){
-		
 		for (int i = 0; i < (bars.size() - 1); i++)
-		{
 			bars[i+1]->moveAbove(bars[i]);
-		}
 	}
 	// set the colors
 	QPen pen;
@@ -118,7 +116,10 @@ void BarPlot::plotBar(node *root)
     // prepare y axis:
 	this->yAxis->setTickStep(5);
     this->yAxis->setPadding(5); // a bit more space to the left border
-    this->yAxis->setLabel("Count");
+	if (grantType)
+		this->yAxis->setLabel("Amount");
+	else
+		this->yAxis->setLabel("Count");
     this->yAxis->grid()->setSubGridVisible(true);
     QPen gridPen;
     gridPen.setStyle(Qt::SolidLine);
