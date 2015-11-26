@@ -46,7 +46,6 @@ private slots:
 
 	void refreshSubWindows();
 
-
 private:
     Ui::MainWindow *ui;
     std::string file_name;

@@ -104,7 +104,6 @@ void BarPlot::plotBar(node *root)
 	}
 
 	//this->plotLayout()->addElement(0, 0, new QCPPlotTitle(this, QString::fromStdString(dataType)));
-	//this->rescaleAxes();
 	// prepare x axis:
     this->xAxis->setAutoTicks(false);
     this->xAxis->setAutoTickLabels(false);
@@ -114,11 +113,10 @@ void BarPlot::plotBar(node *root)
     this->xAxis->setSubTickCount(0);
     this->xAxis->setTickLength(0, 3);
     this->xAxis->grid()->setVisible(true);
-	this->xAxis->setRange(0, 10);
+	
 
     // prepare y axis:
 	this->yAxis->setTickStep(5);
-	//this->yAxis->setAutoTickStep(true);
     this->yAxis->setPadding(5); // a bit more space to the left border
     this->yAxis->setLabel("Count");
     this->yAxis->grid()->setSubGridVisible(true);
@@ -128,11 +126,15 @@ void BarPlot::plotBar(node *root)
     this->yAxis->grid()->setPen(gridPen);
     gridPen.setStyle(Qt::DotLine);
     this->yAxis->grid()->setSubGridPen(gridPen);
-	this->yAxis->setRange(0, 50);
-	
+	this->yAxis->scaleRange(1.3, this->yAxis->range().center());
+
+	this->rescaleAxes(true);
+	this->xAxis->setRange(0.5, 10.5);
+
     // setup legend:
 	QCPLayoutGrid *subLayout = new QCPLayoutGrid;
 	QCPLayoutElement *dummyElement = new QCPLayoutElement;
+
 	this->plotLayout()->addElement(0, 1, subLayout); // add sub-layout in the cell to the right of the main axis rect
 	subLayout->addElement(0, 0, this->legend); // add legend
 	subLayout->addElement(1, 0, dummyElement); // add dummy element below legend
@@ -146,10 +148,10 @@ void BarPlot::plotBar(node *root)
     legendPen.setColor(QColor(130, 130, 130, 200));
     this->legend->setBorderPen(legendPen);
     QFont legendFont = font();
-    legendFont.setPointSize(4);
+    legendFont.setPointSize(8);
     this->legend->setFont(legendFont);
+	this->legend->setSelectableParts(QCPLegend::spItems); // legend box shall not be selectable, only legend items
+	
+	this->setInteractions(QCP::iRangeDrag | QCP::iRangeZoom | QCP::iSelectPlottables | QCP::iSelectLegend);
 
-	
-    this->setInteractions(QCP::iRangeDrag | QCP::iRangeZoom);
-	
 }

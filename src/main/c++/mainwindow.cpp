@@ -21,10 +21,10 @@
 #include "legendwidget.h"
 #include "barplot.h"
 MainWindow::MainWindow(QWidget *parent) :
-    QMainWindow(parent),
-    ui(new Ui::MainWindow)
+QMainWindow(parent),
+ui(new Ui::MainWindow)
 {
-    ui->setupUi(this);
+	ui->setupUi(this);
 	this->showMaximized();
 	rec = QApplication::desktop()->screenGeometry();
 	this->setFixedSize(rec.size());
@@ -36,7 +36,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
 MainWindow::~MainWindow()
 {
-    delete ui;
+	delete ui;
 }
 
 void MainWindow::on_actionImport_CSV_triggered()
@@ -44,49 +44,49 @@ void MainWindow::on_actionImport_CSV_triggered()
 	// Refresh the subWindows each time a new CSV is imported
 	refreshSubWindows();
 
-    QString filename = QFileDialog::getOpenFileName(
-                    this,
-                    tr("Open File"),
-                    "C://",
-                    "CSV files (*.csv)"
-                    );
+	QString filename = QFileDialog::getOpenFileName(
+		this,
+		tr("Open File"),
+		"C://",
+		"CSV files (*.csv)"
+		);
 
-        QMessageBox::information(this, tr("File Name"), filename);
-        file_name = filename.toStdString();
+	QMessageBox::information(this, tr("File Name"), filename);
+	file_name = filename.toStdString();
 
-        if (!(file_name.empty())){
+	if (!(file_name.empty())){
 		//import the csv file and get the professor type
-			professorMap::profType type = this->data->importCSV(file_name);
-		
+		professorMap::profType type = this->data->importCSV(file_name);
 
-			csv = true;
-			statisticsTree* tree;
 
-			switch (type){
-			case professorMap::profType::Publication:
-				tree = new pubTree(this->data);
-				break;
-			case professorMap::profType::Presentation:
-				tree = new presTree(this->data);
-				break;
-			case professorMap::profType::GrantClinical:
-				tree = new granTree(this->data);
-				break;
-			case professorMap::profType::Teaching:
-				tree = new teacTree(this->data);
-				break;
-			default:
-				//didn't find the type of professor
-				break;
-			}
-			this->rootNode = tree->getStatistics();
-			generateList(this->rootNode); // generate tree with the data
+		csv = true;
+		statisticsTree* tree;
+
+		switch (type){
+		case professorMap::profType::Publication:
+			tree = new pubTree(this->data);
+			break;
+		case professorMap::profType::Presentation:
+			tree = new presTree(this->data);
+			break;
+		case professorMap::profType::GrantClinical:
+			tree = new granTree(this->data);
+			break;
+		case professorMap::profType::Teaching:
+			tree = new teacTree(this->data);
+			break;
+		default:
+			//didn't find the type of professor
+			break;
 		}
-		else
-		{
-			QErrorMessage* noCSV = new QErrorMessage();;
-			noCSV->showMessage(QString("ERROR: No CSV was chosen."));
-		}
+		this->rootNode = tree->getStatistics();
+		generateList(this->rootNode); // generate tree with the data
+	}
+	else
+	{
+		QErrorMessage* noCSV = new QErrorMessage();;
+		noCSV->showMessage(QString("ERROR: No CSV was chosen."));
+	}
 }
 
 //make widget that appears in mdiarea of the tab
@@ -97,7 +97,7 @@ void MainWindow::on_actionGenerate_Bar_Graph_triggered()
 		//display the right subwindow
 		this->pie->hide();
 		this->bar->setVisible(true);
-		this->bar->setGeometry(rec.width()/2, 0, rec.width()/2, rec.height()- 120);
+		this->bar->setGeometry(rec.width() / 2, 0, rec.width() / 2, rec.height() - 120);
 		barPlot->plotBar(this->rootNode);
 		this->bar->setWidget(barPlot);
 	}
@@ -151,12 +151,30 @@ void MainWindow::generateList(node* root)
 	}
 	this->tree->setVisible(true);
 	this->tree->setWidget(view);
-	this->tree->setGeometry(0, 0, rec.width()/2, rec.height() - 120);
+	this->tree->setGeometry(0, 0, rec.width() / 2, rec.height() - 120);
 }
 
 void MainWindow::on_actionSave_Graph_triggered()
 {
+	QPixmap originalPixmap;
 
+	if (this->bar->isVisible()){
+		this->bar->setGeometry(rec.width(), 0, rec.width(), rec.height()); //fullscreen
+		QPixmap originalPixmap = QPixmap::grabWidget(this->bar);
+		this->bar->setGeometry(rec.width() / 2, 0, rec.width() / 2, rec.height() - 120); //resize back to original
+	}
+	if (this->pie->isVisible()){
+		QPixmap originalPixmap = QPixmap::grabWidget(this->pie);
+	}
+
+	QString fileName = QFileDialog::getSaveFileName(
+		this,
+		tr("Save File"),
+		"C://",
+		"PNG files (*.png)"
+		);
+	originalPixmap.save(fileName);
+	
 }
 
 void MainWindow::on_actionPrint_Graph_triggered()
@@ -169,7 +187,7 @@ void MainWindow::refreshSubWindows()
 	if (this->m_area->subWindowList().size() > 0){
 		this->m_area->closeAllSubWindows();
 	}
-	
+
 	this->m_area->setTabsMovable(false);
 	// create three subwindows for (bar graph, pie chart, tree widget)
 	// remove their window flags, set fixed dimensions
