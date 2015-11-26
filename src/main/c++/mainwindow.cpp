@@ -160,18 +160,18 @@ void MainWindow::on_actionSave_Graph_triggered()
 
 	if (this->bar->isVisible()){
 		this->bar->setGeometry(rec.width(), 0, rec.width(), rec.height()); //fullscreen
-		QPixmap originalPixmap = QPixmap::grabWidget(this->bar);
+		originalPixmap = QPixmap::grabWidget(this->bar);
 		this->bar->setGeometry(rec.width() / 2, 0, rec.width() / 2, rec.height() - 120); //resize back to original
 	}
 	if (this->pie->isVisible()){
-		QPixmap originalPixmap = QPixmap::grabWidget(this->pie);
+		originalPixmap = QPixmap::grabWidget(this->pie);
 	}
 
 	QString fileName = QFileDialog::getSaveFileName(
 		this,
 		tr("Save File"),
 		"C://",
-		"PNG files (*.png)"
+		tr("Image Files(*.png *.jpg *.bmp)")
 		);
 	originalPixmap.save(fileName);
 	
