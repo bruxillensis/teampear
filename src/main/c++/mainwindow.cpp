@@ -93,7 +93,7 @@ void MainWindow::on_actionImport_CSV_triggered()
 void MainWindow::on_actionGenerate_Bar_Graph_triggered()
 {
 	if (csv){
-		barPlot = new BarPlot(this);
+		BarPlot *barPlot = new BarPlot(this);
 		//display the right subwindow
 		this->pie->hide();
 		this->bar->setVisible(true);
@@ -112,9 +112,9 @@ void MainWindow::on_actionGenerate_Bar_Graph_triggered()
 void MainWindow::on_actionGenerate_Pie_Chart_triggered()
 {
 	if (csv){
-		piechart = new PieChartWidget;
-		legend = new LegendWidget;
-		splitter = new QSplitter;
+		PieChartWidget *piechart = new PieChartWidget;
+		LegendWidget *legend = new LegendWidget;
+		QSplitter *splitter = new QSplitter;
 
 		// display the right subwindow
 		this->bar->hide();
@@ -141,7 +141,7 @@ void MainWindow::on_actionGenerate_Pie_Chart_triggered()
 void MainWindow::generateList(node* root)
 {
 	//create a new list view
-	view = new ListView(this);
+	ListView *view = new ListView(this);
 	view->makeList(root);
 	// call the thing that populates it
 	this->tree->setVisible(true);
