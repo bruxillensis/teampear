@@ -7,8 +7,8 @@
 
 #define HUE_MAX		359			//maximum HSV value
 #define PIE_MULT	16			//Pie slice multiplier
-#define C_SAT		210			//Pie slice saturation
-#define C_VAL		255			//Pie slice lightness
+#define C_SAT		175			//Pie slice saturation
+#define C_VAL		240			//Pie slice lightness
 #define DEGREES		360			//multiplier to convert pie slices to degrees
 #define EDGE		10			//white space between pie chart and edge of window
 
@@ -23,7 +23,7 @@ void PieChartWidget::paintEvent(QPaintEvent *)
     int i, current, total;
     QPainter painter(this);
     QRectF size = QRectF(EDGE, EDGE, this->width()-EDGE, this->width()-EDGE);
-	int currentHue = 0, last_slice = 0;
+	int hue = 0, last_slice = 0;
 	double current_slice;
 
 	//check if csv data is of grants and clinical funding type
@@ -47,14 +47,19 @@ void PieChartWidget::paintEvent(QPaintEvent *)
 		current = children->at(i)->getSecond();
         if(current > 0){
 	
-            color.setHsv(currentHue,C_SAT,C_VAL);						//gen new color
+            color.setHsv(hue,C_SAT,C_VAL);						//gen new color
             painter.setBrush(color);									//set brush as new color
-            current_slice = ceil(((double)current/(double)total)*DEGREES);					//generate slice
-            painter.drawPie(size, last_slice*PIE_MULT, (int)current_slice*PIE_MULT);	//draw slice
+            current_slice = nearbyint(((double)current/(double)total)*DEGREES);					//generate slice
 
+			//
+			if (i == children->size()-1 && (current_slice + last_slice) < 360){
+				current_slice += 360 - (current_slice + last_slice);
+			}
+
+			painter.drawPie(size, last_slice*PIE_MULT, (int)current_slice*PIE_MULT);	//draw slice
             last_slice += current_slice;		//increment tracker of last slice place
 
-            currentHue += c_inc;				//increment hue
+            hue += c_inc;				//increment hue
         }
     }
 

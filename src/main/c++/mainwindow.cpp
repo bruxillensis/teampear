@@ -144,6 +144,11 @@ void MainWindow::generateList(node* root)
 	ListView *view = new ListView(this);
 	view->makeList(root);
 	// call the thing that populates it
+	int i;
+	for (i = 0; i < view->columnCount(); i++)
+	{
+		view->resizeColumnToContents(i);
+	}
 	this->tree->setVisible(true);
 	this->tree->setWidget(view);
 	this->tree->setGeometry(0, 0, rec.width()/2, rec.height() - 120);

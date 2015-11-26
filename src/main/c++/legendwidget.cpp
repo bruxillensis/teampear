@@ -7,8 +7,8 @@
 #include "node.h"
 
 #define HUE_MAX		359			//maximum HSV value
-#define C_SAT		210			//Pie slice saturation
-#define C_VAL		255			//Pie slice lightness
+#define C_SAT		175			//Pie slice saturation
+#define C_VAL		240			//Pie slice lightness
 
 using namespace std;
 
@@ -24,7 +24,7 @@ void LegendWidget::drawLegend(node* root)
 	QStandardItemModel *model = new QStandardItemModel(100, 2, this);
 	//set headers of table
 	model->setHeaderData(1, Qt::Horizontal, tr(root->getFirst().c_str()));
-	model->setHeaderData(0, Qt::Horizontal, tr(" "));
+	model->setHeaderData(0, Qt::Horizontal, tr("#"));
 
 	vector<node*> *children = root->getChildren();
 
