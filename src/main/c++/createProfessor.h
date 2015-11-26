@@ -52,6 +52,10 @@ public:
 				//Produce error message when implemented
 				cerr << e.what();
 			}
+			catch (invalidDateException& e){
+				//fuck this shit
+				cerr << e.what();
+			}
 		}
 		return prof;
 	}
@@ -74,7 +78,7 @@ public:
 			"Peer Reviewed?", "Industry Grant?", "Role", "Title",
 			"Principal Investigator", "Co-Investigators", "Total Amount" };
 		vector<int> headerNumbers = findHeaders(manFields, csv[0]);
-
+		int count = 0;
 		//Create professor
 		professor* prof = new professor(findValue(csv, headerNumbers[0]), findValue(csv, headerNumbers[1]), 11);
 		for (int i = 1; i < csv.size(); i++) {
@@ -96,7 +100,7 @@ public:
 				prof->addEntry(e);
 				//Clean up
 				delete e;
-			}
+			}/*
 			catch (emptyManditoryCellException& e){
 				//Produce error message when implemented
 				cerr << e.what();
@@ -108,6 +112,11 @@ public:
 			catch (failedTypeChangeException& e){
 				//Produce error message when implemented
 				cerr << e.what();
+			}*/
+			catch (...){
+				//fuck this shit
+				count++;
+				cout << "here";
 			}
 		}
 		return prof;
@@ -140,7 +149,7 @@ public:
 				auto e = new vector<boost::variant<int, float, string, bool, boost::gregorian::date>>{
 					errorHandling::checkYear(csv[i][headerNumbers[2]]),
 					errorHandling::checkYear(csv[i][headerNumbers[3]]),
-					csv[i][headerNumbers[7]], csv[i][headerNumbers[5]],
+					csv[i][headerNumbers[4]], csv[i][headerNumbers[5]],
 					csv[i][headerNumbers[6]], csv[i][headerNumbers[7]],
 					errorHandling::toFloat(csv[i][headerNumbers[8]]),
 					errorHandling::toInt(csv[i][headerNumbers[9]]),

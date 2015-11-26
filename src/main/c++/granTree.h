@@ -28,10 +28,18 @@ public:
 				j->addChild(new node("Non-Industry Sponsored", 0, 0, 0));
 			}
 		}
+
 		//Iterate through professors
 		for (auto& it : *professors) {
 			//Sum statistics and add to tree
-			vector<pair<int, float>> count(8, pair<int, float>(0, 0));
+			//vector<pair<int, float>> count(8, pair<int, float>(0, 0));
+			vector<pair<int, float>> count;
+			for (int i = 0; i < 8; i++){
+				count.push_back(pair<int, float>(0, 0));
+			}
+			
+			
+			
 			for (int i = 0; i < it.second->getNumberOfEntries(); i++){
 				int j;
 				if (boost::get<string>(it.second->getField(0)->at(i)) == "Grants"){

@@ -38,7 +38,7 @@ void ListView::makeList(node * root)
 	{
 		this->setHeaderLabels(QStringList() << "Name" << "# Total " << "$ Total");
 	}
-	else if (strcmp(root->getFirst().c_str(), "Teaching"))
+	else if (strcmp(root->getFirst().c_str(), "Programs"))
 	{
 		this->setHeaderLabels(QStringList() << "Name" << "Hour" << "Student");
 	}

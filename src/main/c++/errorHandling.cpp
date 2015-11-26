@@ -90,7 +90,7 @@ float errorHandling::toFloat(string floatValue){
 	//Convert string to vector to iterate through
 	for (char& i : vector<char>(floatValue.begin(), floatValue.end())){
 		//If value is a number or period add to output string vector
-		if (((i<57) && (i>48)) || (i == 46))
+		if (((i<58) && (i>47)) || (i == 46))
 			s.push_back(i);
 	}
 	try{
