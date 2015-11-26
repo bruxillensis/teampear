@@ -4,9 +4,6 @@
 #include "granTree.h"
 #include "teacTree.h"
 #include "presTree.h"
-#include "barplot.h"
-#include "piechartwidget.h"
-#include "legendwidget.h"
 #include <utility>
 #include <string>
 #include <vector>
@@ -20,48 +17,18 @@
 #include <QObject>
 #include <QErrorMessage>
 #include "listview.h"
-
+#include "piechartwidget.h"
+#include "legendwidget.h"
+#include "barplot.h"
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
 	this->showMaximized();
-
-	// get the size of the desktop screen
-	QRect rec = QApplication::desktop()->screenGeometry();
-	int h = rec.height();
-	int w = rec.width();
-
-	// Create a new MDI area
+	rec = QApplication::desktop()->screenGeometry();
+	this->setFixedSize(rec.size());
 	this->m_area = new QMdiArea;
-	
-	// create three subwindows for (bar graph, pie chart, tree widget)
-	// remove their window flags, set fixed dimensions
-	this->tree = new QMdiSubWindow(m_area);
-	this->tree->setWindowFlags(Qt::CustomizeWindowHint);
-
-	this->bar = new QMdiSubWindow(m_area);
-	this->bar->setWindowFlags(Qt::CustomizeWindowHint);
-
-	this->pie = new QMdiSubWindow(m_area);
-	this->pie->setWindowFlags(Qt::CustomizeWindowHint);
-
-	//hide subwindows until called on plot
-	this->tree->hide();
-	this->bar->hide();
-	this->pie->hide();
-
-	// set the location and size of the plot subwindows
-	this->tree->setGeometry(0, 0, w / 2, h - 120);
-	this->pie->setGeometry(w / 2, 0, w / 2, h - 120);
-	this->bar->setGeometry(w/2, 0, w / 2, h - 120);
-
-	// prevent user from moving the windows
-	//this->tree->setDisabled(true);
-	this->bar->setDisabled(true);
-	this->pie->setDisabled(true);
-
 	this->setCentralWidget(m_area);
 }
 
@@ -74,6 +41,9 @@ MainWindow::~MainWindow()
 
 void MainWindow::on_actionImport_CSV_triggered()
 {
+	// Refresh the subWindows each time a new CSV is imported
+	refreshSubWindows();
+
     QString filename = QFileDialog::getOpenFileName(
                     this,
                     tr("Open File"),
@@ -122,13 +92,12 @@ void MainWindow::on_actionImport_CSV_triggered()
 //make widget that appears in mdiarea of the tab
 void MainWindow::on_actionGenerate_Bar_Graph_triggered()
 {
-
 	if (csv){
+		barPlot = new BarPlot(this);
 		//display the right subwindow
 		this->pie->hide();
 		this->bar->setVisible(true);
-
-		BarPlot *barPlot = new BarPlot(this);
+		this->bar->setGeometry(rec.width()/2, 0, rec.width()/2, rec.height()- 120);
 		barPlot->plotBar(this->rootNode);
 		this->bar->setWidget(barPlot);
 	}
@@ -143,14 +112,14 @@ void MainWindow::on_actionGenerate_Bar_Graph_triggered()
 void MainWindow::on_actionGenerate_Pie_Chart_triggered()
 {
 	if (csv){
-		PieChartWidget *piechart = new PieChartWidget;
-		LegendWidget *legend = new LegendWidget;
-		QSplitter *splitter = new QSplitter;
+		piechart = new PieChartWidget;
+		legend = new LegendWidget;
+		splitter = new QSplitter;
 
 		// display the right subwindow
 		this->bar->hide();
 		this->pie->setVisible(true);
-
+		this->pie->setGeometry(rec.width() / 2, 0, rec.width() / 2, rec.height() - 120);
 		//draw piechart and legend
 		piechart->setData(this->rootNode);
 		legend->drawLegend(this->rootNode);
@@ -171,13 +140,13 @@ void MainWindow::on_actionGenerate_Pie_Chart_triggered()
 
 void MainWindow::generateList(node* root)
 {
-	// Andy and Max should fill this out
 	//create a new list view
-	ListView *view = new ListView(this);
+	view = new ListView(this);
 	view->makeList(root);
 	// call the thing that populates it
 	this->tree->setVisible(true);
 	this->tree->setWidget(view);
+	this->tree->setGeometry(0, 0, rec.width()/2, rec.height() - 120);
 }
 
 void MainWindow::on_actionSave_Graph_triggered()
@@ -190,3 +159,31 @@ void MainWindow::on_actionPrint_Graph_triggered()
 
 }
 
+void MainWindow::refreshSubWindows()
+{
+	if (this->m_area->subWindowList().size() > 0){
+		this->m_area->closeAllSubWindows();
+	}
+	
+	this->m_area->setTabsMovable(false);
+	// create three subwindows for (bar graph, pie chart, tree widget)
+	// remove their window flags, set fixed dimensions
+	this->tree = new QMdiSubWindow(m_area);
+	this->tree->setWindowFlags(Qt::CustomizeWindowHint | Qt::FramelessWindowHint);
+
+	this->bar = new QMdiSubWindow(m_area);
+	this->bar->setWindowFlags(Qt::CustomizeWindowHint | Qt::FramelessWindowHint);
+
+	this->pie = new QMdiSubWindow(m_area);
+	this->pie->setWindowFlags(Qt::CustomizeWindowHint | Qt::FramelessWindowHint);
+
+	//hide subwindows until called on plot
+	this->tree->hide();
+	this->bar->hide();
+	this->pie->hide();
+
+	// prevent user from moving the windows
+	//this->tree->setDisabled(true);
+	//this->bar->setDisabled(true);
+	//this->pie->setDisabled(true);
+}

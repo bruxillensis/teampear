@@ -145,8 +145,3 @@ void BarPlot::plotBar(node *root)
     //this->setInteractions(QCP::iRangeDrag | QCP::iRangeZoom);
 	
 }
-
-BarPlot::~BarPlot()
-{
-    delete ui;
-}

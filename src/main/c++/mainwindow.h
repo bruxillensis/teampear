@@ -11,7 +11,6 @@
 #include <stdlib.h>
 #include <QMdiArea>
 #include <QMdiSubWindow>
-//#include "tablayoutwidget.h"
 #include "professorMap.h"
 #include "node.h"
 #include "statisticsTree.h"
@@ -45,6 +44,8 @@ private slots:
 
 	void generateList(node*);
 
+	void refreshSubWindows();
+
 
 private:
     Ui::MainWindow *ui;
@@ -56,7 +57,7 @@ private:
 	QMdiSubWindow *pie;
 	QMdiSubWindow *tree;
 	bool csv = false;
-	//tabLayoutWidget *tabLayout;
+	QRect rec;
 };
 
 #endif // MAINWINDOW_H

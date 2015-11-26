@@ -19,8 +19,6 @@ class BarPlot : public QCustomPlot
 
 public:
 	explicit BarPlot(QWidget *parent);
-    ~BarPlot();
-
 	void plotBar(node* root);
 
 private:
