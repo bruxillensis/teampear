@@ -30,10 +30,17 @@ void BarPlot::plotBar(node *root)
 	// Get the types
 	// Note the type is not always going to be the within the children of the node (depending on what node is passed)
 	// It will be possible to pass in a different node (say a publication type node) when implemented
-	vector<node*>* types;
+	vector<node*>* temptypes;
+	vector<node*>* types = new vector<node*>();
 	if (Node->getParent() == NULL){
-		types = Node->getChildren();
+		temptypes = Node->getChildren();
+		for (int i = 0; i < temptypes->size(); i++){
+			if (temptypes->at(i)->getSecond() > 0){
+				node *temp = temptypes->at(i);
+				types->push_back(temp);
+			}
 		}
+	}
 	else{
 		types->push_back(Node);
 	}
@@ -97,7 +104,7 @@ void BarPlot::plotBar(node *root)
 	}
 
 	//this->plotLayout()->addElement(0, 0, new QCPPlotTitle(this, QString::fromStdString(dataType)));
-	
+	//this->rescaleAxes();
 	// prepare x axis:
     this->xAxis->setAutoTicks(false);
     this->xAxis->setAutoTickLabels(false);
@@ -107,6 +114,7 @@ void BarPlot::plotBar(node *root)
     this->xAxis->setSubTickCount(0);
     this->xAxis->setTickLength(0, 3);
     this->xAxis->grid()->setVisible(true);
+	this->xAxis->setRange(0, 10);
 
     // prepare y axis:
 	this->yAxis->setTickStep(5);
@@ -120,8 +128,8 @@ void BarPlot::plotBar(node *root)
     this->yAxis->grid()->setPen(gridPen);
     gridPen.setStyle(Qt::DotLine);
     this->yAxis->grid()->setSubGridPen(gridPen);
-
-	this->rescaleAxes();
+	this->yAxis->setRange(0, 50);
+	
     // setup legend:
 	QCPLayoutGrid *subLayout = new QCPLayoutGrid;
 	QCPLayoutElement *dummyElement = new QCPLayoutElement;
@@ -138,10 +146,10 @@ void BarPlot::plotBar(node *root)
     legendPen.setColor(QColor(130, 130, 130, 200));
     this->legend->setBorderPen(legendPen);
     QFont legendFont = font();
-    legendFont.setPointSize(10);
+    legendFont.setPointSize(4);
     this->legend->setFont(legendFont);
 
 	
-    //this->setInteractions(QCP::iRangeDrag | QCP::iRangeZoom);
+    this->setInteractions(QCP::iRangeDrag | QCP::iRangeZoom);
 	
 }
