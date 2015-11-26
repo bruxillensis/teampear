@@ -174,6 +174,7 @@ public:
 
 		//find the index of the Member Name
 		//works only if the name field is named "Member Name"
+		mName.clear();
 		mName.push_back("Member Name");
 		vector<int> indexMemberName = createProfessor::findHeaders(mName, *(myCSV.at(0)));
 
