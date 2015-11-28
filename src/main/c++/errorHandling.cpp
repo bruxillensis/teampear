@@ -44,6 +44,8 @@ bool is_number(const std::string& s)
 
 // Validate the filter of the date range
 boost::gregorian::date errorHandling::checkYear(string date){
+	if (date == "present")
+		return boost::gregorian::date(2015, 11, 27);
 	//Get date values from date string
 	istringstream ss(date);
 	string syear, smonth, sday;
@@ -115,9 +117,9 @@ bool errorHandling::checkFilter(int date){
 }
 
 bool errorHandling::toBool(string boolValue){
-	if (boolValue.compare("TRUE"))
+	if (boolValue.compare("True"))
 		return true;
-	if (boolValue.compare("FALSE"))
+	if (boolValue.compare("False"))
 		return false;
 	throw new failedTypeChangeException();
 }

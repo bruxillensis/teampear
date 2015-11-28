@@ -172,13 +172,13 @@ public:
 
 		map<string, vector<vector<string> > >* orgCSV = new map<string, vector<vector<string> > >();
 
-		//find the index of the Member Name
-		//works only if the name field is named "Member Name"
+		//Find the index of the Member Name
+		//Works only if the name field is named "Member Name"
 		mName.clear();
 		mName.push_back("Member Name");
 		vector<int> indexMemberName = createProfessor::findHeaders(mName, *(myCSV.at(0)));
 
-		//populate the map
+		//Populate the Map
 		for (size_t i = 1; i < myCSV.size(); i++) {
 			if (!orgCSV->empty()) {
 				if (myCSV[i]->at(indexMemberName.front()) == "")

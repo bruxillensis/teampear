@@ -18,11 +18,11 @@ public:
 	void createStatistics(professorMap* professors) override {
 		//Create Initial Tree
 		root = new node("Grants and Clinical Funding", 0, 0, 0);
-		root->addChild(new node("Grants", 0, 0, 0));
 		root->addChild(new node("Clinical Funding", 0, 0, 0));
+		root->addChild(new node("Grants", 0, 0, 0));
 		for (auto &i : *root->getChildren()){
-			i->addChild(new node("Peer Reviewed", 0, 0, 0));
 			i->addChild(new node("Non-Peer Reviewed", 0, 0, 0));
+			i->addChild(new node("Peer Reviewed", 0, 0, 0));
 			for (auto &j : *i->getChildren()){
 				j->addChild(new node("Industry Sponsored", 0, 0, 0));
 				j->addChild(new node("Non-Industry Sponsored", 0, 0, 0));
@@ -32,36 +32,32 @@ public:
 		//Iterate through professors
 		for (auto& it : *professors) {
 			//Sum statistics and add to tree
-			//vector<pair<int, float>> count(8, pair<int, float>(0, 0));
-			vector<pair<int, float>> count;
-			for (int i = 0; i < 8; i++){
-				count.push_back(pair<int, float>(0, 0));
-			}
-			
-			
-			//christian: i think something is wrong with the at(i), i don't think it's always a string
+			vector<pair<int, float>> count(8, pair<int, float>(0, 0));
 			for (int i = 0; i < it.second->getNumberOfEntries(); i++){
 				int j;
-				//grants
-				if (boost::get<string>(it.second->getField(0)->at(i)) == "Grants"){
-					if (boost::get<bool>(it.second->getField(4)->at(i))){
+				string t = boost::get<string>(it.second->getField(7)->at(i));
+				bool test = boost::get<bool>(it.second->getField(4)->at(i));
+				bool test2 = boost::get<bool>(it.second->getField(5)->at(i));
+				//Grants
+				if (boost::get<string>(it.second->getField(2)->at(i)) == "Clinical Trials"){
+					if (!boost::get<bool>(it.second->getField(4)->at(i))){
 						if (boost::get<bool>(it.second->getField(5)->at(i))){ j = 0; }
 						else												{ j = 1; }
 					}
 					else{
-						if (boost::get<bool>(it.second->getField(5)->at(i))){ j = 3; }
-						else												{ j = 4; }
+						if (boost::get<bool>(it.second->getField(5)->at(i))){ j = 2; }
+						else												{ j = 3; }
 					}
 				}
-				//clinical funding
+				//Clinical funding
 				else{
-					if (boost::get<bool>(it.second->getField(4)->at(i))){
-						if (boost::get<bool>(it.second->getField(5)->at(i))){ j = 5; }
-						else												{ j = 6; }
+					if (!boost::get<bool>(it.second->getField(4)->at(i))){
+						if (boost::get<bool>(it.second->getField(5)->at(i))){ j = 4; }
+						else												{ j = 5; }
 					}
 					else{
-						if (boost::get<bool>(it.second->getField(5)->at(i))){ j = 7; }
-						else												{ j = 8; }
+						if (boost::get<bool>(it.second->getField(5)->at(i))){ j = 6; }
+						else												{ j = 7; }
 					}
 				}
 				try{
@@ -72,9 +68,12 @@ public:
 			}
 			for (int i = 0; i < count.size(); i++){
 				if (count[i].first != 0){
-					root->getChildren()->at((i ^ 0x4) >> 2)
-						->getChildren()->at((i ^ 0x2) >> 1)
-						->getChildren()->at(i ^ 0x1)
+					int a = ((i & 0x4) >> 2);
+					int b = ((i & 0x2) >> 1);
+					int c = (i & 0x1);
+					root->getChildren()->at((i & 0x4) >> 2)
+						->getChildren()->at((i & 0x2) >> 1)
+						->getChildren()->at(i & 0x1)
 						->addChild(new node(it.first, count[i].first, 0, count[i].second));
 				}
 			}

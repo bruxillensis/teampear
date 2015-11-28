@@ -60,9 +60,9 @@ public:
 		return prof;
 	}
 	/* Fields
-		Type			  : String
 		Start Date		  : Boost::Gregorian::Date
 		End Date		  : Boost::Gregorian::Date
+		Type			  : String
 		Grant Status	  : String
 		Peer Reviewed	  : Boolean
 		Industry Grant	  : Boolean
@@ -100,7 +100,7 @@ public:
 				prof->addEntry(e);
 				//Clean up
 				delete e;
-			}/*
+			}
 			catch (emptyManditoryCellException& e){
 				//Produce error message when implemented
 				cerr << e.what();
@@ -116,10 +116,6 @@ public:
 			catch (invalidDateException& e){
 				//fuck this shit
 				cerr << e.what();
-			}*/
-			catch (...){
-				//fuck this shit
-				cerr << "qq";
 			}
 		}
 		return prof;
