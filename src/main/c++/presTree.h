@@ -40,7 +40,12 @@ public:
 			}
 			//Add the professor stats to the tree
 			for (int i = 0; i < presTypes.size(); i++){
-				root->getChildren()->at(i)->addChild(new node(it.second->getName(), typeCount[i], 0, 0));
+				int j = std::distance(presTypes.begin(),
+					std::find(presTypes.begin(), presTypes.end(), root->getChildren()->at(i)->getFirst()));
+				if (typeCount[j]){
+					node* prof = new node(it.first, typeCount[j], 0, 0);
+					root->getChildren()->at(i)->addChild(prof);
+				}
 			}
 		}
 		//For non-leaf nodes, iterate through tree and count up stats to create totals for inner leaves

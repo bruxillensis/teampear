@@ -46,8 +46,10 @@ public:
 			for (int i = 0; i < root->getChildren()->size(); i++){
 				int j = std::distance(pubTypes.begin(),
 					std::find(pubTypes.begin(), pubTypes.end(), root->getChildren()->at(i)->getFirst()));
-				node* prof = new node(it.first, typeCount[j], 0, 0);
-				root->getChildren()->at(i)->addChild(prof);
+				if (typeCount[j]){
+					node* prof = new node(it.first, typeCount[j], 0, 0);
+					root->getChildren()->at(i)->addChild(prof);
+				}
 			}
 		}
 		//For non-leaf nodes, iterate through tree and count up stats to create totals for inner leaves

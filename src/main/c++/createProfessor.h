@@ -151,7 +151,7 @@ public:
 					csv[i][headerNumbers[4]], csv[i][headerNumbers[5]],
 					csv[i][headerNumbers[6]], csv[i][headerNumbers[7]],
 					errorHandling::toFloat(csv[i][headerNumbers[8]]),
-					errorHandling::toInt(csv[i][headerNumbers[9]]),
+					errorHandling::toFloat(csv[i][headerNumbers[9]]),
 					errorHandling::toFloat(csv[i][headerNumbers[10]]) };
 				//Add entry to prof
 				prof->addEntry(e);
