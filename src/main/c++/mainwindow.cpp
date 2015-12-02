@@ -30,6 +30,7 @@ ui(new Ui::MainWindow)
 	this->setFixedSize(rec.size());
 	this->m_area = new QMdiArea;
 	this->setCentralWidget(m_area);
+	this->rootNode = NULL;
 }
 
 
@@ -56,11 +57,15 @@ void MainWindow::on_actionImport_CSV_triggered()
 
 	if (!(file_name.empty())){
 		//import the csv file and get the professor type
-		professorMap::profType type = this->data->importCSV(file_name);
-
-
-		csv = true;
 		statisticsTree* tree;
+		if (this->rootNode != NULL){
+			delete this->rootNode;
+			delete this->data;
+			this->addModel(new professorMap());
+		}
+
+		professorMap::profType type = this->data->importCSV(file_name);
+		csv = true;
 
 		switch (type){
 		case professorMap::profType::Publication:
