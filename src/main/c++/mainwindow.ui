@@ -106,7 +106,7 @@
     <string>Import CSV</string>
    </property>
    <property name="shortcut">
-    <string>Ctrl+I</string>
+    <string>Alt+I</string>
    </property>
   </action>
   <action name="actionGenerate_Pie_Chart">
