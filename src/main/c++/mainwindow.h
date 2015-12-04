@@ -11,6 +11,7 @@
 #include <stdlib.h>
 #include <QMdiArea>
 #include <QMdiSubWindow>
+#include <QShortcut>
 #include "professorMap.h"
 #include "node.h"
 #include "statisticsTree.h"

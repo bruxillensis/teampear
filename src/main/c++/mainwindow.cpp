@@ -31,8 +31,13 @@ ui(new Ui::MainWindow)
 	this->m_area = new QMdiArea;
 	this->setCentralWidget(m_area);
 	this->rootNode = NULL;
+    
+    //set up hotkeys
+    new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_I), this, SLOT(on_actionImport_CSV_triggered()));
+new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_P), this, SLOT(on_actionGenerate_Pie_Chart_triggered()));
+new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_B), this, SLOT(on_actionGenerate_Bar_Graph_triggered()));
+ new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_S), this, SLOT(on_actionSave_Graph_triggered()));
 }
-
 
 
 MainWindow::~MainWindow()
