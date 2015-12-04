@@ -19,7 +19,7 @@ class BarPlot : public QCustomPlot
 
 public:
 	explicit BarPlot(QWidget *parent);
-	void plotBar(node* root);
+	int plotBar(node* root);
 
 private:
     Ui::BarPlot *ui;

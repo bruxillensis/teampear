@@ -47,6 +47,7 @@ private slots:
 
 	void refreshSubWindows();
 
+	void on_actionData_Filter_Options_triggered();
 private:
     Ui::MainWindow *ui;
     std::string file_name;

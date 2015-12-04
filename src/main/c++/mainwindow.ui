@@ -68,7 +68,7 @@
      <x>0</x>
      <y>0</y>
      <width>837</width>
-     <height>22</height>
+     <height>21</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuTeam_pear_example_UI">
@@ -81,6 +81,8 @@
     <property name="title">
      <string>Graph</string>
     </property>
+    <addaction name="actionData_Filter_Options"/>
+    <addaction name="separator"/>
     <addaction name="actionGenerate_Pie_Chart"/>
     <addaction name="actionGenerate_Bar_Graph"/>
     <addaction name="separator"/>
@@ -112,12 +114,15 @@
     <string>Generate Pie Chart</string>
    </property>
    <property name="shortcut">
-    <string>Ctrl+P</string>
+    <string>Alt+P</string>
    </property>
   </action>
   <action name="actionGenerate_Bar_Graph">
    <property name="text">
     <string>Generate Bar Graph</string>
+   </property>
+   <property name="shortcut">
+    <string>Alt+B</string>
    </property>
   </action>
   <action name="actionSave_Graph">
@@ -125,12 +130,17 @@
     <string>Save Graph</string>
    </property>
    <property name="shortcut">
-    <string>Ctrl+S</string>
+    <string>Alt+S</string>
    </property>
   </action>
   <action name="actionPrint_Graph">
    <property name="text">
     <string>Print Graph</string>
+   </property>
+  </action>
+  <action name="actionData_Filter_Options">
+   <property name="text">
+    <string>Data Filter Options</string>
    </property>
   </action>
  </widget>

@@ -20,6 +20,7 @@
 #include "piechartwidget.h"
 #include "legendwidget.h"
 #include "barplot.h"
+#include "filterdialog.h"
 MainWindow::MainWindow(QWidget *parent) :
 QMainWindow(parent),
 ui(new Ui::MainWindow)
@@ -33,10 +34,10 @@ ui(new Ui::MainWindow)
 	this->rootNode = NULL;
     
     //set up hotkeys
-    new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_I), this, SLOT(on_actionImport_CSV_triggered()));
-new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_P), this, SLOT(on_actionGenerate_Pie_Chart_triggered()));
-new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_B), this, SLOT(on_actionGenerate_Bar_Graph_triggered()));
- new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_S), this, SLOT(on_actionSave_Graph_triggered()));
+    new QShortcut(QKeySequence(Qt::ALT + Qt::Key_I), this, SLOT(on_actionImport_CSV_triggered()));
+	new QShortcut(QKeySequence(Qt::ALT + Qt::Key_P), this, SLOT(on_actionGenerate_Pie_Chart_triggered()));
+	new QShortcut(QKeySequence(Qt::ALT + Qt::Key_B), this, SLOT(on_actionGenerate_Bar_Graph_triggered()));
+	new QShortcut(QKeySequence(Qt::ALT + Qt::Key_S), this, SLOT(on_actionSave_Graph_triggered()));
 }
 
 
@@ -108,8 +109,14 @@ void MainWindow::on_actionGenerate_Bar_Graph_triggered()
 		this->pie->hide();
 		this->bar->setVisible(true);
 		this->bar->setGeometry(rec.width() / 2, 0, rec.width() / 2, rec.height() - 120);
-		barPlot->plotBar(this->rootNode);
+		int extra = barPlot->plotBar(this->rootNode);
 		this->bar->setWidget(barPlot);
+
+		if (extra == 1){
+			QErrorMessage* noCSV = new QErrorMessage();;
+			noCSV->showMessage(QString("Due to the large number of different types, only the 20 greatest ones are shown.\
+									   The rest have been compiled into 'Others'."));
+		}
 	}
 	else
 	{
@@ -219,4 +226,11 @@ void MainWindow::refreshSubWindows()
 	//this->tree->setDisabled(true);
 	//this->bar->setDisabled(true);
 	//this->pie->setDisabled(true);
+}
+
+void MainWindow::on_actionData_Filter_Options_triggered()
+{
+	filterDialog d;
+	d.setModal(true);
+	d.exec();
 }

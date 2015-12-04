@@ -1,26 +1,30 @@
-#include "barplot.h"
 #include <vector>
 #include <string.h>
 #include <iostream>
 #include <QString>
+#include <algorithm> 
+#include <limits>
+#include "barplot.h"
 #include "statisticsTree.h"
 #include "node.h"
 
+
 #define BAR_SAT		210		// colour saturation
 #define BAR_VAL		230		// colour lightness
-#define BAR_ALPHA	220		// colour transparency
+#define BAR_ALPHA	110 	// colour transparency
 #define HUE_MAX		359
+#define COUNT_MAX	20		// number of stacked layers
 
 using namespace std;
 BarPlot::BarPlot(QWidget *parent) : QCustomPlot(parent)
 {
 }
 
-void BarPlot::plotBar(node *root)
+int BarPlot::plotBar(node *root)
 {	
 	Node = root; // Data is passed through as a node
 
-	string dataType = Node->getFirst(); // only works if this is the root node!!
+	string dataType = Node->getFirst();
 
 	bool grantType = false;
 	if (Node->getFourth() > 0.0)
@@ -39,7 +43,7 @@ void BarPlot::plotBar(node *root)
 	}
 	else{	types.push_back(Node);	}
 
-	// Grab Data and prepare x axis with professor Name labels:
+	// Grab Data and prepare x axis with (professor Name) labels:
 	QVector<QString> labels;
 	// Search for the prof names if not grant type
 	if (!(grantType)){
@@ -57,26 +61,62 @@ void BarPlot::plotBar(node *root)
 			labels.push_back(QString::fromStdString(Node->getChildren()->at(i)->getFirst()));
 	}
 
+	// stacked bar chart can get cluttered, ensure no more than 30 different types
+	// determine which types to push into an "Others" group
+	vector<int> othersNdx;
+	if (types.size() > COUNT_MAX){
+		vector<double> typeSumCounts;
+		for (int i = 0; i < types.size(); i++){
+			if (grantType)
+				typeSumCounts.push_back(types.at(i)->getFourth());
+			else
+				typeSumCounts.push_back(types.at(i)->getSecond());
+		}
+		while (types.size() - othersNdx.size() > COUNT_MAX){
+			othersNdx.push_back(min_element(typeSumCounts.begin(), typeSumCounts.end()) - typeSumCounts.begin());
+			typeSumCounts.at(min_element(typeSumCounts.begin(), typeSumCounts.end()) - typeSumCounts.begin()) = std::numeric_limits<double>::infinity();
+		}
+	}
+
 	QVector<double> ticks;
 	for (int i = 1; i <= labels.size(); i++)
 		ticks.push_back(i);
 
-
 	vector<QCPBars*> bars;
-	// create a new plottable area for each type of publication
+	QVector<double> othersCount(labels.size());
+	double *othersData = othersCount.data();
+	// create a new plottable area for each type, group everything within the "Others" group together
 	for (int i = 0; i < types.size(); i++)
 	{
-		QVector<double> count;
-		for (int j = 0; j < types.at(i)->getChildren()->size(); j++)
-		{
+		QVector<double> count(labels.size());
+		double *data = count.data();
+		// Note: not all types have same number of children (profs)
+		// this would affect the labels (prof names)
+		for (int j = 0; j < types.at(i)->getChildren()->size(); j++){
+			int pos = labels.indexOf(QString::fromStdString(types.at(i)->getChildren()->at(j)->getFirst()));
 			if (grantType)
-				count.push_back(types.at(i)->getChildren()->at(j)->getFourth());
+				data[pos] = types.at(i)->getChildren()->at(j)->getFourth();
 			else
-				count.push_back(types.at(i)->getChildren()->at(j)->getSecond());
+				data[pos]= types.at(i)->getChildren()->at(j)->getSecond();
 		}
 		QCPBars *temp = new QCPBars(this->xAxis, this->yAxis);
-		temp->setName(QString::fromStdString(types.at(i)->getFirst()));
-		temp->setData(ticks, count);
+
+		if (std::find(othersNdx.begin(), othersNdx.end(), i) != othersNdx.end()){
+			for (int j = 0; j < labels.size(); j++)
+				othersData[j] += count[j];
+		}
+		else{
+			temp->setName(QString::fromStdString(types.at(i)->getFirst()));
+			temp->setData(ticks, count);
+			bars.push_back(temp);
+			this->addPlottable(temp);
+		}
+	}
+	// Graph "Others" only if there's something in it
+	if (std::find(othersCount.begin(), othersCount.end(), (!0)) != othersCount.end()){
+		QCPBars *temp = new QCPBars(this->xAxis, this->yAxis);
+		temp->setName("Others");
+		temp->setData(ticks, othersCount);
 		bars.push_back(temp);
 		this->addPlottable(temp);
 	}
@@ -92,12 +132,14 @@ void BarPlot::plotBar(node *root)
 	int C_HUE = 0;
 	for (int i = 0; i < bars.size(); i++)
 	{
-		QColor color;
-		color.setHsv(C_HUE, BAR_SAT, BAR_VAL);
-		color.setAlpha(BAR_ALPHA);
-		pen.setColor(color);
+		QColor color_brush, color_pen;
+		color_brush.setHsv(C_HUE, BAR_SAT, BAR_VAL);
+		color_brush.setAlpha(BAR_ALPHA);
+		color_pen.setHsv(C_HUE, BAR_SAT+30, BAR_VAL+10);
+		color_pen.setAlpha(255);
+		pen.setColor(color_pen);
 		bars[i]->setPen(pen);
-		bars[i]->setBrush(color);
+		bars[i]->setBrush(color_brush);
 		C_HUE += HUE_MAX/bars.size();
 	}
 
@@ -155,4 +197,9 @@ void BarPlot::plotBar(node *root)
 	
 	this->setInteractions(QCP::iRangeDrag | QCP::iRangeZoom | QCP::iSelectPlottables | QCP::iSelectLegend);
 
+	if (std::find(othersCount.begin(), othersCount.end(), (!0)) != othersCount.end()){
+		return 1;
+	}
+	else
+		return 0;
 }
