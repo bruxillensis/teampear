@@ -1,9 +1,6 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include "pubTree.h"
-#include "granTree.h"
-#include "teacTree.h"
-#include "presTree.h"
 #include <utility>
 #include <string>
 #include <vector>
@@ -16,11 +13,19 @@
 #include <QRect>
 #include <QObject>
 #include <QErrorMessage>
+#include <QPrinter>
+#include <QPrintPreviewDialog>
+#include <QPrintDialog>
+
+#include "granTree.h"
+#include "teacTree.h"
+#include "presTree.h"
 #include "listview.h"
 #include "piechartwidget.h"
 #include "legendwidget.h"
 #include "barplot.h"
 #include "filterdialog.h"
+
 MainWindow::MainWindow(QWidget *parent) :
 QMainWindow(parent),
 ui(new Ui::MainWindow)
@@ -34,10 +39,11 @@ ui(new Ui::MainWindow)
 	this->rootNode = NULL;
     
     //set up hotkeys
-    new QShortcut(QKeySequence(Qt::ALT + Qt::Key_I), this, SLOT(on_actionImport_CSV_triggered()));
-	new QShortcut(QKeySequence(Qt::ALT + Qt::Key_P), this, SLOT(on_actionGenerate_Pie_Chart_triggered()));
-	new QShortcut(QKeySequence(Qt::ALT + Qt::Key_B), this, SLOT(on_actionGenerate_Bar_Graph_triggered()));
-	new QShortcut(QKeySequence(Qt::ALT + Qt::Key_S), this, SLOT(on_actionSave_Graph_triggered()));
+    new QShortcut(QKeySequence(Qt::Key_Control + Qt::Key_I), this, SLOT(on_actionImport_CSV_triggered()));
+	new QShortcut(QKeySequence(Qt::Key_Control + Qt::Key_C), this, SLOT(on_actionGenerate_Pie_Chart_triggered()));
+	new QShortcut(QKeySequence(Qt::Key_Control + Qt::Key_B), this, SLOT(on_actionGenerate_Bar_Graph_triggered()));
+	new QShortcut(QKeySequence(Qt::Key_Control + Qt::Key_S), this, SLOT(on_actionSave_Graph_triggered()));
+	//new QShortcut(QKeySequence(Qt::Key_Control + Qt::Key_P), this, SLOT(on_actionPrint_triggered()));
 }
 
 
@@ -194,11 +200,6 @@ void MainWindow::on_actionSave_Graph_triggered()
 	
 }
 
-void MainWindow::on_actionPrint_Graph_triggered()
-{
-
-}
-
 void MainWindow::refreshSubWindows()
 {
 	if (this->m_area->subWindowList().size() > 0){
@@ -233,4 +234,107 @@ void MainWindow::on_actionData_Filter_Options_triggered()
 	filterDialog d;
 	d.setModal(true);
 	d.exec();
+}
+
+void MainWindow::on_actionPrint_Graph_triggered()
+{
+	// display print dialog and if accepted print
+	QPrinter       printer(QPrinter::HighResolution);
+	QPrintDialog   dialog(&printer, this);
+	if (dialog.exec() == QDialog::Accepted) print(&printer);
+}
+
+void MainWindow::on_actionPrint_Graph_Preview_triggered()
+{
+	// display print preview dialog
+	QPrinter             printer(QPrinter::HighResolution);
+	QPrintPreviewDialog  preview(&printer, this);
+	connect(&preview, SIGNAL(paintRequested(QPrinter*)), SLOT(print(QPrinter*)));
+	preview.exec();
+}
+
+void MainWindow::print(QPrinter* printer)
+{
+	// create painter for drawing print page
+	QPainter painter;
+	int      w = printer->pageRect().width();
+	int      h = printer->pageRect().height();
+	QRect    page(0, 0, w, h);
+
+	// create a font appropriate to page size
+	QFont    font = painter.font();
+	font.setPixelSize((w + h) / 100);
+	painter.setFont(font);
+	painter.begin(printer);
+
+	// draw labels in corners of page
+	painter.drawText(page, Qt::AlignTop | Qt::AlignLeft, QString::fromStdString(rootNode->getFirst()));
+	painter.drawText(page, Qt::AlignBottom | Qt::AlignLeft, QString(getenv("USER")));
+	painter.drawText(page, Qt::AlignBottom | Qt::AlignRight,
+		QDateTime::currentDateTime().toString(Qt::DefaultLocaleShortDate));
+
+	// draw simulated landscape
+	page.adjust(w / 20, h / 20, -w / 20, -h / 20);
+	QPixmap printPixmap;
+	if (this->bar->isVisible()){
+		this->bar->setGeometry(rec.width(), 0, rec.width(), rec.height()); //fullscreen
+		printPixmap = QPixmap::grabWidget(this->bar);
+		this->bar->setGeometry(rec.width() / 2, 0, rec.width() / 2, rec.height() - 120); //resize back to original
+	}
+
+	if (this->pie->isVisible()){
+		printPixmap = QPixmap::grabWidget(this->pie);
+	}
+	printPixmap = printPixmap.scaled(w, h, Qt::KeepAspectRatio);
+	painter.drawPixmap(0, 100, printPixmap);
+	painter.end();
+	
+}
+
+void MainWindow::on_actionPrint_List_triggered()
+{
+	// display print dialog and if accepted print
+	QPrinter       printer(QPrinter::ScreenResolution);
+	QPrintDialog   dialog(&printer, this);
+	if (dialog.exec() == QDialog::Accepted) printList(&printer);
+}
+
+void MainWindow::on_actionPrint_List_Preview_triggered()
+{
+	// display print preview dialog
+	QPrinter             printer(QPrinter::ScreenResolution);
+	QPrintPreviewDialog  preview(&printer, this);
+	connect(&preview, SIGNAL(paintRequested(QPrinter*)), SLOT(printList(QPrinter*)));
+	preview.exec();
+}
+
+void MainWindow::printList(QPrinter* printer)
+{
+	// create painter for drawing print page
+	QPainter painter;
+	int      w = printer->pageRect().width();
+	int      h = printer->pageRect().height();
+	QRect    page(0, 0, w, h);
+
+	// create a font appropriate to page size
+	QFont    font = painter.font();
+	font.setPixelSize((w + h) / 100);
+	painter.setFont(font);
+	painter.begin(printer);
+
+	// draw labels in corners of page
+	painter.drawText(page, Qt::AlignTop | Qt::AlignLeft, QString::fromStdString(rootNode->getFirst()));
+	painter.drawText(page, Qt::AlignBottom | Qt::AlignLeft, QString(getenv("USER")));
+	painter.drawText(page, Qt::AlignBottom | Qt::AlignRight,
+		QDateTime::currentDateTime().toString(Qt::DefaultLocaleShortDate));
+
+	// draw simulated landscape
+	page.adjust(w / 20, h / 20, -w / 20, -h / 20);
+	QPixmap printPixmap;
+	printPixmap = QPixmap::grabWidget(this->tree);
+
+	printPixmap = printPixmap.scaled(w, h, Qt::KeepAspectRatio);
+	painter.drawPixmap(0, 100, printPixmap);
+	painter.end();
+
 }

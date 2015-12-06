@@ -18,6 +18,7 @@
 
 class QMdiArea;
 class QMdiSubWindow;
+class QPrinter;
 
 namespace Ui {
 class MainWindow;
@@ -41,13 +42,24 @@ private slots:
 
     void on_actionSave_Graph_triggered();
 
-    void on_actionPrint_Graph_triggered();
-
 	void generateList(node*);
 
 	void refreshSubWindows();
 
 	void on_actionData_Filter_Options_triggered();
+
+	void on_actionPrint_Graph_triggered();
+
+	void on_actionPrint_Graph_Preview_triggered();
+
+	void print(QPrinter*);
+
+	void on_actionPrint_List_triggered();
+
+	void on_actionPrint_List_Preview_triggered();
+
+	void printList(QPrinter*);
+
 private:
     Ui::MainWindow *ui;
     std::string file_name;
