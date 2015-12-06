@@ -3,8 +3,15 @@
 
 #include <qtreewidget.h>
 #include <QWidget>
-#include <pubTree.h>
+#include <QTreeWidget>
+#include "pubTree.h"
 #include "node.h"
+#include <QtCore>
+#include <QtGui>
+#include <QtCore>
+#include <QtGui>
+#include <QMessageBox>
+#include <QTreeWidget>
 using namespace std;
 
 class ListView : public QTreeWidget
@@ -13,7 +20,7 @@ class ListView : public QTreeWidget
 public:
 	ListView(QWidget *parent);
 	void makeList(node *root);
-	void addChild(QTreeWidgetItem* parent, QString name, QString description);
+	void populateList(node *root, QTreeWidgetItem* parent);
 
 private:
 	node* nodeData;
