@@ -11,56 +11,13 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Dashboard</string>
+   <string>Acuity Star Visualization - Team Pear</string>
   </property>
   <widget class="QWidget" name="centralWidget">
    <property name="enabled">
     <bool>true</bool>
    </property>
-   <layout class="QVBoxLayout" name="verticalLayout_2">
-    <item>
-     <layout class="QVBoxLayout" name="verticalLayout">
-      <item>
-       <layout class="QHBoxLayout" name="horizontalLayout">
-        <item>
-         <widget class="QPushButton" name="newTabButton">
-          <property name="text">
-           <string>New Tab</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QPushButton" name="deleteTabButton">
-          <property name="text">
-           <string>Delete Tab</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <spacer name="horizontalSpacer">
-          <property name="orientation">
-           <enum>Qt::Horizontal</enum>
-          </property>
-          <property name="sizeHint" stdset="0">
-           <size>
-            <width>40</width>
-            <height>20</height>
-           </size>
-          </property>
-         </spacer>
-        </item>
-       </layout>
-      </item>
-      <item>
-       <widget class="QTabWidget" name="tabWidget">
-        <property name="currentIndex">
-         <number>-1</number>
-        </property>
-       </widget>
-      </item>
-     </layout>
-    </item>
-   </layout>
+   <layout class="QVBoxLayout" name="verticalLayout_2"/>
   </widget>
   <widget class="QMenuBar" name="menuBar">
    <property name="geometry">
@@ -76,6 +33,12 @@
      <string>File</string>
     </property>
     <addaction name="actionImport_CSV"/>
+    <addaction name="separator"/>
+    <addaction name="actionPrint_Graph_Preview"/>
+    <addaction name="actionPrint_Graph"/>
+    <addaction name="separator"/>
+    <addaction name="actionPrint_List_Preview"/>
+    <addaction name="actionPrint_List"/>
    </widget>
    <widget class="QMenu" name="menuGraph">
     <property name="title">
@@ -87,7 +50,6 @@
     <addaction name="actionGenerate_Bar_Graph"/>
     <addaction name="separator"/>
     <addaction name="actionSave_Graph"/>
-    <addaction name="actionPrint_Graph"/>
    </widget>
    <addaction name="menuTeam_pear_example_UI"/>
    <addaction name="menuGraph"/>
@@ -106,7 +68,7 @@
     <string>Import CSV</string>
    </property>
    <property name="shortcut">
-    <string>Alt+I</string>
+    <string>Ctrl+I</string>
    </property>
   </action>
   <action name="actionGenerate_Pie_Chart">
@@ -114,7 +76,7 @@
     <string>Generate Pie Chart</string>
    </property>
    <property name="shortcut">
-    <string>Alt+P</string>
+    <string>Ctrl+C</string>
    </property>
   </action>
   <action name="actionGenerate_Bar_Graph">
@@ -122,7 +84,7 @@
     <string>Generate Bar Graph</string>
    </property>
    <property name="shortcut">
-    <string>Alt+B</string>
+    <string>Ctrl+B</string>
    </property>
   </action>
   <action name="actionSave_Graph">
@@ -130,7 +92,17 @@
     <string>Save Graph</string>
    </property>
    <property name="shortcut">
-    <string>Alt+S</string>
+    <string>Ctrl+S</string>
+   </property>
+  </action>
+  <action name="actionData_Filter_Options">
+   <property name="text">
+    <string>Data Filter Options</string>
+   </property>
+  </action>
+  <action name="actionPrint_Graph_Preview">
+   <property name="text">
+    <string>Print Graph Preview</string>
    </property>
   </action>
   <action name="actionPrint_Graph">
@@ -138,9 +110,14 @@
     <string>Print Graph</string>
    </property>
   </action>
-  <action name="actionData_Filter_Options">
+  <action name="actionPrint_List_Preview">
    <property name="text">
-    <string>Data Filter Options</string>
+    <string>Print List Preview</string>
+   </property>
+  </action>
+  <action name="actionPrint_List">
+   <property name="text">
+    <string>Print List</string>
    </property>
   </action>
  </widget>
