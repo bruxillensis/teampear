@@ -48,6 +48,8 @@ private slots:
 
 	void on_actionData_Filter_Options_triggered();
 
+	void on_actionOpen_Help_triggered();
+
 	void on_actionPrint_Graph_triggered();
 
 	void on_actionPrint_Graph_Preview_triggered();

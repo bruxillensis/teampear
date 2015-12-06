@@ -51,8 +51,15 @@
     <addaction name="separator"/>
     <addaction name="actionSave_Graph"/>
    </widget>
+      <widget class="QMenu" name="menuHelp">
+          <property name="title">
+              <string>Help</string>
+          </property>
+          <addaction name="actionOpen_Help" />
+      </widget>
    <addaction name="menuTeam_pear_example_UI"/>
    <addaction name="menuGraph"/>
+   <addaction name="menuHelp" />
   </widget>
   <widget class="QToolBar" name="mainToolBar">
    <attribute name="toolBarArea">
@@ -120,7 +127,14 @@
     <string>Print List</string>
    </property>
   </action>
- </widget>
+     <action name="actionOpen_Help">
+         <property name="text">
+             <string>Open Help</string>
+         </property>
+         <property name="shortcut">
+             <string>Alt+H</string>
+         </property>
+     </action></widget>
  <layoutdefault spacing="6" margin="11"/>
  <resources/>
  <connections/>
