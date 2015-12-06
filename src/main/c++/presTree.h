@@ -22,6 +22,7 @@ public:
 		for (auto& it : *professors) {
 			//Sum statistics and add to tree
 			vector<int> typeCount(presTypes.size(), 0);
+			vector<vector<string>> titles(presTypes.size(), vector<string>());
 			//Iterator through presentations
 			for (int i = 0; i < it.second->getNumberOfEntries(); i++){
 				//Try to find presentation in presTypes
@@ -31,11 +32,13 @@ public:
 				if (ti == presTypes.end()){
 					presTypes.push_back(boost::get<string>(it.second->getField(1)->at(i)));
 					typeCount.push_back(1);
+					titles.push_back(vector<string>(1, boost::get<string>(it.second->getField(2)->at(i))));
 					root->addChild(new node(presTypes.back(), 0, 0, 0));
 				}
 				//Else increment count of that type
 				else{
 					typeCount[std::distance(presTypes.begin(), ti)]++;
+					titles[std::distance(presTypes.begin(), ti)].push_back(boost::get<string>(it.second->getField(2)->at(i)));
 				}
 			}
 			//Add the professor stats to the tree
@@ -44,6 +47,8 @@ public:
 					std::find(presTypes.begin(), presTypes.end(), root->getChildren()->at(i)->getFirst()));
 				if (typeCount[j]){
 					node* prof = new node(it.first, typeCount[j], 0, 0);
+					for (auto& k : titles[j])
+						prof->addChild(new node(k, 0, 0, 0));
 					root->getChildren()->at(i)->addChild(prof);
 				}
 			}

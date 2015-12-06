@@ -33,11 +33,9 @@ public:
 		for (auto& it : *professors) {
 			//Sum statistics and add to tree
 			vector<pair<int, float>> count(8, pair<int, float>(0, 0));
+			vector<vector<string>> titles(8, vector<string>());
 			for (int i = 0; i < it.second->getNumberOfEntries(); i++){
 				int j;
-				string t = boost::get<string>(it.second->getField(7)->at(i));
-				bool test = boost::get<bool>(it.second->getField(4)->at(i));
-				bool test2 = boost::get<bool>(it.second->getField(5)->at(i));
 				//Grants
 				if (boost::get<string>(it.second->getField(2)->at(i)) == "Clinical Trials"){
 					if (!boost::get<bool>(it.second->getField(4)->at(i))){
@@ -63,18 +61,19 @@ public:
 				try{
 					count[j].first++;
 					count[j].second += boost::get<float>(it.second->getField(10)->at(i));
+					titles[j].push_back(boost::get<string>(it.second->getField(7)->at(i)));
 				}
 				catch (const std::out_of_range& oor) { std::cerr << "Out of Range error: " << oor.what() << '\n'; }
 			}
 			for (int i = 0; i < count.size(); i++){
 				if (count[i].first != 0){
-					int a = ((i & 0x4) >> 2);
-					int b = ((i & 0x2) >> 1);
-					int c = (i & 0x1);
+					node* prof = new node(it.first, count[i].first, 0, count[i].second);
+					for (auto& k : titles[i])
+						prof->addChild(new node(k, 0, 0, 0));
 					root->getChildren()->at((i & 0x4) >> 2)
 						->getChildren()->at((i & 0x2) >> 1)
 						->getChildren()->at(i & 0x1)
-						->addChild(new node(it.first, count[i].first, 0, count[i].second));
+						->addChild(prof);
 				}
 			}
 		}

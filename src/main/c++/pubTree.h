@@ -24,7 +24,8 @@ public:
 		//Iterate through professors
 		for (auto& it : *professors) {
 			//Sum statistics and add to tree
-			vector<int> typeCount(pubTypes.size(), 0);
+			vector<int> typeCount(pubTypes.size(),0);
+			vector<vector<string>> titles(pubTypes.size(), vector<string>());
 			//Iterator through publications
 			for (int i = 0; i < it.second->getNumberOfEntries(); i++){
 				//Try to find publication in pubTypes
@@ -35,11 +36,13 @@ public:
 					boost::get<string>(it.second->getField(1)->at(i));
 					pubTypes.push_back(boost::get<string>(it.second->getField(1)->at(i)));
 					typeCount.push_back(1);
+					titles.push_back(vector<string>(1, boost::get<string>(it.second->getField(4)->at(i))));
 					root->addChild(new node(pubTypes.back(), 0, 0, 0));
 				}
 				//Else increment count of that type
 				else{
 					typeCount[std::distance(pubTypes.begin(), ti)]++;
+					titles[std::distance(pubTypes.begin(), ti)].push_back(boost::get<string>(it.second->getField(4)->at(i)));
 				}
 			}
 			//Add the professor stats to the tree
@@ -48,6 +51,8 @@ public:
 					std::find(pubTypes.begin(), pubTypes.end(), root->getChildren()->at(i)->getFirst()));
 				if (typeCount[j]){
 					node* prof = new node(it.first, typeCount[j], 0, 0);
+					for (auto& k : titles[j])
+						prof->addChild(new node(k, 0, 0, 0));
 					root->getChildren()->at(i)->addChild(prof);
 				}
 			}
