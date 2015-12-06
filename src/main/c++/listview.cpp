@@ -22,22 +22,24 @@ ListView::ListView(QWidget *parent) : QTreeWidget(parent)
 	
 }
 
+
 void ListView::makeList(node * root)
 {
-	this->setColumnCount(2);
+	QString asd;
+	this->setColumnCount(4);
 	
 	//Publication & Grants
 	vector<node*>* children = root->getChildren();
 	
-	if (strcmp(root->getFirst().c_str(), "Publications"))
+		if (strcmp(root->getFirst().c_str(), "Publications") == 0)
 	{
 		this->setHeaderLabels(QStringList() << "Name" << "Total");
 	}
-	else if (strcmp(root->getFirst().c_str(), "Grant"))
+	else if (strcmp(root->getFirst().c_str(), "Grants and Clinical Funding") == 0)
 	{
 		this->setHeaderLabels(QStringList() << "Name" << "# Total " << "$ Total");
 	}
-	else if (strcmp(root->getFirst().c_str(), "Programs"))
+	else if (strcmp(root->getFirst().c_str(), "Programs") == 0)
 	{
 		this->setHeaderLabels(QStringList() << "Name" << "Hour" << "Student");
 	}
@@ -46,52 +48,32 @@ void ListView::makeList(node * root)
 		this->setHeaderLabels(QStringList() << "Name" << "Total");
 	}
 
-	int size = children->size();
-	for (int i = 0; i < size; i++)
-	{
-		
-
-		if (children->at(i)->getSecond() == 0)
-			continue;
-
 		QTreeWidgetItem *itm = new QTreeWidgetItem(this);
+		
+		populateList(root, itm);
 
-		itm->setText(0, QString::fromStdString(children->at(i)->getFirst()));
-		itm->setText(1,QString::number(children->at(i)->getSecond()));
-		vector<node*>* child = children->at(i)->getChildren();
-
-		int sizet = child->size();
-		for (int g = 0; g < sizet; g++)
-		{
-			
-
-			if (child->at(g)->getSecond() == 0)
-				continue;
-
-			QTreeWidgetItem *t = new QTreeWidgetItem();
-			
-
-			t->setText(0, QString::fromStdString(child->at(g)->getFirst()));
-			t->setText(1, QString::number(child->at(g)->getSecond()));
-			if (child->at(g)->getThird() != NULL)
-			{
-				t->setText(3, QString::fromStdString(child->at(g)->getFirst()));
-			}
-			if (child->at(g)->getFourth() != NULL)
-			{
-				t->setText(3, QString::fromStdString(child->at(g)->getFirst()));
-			}
-			itm->addChild(t);
-		}
-	}
-		nodeData = root;
-	nodeData->getFirst();
 }
 
-void ListView::addChild(QTreeWidgetItem* parent, QString name, QString description)
+void ListView::populateList(node* root, QTreeWidgetItem* parent)
 {
-	QTreeWidgetItem *itm = new QTreeWidgetItem();
-	itm->setText(0, name);
-	itm->setText(1, description);
+	QTreeWidgetItem* itm = new QTreeWidgetItem();
+	itm->setText(0, QString::fromStdString(root->getFirst()));
+	itm->setText(1, QString::number(root->getSecond()));
+	if (root->getThird() != NULL)
+	{
+		itm->setText(2, QString::number(root->getSecond()));
+	}
+	if (root->getFourth() != NULL)
+	{
+		itm->setText(3, QString::number(root->getFourth()));
+	}
+
 	parent->addChild(itm);
+
+	vector<node*>* children = root->getChildren();
+
+	for (int i = 0; i < children->size(); i++)
+	{
+		populateList(children->at(i), itm);
+	}
 }
