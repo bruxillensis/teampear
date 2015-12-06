@@ -25,34 +25,39 @@ ListView::ListView(QWidget *parent) : QTreeWidget(parent)
 
 void ListView::makeList(node * root)
 {
-	QString asd;
-	this->setColumnCount(4);
-	
+
 	//Publication & Grants
 	vector<node*>* children = root->getChildren();
 	
 		if (strcmp(root->getFirst().c_str(), "Publications") == 0)
 	{
+		this->setColumnCount(2);
 		this->setHeaderLabels(QStringList() << "Name" << "Total");
+
 	}
 	else if (strcmp(root->getFirst().c_str(), "Grants and Clinical Funding") == 0)
 	{
+		this->setColumnCount(3);
 		this->setHeaderLabels(QStringList() << "Name" << "# Total " << "$ Total");
 	}
 	else if (strcmp(root->getFirst().c_str(), "Programs") == 0)
 	{
+		this->setColumnCount(3);
 		this->setHeaderLabels(QStringList() << "Name" << "Hour" << "Student");
 	}
 	else
 	{
+		this->setColumnCount(2);
 		this->setHeaderLabels(QStringList() << "Name" << "Total");
 	}
 
 		QTreeWidgetItem *itm = new QTreeWidgetItem(this);
 		
 		populateList(root, itm);
-
 }
+
+
+
 
 void ListView::populateList(node* root, QTreeWidgetItem* parent)
 {
@@ -65,7 +70,7 @@ void ListView::populateList(node* root, QTreeWidgetItem* parent)
 	}
 	if (root->getFourth() != NULL)
 	{
-		itm->setText(3, QString::number(root->getFourth()));
+		itm->setText(2, QString::number(root->getFourth()));
 	}
 
 	parent->addChild(itm);
