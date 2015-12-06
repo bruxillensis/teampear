@@ -27,10 +27,6 @@ void ListView::makeList(node * root)
 
 	this->setColumnCount(2);
 	this->setHeaderLabels(QStringList() << "Col A" << "Col B");
-//	QTreeWidgetItem *itm = new QTreeWidgetItem(this);
-//	itm->setText(0, "Professor");
-//	itm->setText(1, "Publications");
-//	addChild(itm, "Author 1", "57");
 
 	vector<node*>* children = root->getChildren();
 	int size = children->size();
@@ -46,7 +42,6 @@ void ListView::makeList(node * root)
 	}
 
 	
-	//addChild(this, )
 		nodeData = root;
 	nodeData->getFirst();
 
