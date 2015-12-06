@@ -24,7 +24,7 @@ ListView::ListView(QWidget *parent) : QTreeWidget(parent)
 
 void ListView::makeList(node * root)
 {
-	this->setColumnCount(4);
+	this->setColumnCount(2);
 	
 	//Publication & Grants
 	vector<node*>* children = root->getChildren();
