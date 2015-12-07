@@ -43,6 +43,7 @@ ui(new Ui::MainWindow)
 	this->pieChart = NULL;
 	this->legend = NULL;
 	this->list = NULL;
+	this->filters = new vector<filter>();
 	this->ui->verticalLayout_2->addWidget(this->m_area);
     //set up hotkeys
     new QShortcut(QKeySequence(Qt::Key_Control + Qt::Key_I), this, SLOT(on_actionImport_CSV_triggered()));
@@ -81,29 +82,37 @@ void MainWindow::on_actionImport_CSV_triggered()
 			delete this->data;
 			this->addModel(new professorMap());
 		}
+		
+		try{
+			csv = true;
+			professorMap::profType type = this->data->importCSV(file_name);
 
-		professorMap::profType type = this->data->importCSV(file_name);
-		csv = true;
-
-		switch (type){
-		case professorMap::profType::Publication:
-			tree = new pubTree(this->data);
-			break;
-		case professorMap::profType::Presentation:
-			tree = new presTree(this->data);
-			break;
-		case professorMap::profType::GrantClinical:
-			tree = new granTree(this->data);
-			break;
-		case professorMap::profType::Teaching:
-			tree = new teacTree(this->data);
-			break;
-		default:
-			//didn't find the type of professor
-			break;
+			switch (type){
+			case professorMap::profType::Publication:
+				tree = new pubTree(this->data);
+				break;
+			case professorMap::profType::Presentation:
+				tree = new presTree(this->data);
+				break;
+			case professorMap::profType::GrantClinical:
+				tree = new granTree(this->data);
+				break;
+			case professorMap::profType::Teaching:
+				tree = new teacTree(this->data);
+				break;
+			default:
+				//didn't find the type of professor
+				break;
+			}
+			this->rootNode = tree->getStatistics();
+			generateList(this->rootNode); // generate tree with the data
 		}
-		this->rootNode = tree->getStatistics();
-		generateList(this->rootNode); // generate tree with the data
+		catch (manditoryHeaderNotFoundException& e){
+			QErrorMessage msg;
+			msg.showMessage(QString("Mandatory headers not found. There are spelling errors in the column names."));
+			msg.exec();
+			cerr << e.what();
+		}
 	}
 	else
 	{
@@ -370,6 +379,7 @@ void MainWindow::on_addFilter_clicked()
 	filterDialog d;
 	d.setModal(true);
 	d.exec();
+	
 }
 
 void MainWindow::on_updateGraph_clicked()

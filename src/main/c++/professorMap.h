@@ -206,19 +206,24 @@ public:
 		int errCount = 0;
 		for (map<string, vector<vector<string> > >::iterator it = orgCSV->begin(); it != orgCSV->end(); ++it) {
 			pair<professor*, int> prof;
-			switch (type){
-			case Publication:
-				prof = createProfessor::createNewPubProfessor(it->second);
-				break;
-			case Presentation:
-				prof = createProfessor::createNewPresProfessor(it->second);
-				break;
-			case GrantClinical:
-				prof = createProfessor::createNewGranProfessor(it->second);
-				break;
-			case Teaching:
-				prof = createProfessor::createNewTeacProfessor(it->second);
-				break;
+			try{
+				switch (type){
+				case Publication:
+					prof = createProfessor::createNewPubProfessor(it->second);
+					break;
+				case Presentation:
+					prof = createProfessor::createNewPresProfessor(it->second);
+					break;
+				case GrantClinical:
+					prof = createProfessor::createNewGranProfessor(it->second);
+					break;
+				case Teaching:
+					prof = createProfessor::createNewTeacProfessor(it->second);
+					break;
+				}
+			}
+			catch (manditoryHeaderNotFoundException& e){
+				throw manditoryHeaderNotFoundException();
 			}
 			this->professors->insert(pair<string, professor*>(prof.first->getName(), prof.first));
 			errCount += prof.second;

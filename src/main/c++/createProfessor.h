@@ -51,12 +51,7 @@ public:
 				cerr << e.what();
 			}
 			catch (manditoryHeaderNotFoundException& e){
-				QErrorMessage msg;
-				msg.showMessage(QString("Mandatory Headers Not Found. Expected Headers are: Member Name, \
-										Primary Domain, Publication Status, Type, Status Date, Role, \
-										Journal Name | Published In | Book Title | etc., Author(s), Title"));
-				msg.exec();
-				cerr << e.what();
+				throw manditoryHeaderNotFoundException();
 			}
 			catch (invalidDateException& e){
 				count++;
@@ -112,13 +107,7 @@ public:
 				cerr << e.what();
 			}
 			catch (manditoryHeaderNotFoundException& e){
-				QErrorMessage msg;
-				msg.showMessage(QString("Mandatory Headers Not Found. Expected Headers are: Member Name, \
-										Primary Domain, Start Date, End Date, Funding Type, Status, \
-										Peer Reviewed?, Industry Grant?, Role, Title, Principal Investigator, \
-										Co-Investigators, Total Amount"));
-				msg.exec();
-				cerr << e.what();
+				throw manditoryHeaderNotFoundException();
 			}
 			catch (failedTypeChangeException& e){
 				count++;
@@ -174,14 +163,7 @@ public:
 				cerr << e.what();
 			}
 			catch (manditoryHeaderNotFoundException& e){
-				QErrorMessage msg;
-				msg.showMessage(QString("Mandatory Headers Not Found. Expected Headers are: \
-										Member Name, Primary Domain, Start Date, End Date, Program, \
-										Type of Course / Activity, Course / Activity, Geographical Scope, \
-										Hours per Teaching Session or Week, Number of Teaching Sessions or Weeks, \
-										Total Hours"));
-				msg.exec();
-				cerr << e.what();
+				throw manditoryHeaderNotFoundException();
 			}
 			catch (failedTypeChangeException& e){
 				count++;
@@ -191,10 +173,10 @@ public:
 		return pair<professor*, int>(prof, count);
 	}
 	/* Fields
-		Date			  : Boost::Gregorian::Date
 		Type			  : String
 		Role			  : String
 		Title			  : String
+		Date			  : Boost::Gregorian::Date
 	*/
 	static pair<professor*, int> createNewPresProfessor(vector<vector<string>>& csv){
 		//Define manditory fields for a presentation csv
@@ -222,11 +204,7 @@ public:
 				cerr << e.what();
 			}
 			catch (manditoryHeaderNotFoundException& e){
-				QErrorMessage msg;
-				msg.showMessage(QString("Mandatory Headers Not Found. Expected Headers are: \
-										Member Name, Primary Domain, Type, Role, Title, Date"));
-				msg.exec();
-				cerr << e.what();
+				throw manditoryHeaderNotFoundException();
 			}
 			catch (failedTypeChangeException& e){
 				count++;

@@ -74,6 +74,7 @@ public:
 		it = children->begin();
 		if (children->size() == 0){
 			children->push_back(child);
+			child->setParent(this);
 		}
 		else{
 			for (size_t i = 0; i < children->size(); i++){
