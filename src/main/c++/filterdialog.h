@@ -25,7 +25,11 @@ public:
     long int getEndHours();
     long int getStartCount();
     long int getEndCount();
-
+	bool isDateChecked();
+	bool isDomainChecked();
+	bool isFundingChecked();
+	bool isHoursChecked();
+	bool isCountChecked();
 
     ~filterDialog();
 
@@ -72,10 +76,6 @@ QString domainSelected;
 long double startingAmount,endAmount;
 long int startingHours, endHours;
 long int startingCount, endCount;
-
-
-
-
 };
 
 #endif // FILTERDIALOG_H

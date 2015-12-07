@@ -20,6 +20,7 @@
 #include "piechartwidget.h"
 #include "barplot.h"
 #include "helpdialog.h"
+#include "filter.h"
 
 class QMdiArea;
 class QMdiSubWindow;
@@ -88,6 +89,7 @@ private:
 	PieChartWidget* pieChart;
 	LegendWidget* legend;
 	BarPlot* barPlot;
+	professorMap::profType type;
 };
 
 #endif // MAINWINDOW_H

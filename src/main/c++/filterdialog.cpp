@@ -147,3 +147,23 @@ long int filterDialog::getStartCount(){
 long int filterDialog::getEndCount(){
     return endCount;
 }
+
+bool filterDialog::isDateChecked(){
+	return dateFilterChecked;
+}
+
+bool filterDialog::isDomainChecked(){
+	return domainFilterChecked;
+}
+
+bool filterDialog::isFundingChecked(){
+	return FundingFilterChecked;
+}
+
+bool filterDialog::isHoursChecked(){
+	return hourFilterChecked;
+}
+
+bool filterDialog::isCountChecked(){
+	return countFilterChecked;
+}

@@ -27,6 +27,7 @@
 #include "filterdialog.h"
 #include "node.h"
 #include "helpdialog.h"
+#include "countFilter.h"
 
 MainWindow::MainWindow(QWidget *parent) :
 QMainWindow(parent),
@@ -43,7 +44,6 @@ ui(new Ui::MainWindow)
 	this->pieChart = NULL;
 	this->legend = NULL;
 	this->list = NULL;
-	this->filters = new vector<filter>();
 	this->ui->verticalLayout_2->addWidget(this->m_area);
     //set up hotkeys
     new QShortcut(QKeySequence(Qt::Key_Control + Qt::Key_I), this, SLOT(on_actionImport_CSV_triggered()));
@@ -85,9 +85,9 @@ void MainWindow::on_actionImport_CSV_triggered()
 		
 		try{
 			csv = true;
-			professorMap::profType type = this->data->importCSV(file_name);
+			this->type = this->data->importCSV(file_name);
 
-			switch (type){
+			switch (this->type){
 			case professorMap::profType::Publication:
 				tree = new pubTree(this->data);
 				break;
@@ -376,10 +376,18 @@ void MainWindow::printList(QPrinter* printer)
 
 void MainWindow::on_addFilter_clicked()
 {
-	filterDialog d;
-	d.setModal(true);
-	d.exec();
-	
+	filterDialog* d = new filterDialog();
+	d->setModal(true);
+	d->exec();
+	//d.findChild<QCheckBox*>("dateCheckBox")->isChecked();
+	//d.findChild<QCheckBox*>("domainCheckBox")->isChecked();
+	//d.findChild<QCheckBox*>("fundingCheckBox")->isChecked();
+	//d.findChild<QCheckBox*>("hourCheckBox")->isChecked();
+	if (d->isCountChecked()){
+		countFilter* filter = new countFilter(d);
+		filter->applyFilter(this->rootNode, this->type);
+	}
+	delete d;
 }
 
 void MainWindow::on_updateGraph_clicked()

@@ -4,6 +4,8 @@
 #include "node.h"
 #include "filter.h"
 #include "professorMap.h"
+#include "filterdialog.h"
+#include <QSpinBox>
 
 using namespace std;
 
@@ -12,16 +14,15 @@ private:
 	double low;
 	double high;
 public:
-	countFilter(){
-		low = 0;
-		high = 0;
+	countFilter(filterDialog* d){
+		low = d->getStartCount();
+		high = d->getEndCount();
 	}
 
 	countFilter(double low, double high){
 		this->low = low;
 		this->high = high;
 	}
-
 
 	void applyFilter(node* root, professorMap::profType type){
 		switch (type){
@@ -34,9 +35,9 @@ public:
 							if ((fourthLayer->getSecond() < low) || (fourthLayer->getSecond() > high)){
 								//outside of the filter
 								fourthLayer->setVisible("count",false);
-								thirdLayer->setSecond(thirdLayer->getSecond - fourthLayer->getSecond());
-								secondLayer->setSecond(secondLayer->getSecond - fourthLayer->getSecond());
-								firstLayer->setSecond(firstLayer->getSecond - fourthLayer->getSecond());
+								thirdLayer->setSecond(thirdLayer->getSecond() - fourthLayer->getSecond());
+								secondLayer->setSecond(secondLayer->getSecond() - fourthLayer->getSecond());
+								firstLayer->setSecond(firstLayer->getSecond() - fourthLayer->getSecond());
 							}
 						}
 						//checks to see if any of the children are visible, if the count = 0, that means no children are visible
@@ -63,7 +64,7 @@ public:
 					if ((secondLayer->getSecond() < low) || (secondLayer->getSecond() > high)){
 						//outside of the filter
 						secondLayer->setVisible("count", false);
-						firstLayer->setSecond(firstLayer->getSecond - secondLayer->getSecond());
+						firstLayer->setSecond(firstLayer->getSecond() - secondLayer->getSecond());
 					}
 				}
 				//checks to see if any of the children are visible, if the count = 0, that means no children are visible
@@ -86,9 +87,9 @@ public:
 							if ((fourthLayer->getSecond() < low) || (fourthLayer->getSecond() > high)){
 								//outside of the filter
 								fourthLayer->setVisible("count", true);
-								thirdLayer->setSecond(thirdLayer->getSecond + fourthLayer->getSecond());
-								secondLayer->setSecond(secondLayer->getSecond + fourthLayer->getSecond());
-								firstLayer->setSecond(firstLayer->getSecond + fourthLayer->getSecond());
+								thirdLayer->setSecond(thirdLayer->getSecond() + fourthLayer->getSecond());
+								secondLayer->setSecond(secondLayer->getSecond() + fourthLayer->getSecond());
+								firstLayer->setSecond(firstLayer->getSecond() + fourthLayer->getSecond());
 							}
 						}
 						if (thirdLayer->getSecond() != 0){
@@ -112,7 +113,7 @@ public:
 					if ((secondLayer->getSecond() < low) || (secondLayer->getSecond() > high)){
 						//outside of the filter
 						secondLayer->setVisible("count", true);
-						firstLayer->setSecond(firstLayer->getSecond + secondLayer->getSecond());
+						firstLayer->setSecond(firstLayer->getSecond() + secondLayer->getSecond());
 					}
 				}
 				if (firstLayer->getSecond() != 0){
