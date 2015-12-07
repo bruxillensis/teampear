@@ -17,7 +17,7 @@ private:
 	int third;
 	float fourth;
 	vector<node*>* children;
-	bool visible;
+	vector<bool>* visible;
 	node* parent;
 public:
 	//Constructor
@@ -27,7 +27,7 @@ public:
 		third = 0;
 		fourth = 0;
 		children = new vector<node*>();
-		visible = false;
+		visible = new vector<bool>(5, true);
 		parent = NULL;
 	}
 	
@@ -38,20 +38,20 @@ public:
 		this->third = third;
 		this->fourth = fourth;
 		children = new vector<node*>();
-		visible = false;
+		visible = new vector<bool>(5, true);
 		parent = NULL;
 	}
-	
+	/*
 	//Constructor with another tree as argument
 	node(node& orig){
 		this->first = orig.getFirst();
 		this->second = orig.getSecond();
 		this->third = orig.getThird();
 		this->fourth = orig.getFourth();
-		this->visible = orig.getVisible();
+		visible = new vector<bool>(5, true);
 		children = new vector<node*>();
 		parent = NULL;
-	}
+	}*/
 
 	//Should delete node and all of this children recursively
 	~node(){
@@ -124,14 +124,39 @@ public:
 	void setParent(node* parent){
 		this->parent = parent;
 	}
+	//set visibility of the node
+	//Visible (count, date, domain, funding, hours)
+	void setVisible(string filterType, bool visible){
+		if (filterType.compare("count")){
+			this->visible->at(0) = visible;
+		}
+		else if (filterType.compare("date")){
+			this->visible->at(1) = visible;
+		}
+		else if (filterType.compare("domain")){
+			this->visible->at(2) = visible;
+		}
+		else if (filterType.compare("funding")){
+			this->visible->at(3) = visible;
+		}
+		else if (filterType.compare("hours")){
+			this->visible->at(4) = visible;
+		}
+	}
 
 	//Get functions
 	const string getFirst(){ return first; }
 	const int getSecond(){ return second; }
 	const int getThird(){ return third; }
 	const float getFourth(){ return fourth; }
-	const bool getVisible(){ return visible; }
 	const node* getParent(){ return parent; }
+	const bool getVisible(){ 
+		for (int i = 0; i < visible->size(); i++){
+			if (visible->at(i) == false)
+				return false;
+		}
+		return true;
+	}
 };
 
 inline bool operator==(node& lhs, node& rhs){
