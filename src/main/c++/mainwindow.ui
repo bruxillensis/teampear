@@ -17,7 +17,43 @@
    <property name="enabled">
     <bool>true</bool>
    </property>
-   <layout class="QVBoxLayout" name="verticalLayout_2"/>
+   <layout class="QVBoxLayout" name="verticalLayout_3">
+    <item>
+     <layout class="QVBoxLayout" name="verticalLayout_2">
+      <item>
+       <layout class="QHBoxLayout" name="horizontalLayout">
+        <item>
+         <spacer name="horizontalSpacer">
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>40</width>
+            <height>20</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+        <item>
+         <widget class="QPushButton" name="addFilter">
+          <property name="text">
+           <string>Add Filter</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="updateGraph">
+          <property name="text">
+           <string>Update Graph</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+     </layout>
+    </item>
+   </layout>
   </widget>
   <widget class="QMenuBar" name="menuBar">
    <property name="geometry">
@@ -51,7 +87,7 @@
     <addaction name="separator"/>
     <addaction name="actionSave_Graph"/>
    </widget>
-      <widget class="QMenu" name="menuHelp">
+	<widget class="QMenu" name="menuHelp">
           <property name="title">
               <string>Help</string>
           </property>
@@ -127,7 +163,7 @@
     <string>Print List</string>
    </property>
   </action>
-     <action name="actionOpen_Help">
+ <action name="actionOpen_Help">
          <property name="text">
              <string>Open Help</string>
          </property>

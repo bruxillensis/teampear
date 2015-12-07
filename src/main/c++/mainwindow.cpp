@@ -25,6 +25,7 @@
 #include "legendwidget.h"
 #include "barplot.h"
 #include "filterdialog.h"
+#include "node.h"
 #include "helpdialog.h"
 
 MainWindow::MainWindow(QWidget *parent) :
@@ -36,16 +37,19 @@ ui(new Ui::MainWindow)
 	rec = QApplication::desktop()->screenGeometry();
 	this->setFixedSize(rec.size());
 	this->m_area = new QMdiArea;
-	this->setCentralWidget(m_area);
+	//this->setCentralWidget(m_area);
 	this->rootNode = NULL;
-    
+	this->barPlot = NULL;
+	this->pieChart = NULL;
+	this->legend = NULL;
+	this->list = NULL;
+	this->ui->verticalLayout_2->addWidget(this->m_area);
     //set up hotkeys
     new QShortcut(QKeySequence(Qt::Key_Control + Qt::Key_I), this, SLOT(on_actionImport_CSV_triggered()));
 	new QShortcut(QKeySequence(Qt::Key_Control + Qt::Key_C), this, SLOT(on_actionGenerate_Pie_Chart_triggered()));
 	new QShortcut(QKeySequence(Qt::Key_Control + Qt::Key_B), this, SLOT(on_actionGenerate_Bar_Graph_triggered()));
 	new QShortcut(QKeySequence(Qt::Key_Control + Qt::Key_S), this, SLOT(on_actionSave_Graph_triggered()));
 	new QShortcut(QKeySequence(Qt::ALT + Qt::Key_H), this, SLOT(on_actionOpen_Help()));
-	//new QShortcut(QKeySequence(Qt::Key_Control + Qt::Key_P), this, SLOT(on_actionPrint_triggered()));
 }
 
 
@@ -112,13 +116,13 @@ void MainWindow::on_actionImport_CSV_triggered()
 void MainWindow::on_actionGenerate_Bar_Graph_triggered()
 {
 	if (csv){
-		BarPlot *barPlot = new BarPlot(this);
+		this->barPlot = new BarPlot(this);
 		//display the right subwindow
 		this->pie->hide();
 		this->bar->setVisible(true);
 		this->bar->setGeometry(rec.width() / 2, 0, rec.width() / 2, rec.height() - 120);
-		int extra = barPlot->plotBar(this->rootNode);
-		this->bar->setWidget(barPlot);
+		int extra = this->barPlot->plotBar(this->rootNode);
+		this->bar->setWidget(this->barPlot);
 
 		if (extra == 1){
 			QErrorMessage* noCSV = new QErrorMessage();;
@@ -137,8 +141,8 @@ void MainWindow::on_actionGenerate_Bar_Graph_triggered()
 void MainWindow::on_actionGenerate_Pie_Chart_triggered()
 {
 	if (csv){
-		PieChartWidget *piechart = new PieChartWidget;
-		LegendWidget *legend = new LegendWidget;
+		this->pieChart = new PieChartWidget;
+		this->legend = new LegendWidget;
 		QSplitter *splitter = new QSplitter;
 
 		// display the right subwindow
@@ -146,12 +150,12 @@ void MainWindow::on_actionGenerate_Pie_Chart_triggered()
 		this->pie->setVisible(true);
 		this->pie->setGeometry(rec.width() / 2, 0, rec.width() / 2, rec.height() - 120);
 		//draw piechart and legend
-		piechart->setData(this->rootNode);
-		legend->drawLegend(this->rootNode);
+		this->pieChart->setData(this->rootNode);
+		this->legend->drawLegend(this->rootNode);
 
 		// add a plottable area and legend
-		splitter->addWidget(piechart);
-		splitter->addWidget(legend);
+		splitter->addWidget(this->pieChart);
+		splitter->addWidget(this->legend);
 		splitter->setStretchFactor(0, 0);
 		splitter->setStretchFactor(1, 2);
 		this->pie->setWidget(splitter);
@@ -166,17 +170,18 @@ void MainWindow::on_actionGenerate_Pie_Chart_triggered()
 void MainWindow::generateList(node* root)
 {
 	//create a new list view
-	ListView *view = new ListView(this);
-	view->makeList(root);
+	this->list = new ListView(this);
+	this->list->makeList(root);
 	// call the thing that populates it
 	int i;
-	for (i = 0; i < view->columnCount(); i++)
+	for (i = 0; i < this->list->columnCount(); i++)
 	{
-		view->resizeColumnToContents(i);
+		this->list->resizeColumnToContents(i);
 	}
 	this->tree->setVisible(true);
-	this->tree->setWidget(view);
+	this->tree->setWidget(this->list);
 	this->tree->setGeometry(0, 0, rec.width() / 2, rec.height() - 120);
+
 }
 
 void MainWindow::on_actionSave_Graph_triggered()
@@ -206,6 +211,20 @@ void MainWindow::refreshSubWindows()
 {
 	if (this->m_area->subWindowList().size() > 0){
 		this->m_area->closeAllSubWindows();
+		if (this->list != NULL){
+			delete this->list;
+			this->list = NULL;
+		}
+		if (this->barPlot != NULL){
+			delete this->barPlot;
+			this->barPlot = NULL;
+		}
+		if (this->pieChart != NULL){
+			delete this->pieChart;
+			delete this->legend;
+			this->pieChart = NULL;
+			this->legend = NULL;
+		}
 	}
 
 	this->m_area->setTabsMovable(false);
@@ -238,6 +257,12 @@ void MainWindow::on_actionData_Filter_Options_triggered()
 	d.exec();
 }
 
+void MainWindow::on_actionOpen_Help_triggered(){
+	helpDialog d;
+	d.setModal(true);
+	d.exec();
+}
+
 void MainWindow::on_actionPrint_Graph_triggered()
 {
 	// display print dialog and if accepted print
@@ -253,14 +278,6 @@ void MainWindow::on_actionPrint_Graph_Preview_triggered()
 	QPrintPreviewDialog  preview(&printer, this);
 	connect(&preview, SIGNAL(paintRequested(QPrinter*)), SLOT(print(QPrinter*)));
 	preview.exec();
-}
-
-void MainWindow::on_actionOpen_Help_triggered()
-{
-	//
-	helpDialog d;
-	d.setModal(true);
-	d.exec();
 }
 
 void MainWindow::print(QPrinter* printer)
@@ -346,5 +363,44 @@ void MainWindow::printList(QPrinter* printer)
 	printPixmap = printPixmap.scaled(w, h, Qt::KeepAspectRatio);
 	painter.drawPixmap(0, 100, printPixmap);
 	painter.end();
+}
 
+void MainWindow::on_addFilter_clicked()
+{
+	filterDialog d;
+	d.setModal(true);
+	d.exec();
+}
+
+void MainWindow::on_updateGraph_clicked()
+{
+	QTreeWidgetItem* n = this->list->currentItem();
+	vector<int>* position = new vector<int>();
+
+	if (n->parent() != NULL){
+		position->push_back(n->parent()->indexOfChild(n));
+		findPosition(n->parent(), position);
+	}
+	else{
+		position->push_back(this->list->indexOfTopLevelItem(n));
+	}
+	node* val = this->rootNode;
+	for (vector<int>::reverse_iterator it = position->rbegin(); it != position->rend(); ++it)
+		val = val->getChildren()->at(*it);
+	if (this->barPlot != NULL)
+		this->barPlot->plotBar(val);
+	if (this->pieChart != NULL){
+		this->pieChart->setData(val);
+		this->legend->drawLegend(val);
+	}
+}
+
+void MainWindow::findPosition(QTreeWidgetItem* n, vector<int>* position){
+	if (n->parent() != NULL){
+		position->push_back(n->parent()->indexOfChild(n));
+		findPosition(n->parent(), position);
+	}
+	else{
+		position->push_back(this->list->indexOfTopLevelItem(n));
+	}
 }

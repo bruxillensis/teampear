@@ -15,6 +15,11 @@
 #include "professorMap.h"
 #include "node.h"
 #include "statisticsTree.h"
+#include "listview.h"
+#include "legendwidget.h"
+#include "piechartwidget.h"
+#include "barplot.h"
+#include "helpdialog.h"
 
 class QMdiArea;
 class QMdiSubWindow;
@@ -62,6 +67,12 @@ private slots:
 
 	void printList(QPrinter*);
 
+	void on_addFilter_clicked();
+
+	void on_updateGraph_clicked();
+
+	void findPosition(QTreeWidgetItem*, vector<int>*);
+
 private:
     Ui::MainWindow *ui;
     std::string file_name;
@@ -73,6 +84,10 @@ private:
 	QMdiSubWindow *tree;
 	bool csv = false;
 	QRect rec;
+	ListView* list;
+	PieChartWidget* pieChart;
+	LegendWidget* legend;
+	BarPlot* barPlot;
 };
 
 #endif // MAINWINDOW_H
