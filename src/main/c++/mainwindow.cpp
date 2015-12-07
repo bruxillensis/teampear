@@ -381,10 +381,8 @@ void MainWindow::on_updateGraph_clicked()
 		position->push_back(n->parent()->indexOfChild(n));
 		findPosition(n->parent(), position);
 	}
-	else{
-		position->push_back(this->list->indexOfTopLevelItem(n));
-	}
 	node* val = this->rootNode;
+	position->pop_back();
 	for (vector<int>::reverse_iterator it = position->rbegin(); it != position->rend(); ++it)
 		val = val->getChildren()->at(*it);
 	if (this->barPlot != NULL)
@@ -399,8 +397,5 @@ void MainWindow::findPosition(QTreeWidgetItem* n, vector<int>* position){
 	if (n->parent() != NULL){
 		position->push_back(n->parent()->indexOfChild(n));
 		findPosition(n->parent(), position);
-	}
-	else{
-		position->push_back(this->list->indexOfTopLevelItem(n));
 	}
 }
