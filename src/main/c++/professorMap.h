@@ -1,4 +1,6 @@
 #pragma once
+#include <QErrorMessage>
+#include <QString>
 #include <vector>
 #include <string>
 #include <map>
@@ -201,9 +203,9 @@ public:
 				orgCSV->insert(pair<string, vector<vector<string> > >((*myCSV[i])[indexMemberName.front()], professorVector));
 			}
 		}
-
+		int errCount = 0;
 		for (map<string, vector<vector<string> > >::iterator it = orgCSV->begin(); it != orgCSV->end(); ++it) {
-			professor* prof;
+			pair<professor*, int> prof;
 			switch (type){
 			case Publication:
 				prof = createProfessor::createNewPubProfessor(it->second);
@@ -218,12 +220,19 @@ public:
 				prof = createProfessor::createNewTeacProfessor(it->second);
 				break;
 			}
-			this->professors->insert(pair<string, professor*>(prof->getName(), prof));
+			this->professors->insert(pair<string, professor*>(prof.first->getName(), prof.first));
+			errCount += prof.second;
 		}
+		ostringstream convert;
+		convert << errCount;
+		string result = "Rows Not Imported Due to Errors: " + convert.str();
+
+		QErrorMessage msg;
+		msg.showMessage(QString(result.c_str()));
+		msg.exec();
 		for (size_t i = 0; i < myCSV.size(); i++)
 			delete myCSV[i];
 		delete orgCSV;
-
 
 		return type;
 	}

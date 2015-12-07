@@ -1,6 +1,8 @@
 #pragma once
 #include <string>
 #include <vector>
+#include <QErrorMessage>
+#include <QString>
 #include "errorHandling.h"
 #include "professor.h"
 #include "modelExceptions.h"
@@ -20,12 +22,12 @@ public:
 		Authors			  : String
 		Date			  : Boost::Gregorian::Date
 	*/
-	static professor* createNewPubProfessor(vector<vector<string>>& csv) {
+	static pair<professor*, int> createNewPubProfessor(vector<vector<string>>& csv) {
 		//Define manditory fields for a publication csv
 		vector<string> manFields = {"Member Name", "Primary Domain", "Publication Status", "Type", "Status Date",
 			"Role", "Journal Name | Published In | Book Title | etc.", "Author(s)", "Title" };
 		vector<int> headerNumbers = findHeaders(manFields, csv[0]);
-
+		int count = 0;
 		//Create professor
 		professor* prof = new professor(findValue(csv, headerNumbers[0]), findValue(csv, headerNumbers[1]), 7);
 		for (int i = 1; i < csv.size(); i++) {
@@ -45,19 +47,23 @@ public:
 				delete e;
 			}
 			catch (emptyManditoryCellException& e){
-				//Produce error message when implemented
+				count++;
 				cerr << e.what();
 			}
 			catch (manditoryHeaderNotFoundException& e){
-				//Produce error message when implemented
+				QErrorMessage msg;
+				msg.showMessage(QString("Mandatory Headers Not Found. Expected Headers are: Member Name, \
+										Primary Domain, Publication Status, Type, Status Date, Role, \
+										Journal Name | Published In | Book Title | etc., Author(s), Title"));
+				msg.exec();
 				cerr << e.what();
 			}
 			catch (invalidDateException& e){
-				//fuck this shit
+				count++;
 				cerr << e.what();
 			}
 		}
-		return prof;
+		return pair<professor*, int>(prof,count);
 	}
 	/* Fields
 		Start Date		  : Boost::Gregorian::Date
@@ -72,7 +78,7 @@ public:
 		Co-Investigators  : String
 		Funding Amount	  : Float
 	*/
-	static professor* createNewGranProfessor(vector<vector<string>>& csv){
+	static pair<professor*,int> createNewGranProfessor(vector<vector<string>>& csv){
 		//Define manditory fields for a grantclinical csv
 		vector<string> manFields = { "Member Name", "Primary Domain", "Start Date", "End Date", "Funding Type", "Status",
 			"Peer Reviewed?", "Industry Grant?", "Role", "Title",
@@ -102,23 +108,28 @@ public:
 				delete e;
 			}
 			catch (emptyManditoryCellException& e){
-				//Produce error message when implemented
+				count++;
 				cerr << e.what();
 			}
 			catch (manditoryHeaderNotFoundException& e){
-				//Produce error message when implemented
+				QErrorMessage msg;
+				msg.showMessage(QString("Mandatory Headers Not Found. Expected Headers are: Member Name, \
+										Primary Domain, Start Date, End Date, Funding Type, Status, \
+										Peer Reviewed?, Industry Grant?, Role, Title, Principal Investigator, \
+										Co-Investigators, Total Amount"));
+				msg.exec();
 				cerr << e.what();
 			}
 			catch (failedTypeChangeException& e){
-				//Produce error message when implemented
+				count++;
 				cerr << e.what();
 			}
 			catch (invalidDateException& e){
-				//fuck this shit
+				count++;
 				cerr << e.what();
 			}
 		}
-		return prof;
+		return pair<professor*, int>(prof, count);
 	}
 	/* Fields
 		Start Date		  : Boost::Gregorian::Date
@@ -130,13 +141,13 @@ public:
 		Number of Sessions: Int
 		Total Hours		  : Float
 	*/
-	static professor* createNewTeacProfessor(vector<vector<string>>& csv){
+	static pair<professor*, int> createNewTeacProfessor(vector<vector<string>>& csv){
 		//Define manditory fields for a teaching csv
 		vector<string> manFields = { "Member Name", "Primary Domain", "Start Date", "End Date", "Program", "Type of Course / Activity",
 			"Course / Activity", "Geographical Scope", "Hours per Teaching Session or Week",
 			"Number of Teaching Sessions or Weeks", "Total Hours" };
 		vector<int> headerNumbers = findHeaders(manFields, csv[0]);
-
+		int count = 0;
 		//Create professor
 		professor* prof = new professor(findValue(csv, headerNumbers[0]), findValue(csv, headerNumbers[1]), 9);
 		for (int i = 1; i < csv.size(); i++) {
@@ -159,19 +170,25 @@ public:
 				delete e;
 			}
 			catch (emptyManditoryCellException& e){
-				//Produce error message when implemented
+				count++;
 				cerr << e.what();
 			}
 			catch (manditoryHeaderNotFoundException& e){
-				//Produce error message when implemented
+				QErrorMessage msg;
+				msg.showMessage(QString("Mandatory Headers Not Found. Expected Headers are: \
+										Member Name, Primary Domain, Start Date, End Date, Program, \
+										Type of Course / Activity, Course / Activity, Geographical Scope, \
+										Hours per Teaching Session or Week, Number of Teaching Sessions or Weeks, \
+										Total Hours"));
+				msg.exec();
 				cerr << e.what();
 			}
 			catch (failedTypeChangeException& e){
-				//Produce error message when implemented
+				count++;
 				cerr << e.what();
 			}
 		}
-		return prof;
+		return pair<professor*, int>(prof, count);
 	}
 	/* Fields
 		Date			  : Boost::Gregorian::Date
@@ -179,11 +196,11 @@ public:
 		Role			  : String
 		Title			  : String
 	*/
-	static professor* createNewPresProfessor(vector<vector<string>>& csv){
+	static pair<professor*, int> createNewPresProfessor(vector<vector<string>>& csv){
 		//Define manditory fields for a presentation csv
 		vector<string> manFields = { "Member Name", "Primary Domain", "Type", "Role", "Title", "Date" };
 		vector<int> headerNumbers = findHeaders(manFields, csv[0]);
-
+		int count = 0;
 		//Create professor
 		professor* prof = new professor(findValue(csv, headerNumbers[0]), findValue(csv, headerNumbers[1]), 4);
 		for (int i = 1; i < csv.size(); i++) {
@@ -201,19 +218,22 @@ public:
 				delete e;
 			}
 			catch (emptyManditoryCellException& e){
-				//Produce error message when implemented
+				count++;
 				cerr << e.what();
 			}
 			catch (manditoryHeaderNotFoundException& e){
-				//Produce error message when implemented
+				QErrorMessage msg;
+				msg.showMessage(QString("Mandatory Headers Not Found. Expected Headers are: \
+										Member Name, Primary Domain, Type, Role, Title, Date"));
+				msg.exec();
 				cerr << e.what();
 			}
 			catch (failedTypeChangeException& e){
-				//Produce error message when implemented
+				count++;
 				cerr << e.what();
 			}
 		}
-		return prof;
+		return pair<professor*, int>(prof,count);
 	}
 
 	//Find headers given string values
