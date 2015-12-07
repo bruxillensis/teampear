@@ -375,6 +375,8 @@ void MainWindow::on_addFilter_clicked()
 void MainWindow::on_updateGraph_clicked()
 {
 	QTreeWidgetItem* n = this->list->currentItem();
+	if (n->parent() == NULL || n->childCount() == 0)
+		return;
 	vector<int>* position = new vector<int>();
 
 	if (n->parent() != NULL){
