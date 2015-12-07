@@ -387,6 +387,10 @@ void MainWindow::on_addFilter_clicked()
 		countFilter* filter = new countFilter(d);
 		filter->applyFilter(this->rootNode, this->type);
 	}
+	if (this->list != NULL){
+		delete this->list;
+		this->generateList(this->rootNode);
+	}
 	delete d;
 }
 
