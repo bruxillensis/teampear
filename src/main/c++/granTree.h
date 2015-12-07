@@ -91,7 +91,7 @@ public:
 						tFunding += l->getFourth();
 					}
 					k->setSecond(tCount);
-					k->setFourth(tCount);
+					k->setFourth(tFunding);
 					sCount += tCount;
 					sFunding += tFunding;
 				}
