@@ -255,7 +255,7 @@ public:
 		return this->professors->size();
 	}
 
-	const professor* getProfessor(string professorName) {
+	professor* getProfessor(string professorName) {
 		std::map<string, professor*>::iterator it = this->professors->find(professorName);
 		if (it->first == professorName)
 			return it->second;

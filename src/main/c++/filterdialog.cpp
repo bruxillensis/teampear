@@ -132,12 +132,12 @@ long double filterDialog::getEndAmount(){
  return endAmount;
 }
 
-long int filterDialog::getStartHours(){
+long float filterDialog::getStartHours(){
     return startingHours;
 }
 
-long int filterDialog::getEndHours(){
-    return endAmount;
+long float filterDialog::getEndHours(){
+    return endHours;
 }
 
 long int filterDialog::getStartCount(){

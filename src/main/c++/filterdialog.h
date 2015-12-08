@@ -21,8 +21,8 @@ public:
     QString getDomain();
     long double getStartAmount();
     long double getEndAmount();
-    long int getStartHours();
-    long int getEndHours();
+    long float getStartHours();
+	long float getEndHours();
     long int getStartCount();
     long int getEndCount();
 	bool isDateChecked();
@@ -74,7 +74,7 @@ bool dateFilterChecked, domainFilterChecked, hourFilterChecked, FundingFilterChe
 QDate startingDate, endDate;
 QString domainSelected;
 long double startingAmount,endAmount;
-long int startingHours, endHours;
+long float startingHours, endHours;
 long int startingCount, endCount;
 };
 

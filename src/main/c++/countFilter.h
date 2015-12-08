@@ -38,6 +38,7 @@ public:
 								thirdLayer->setSecond(thirdLayer->getSecond() - fourthLayer->getSecond());
 								secondLayer->setSecond(secondLayer->getSecond() - fourthLayer->getSecond());
 								firstLayer->setSecond(firstLayer->getSecond() - fourthLayer->getSecond());
+								root->setSecond(root->getSecond() - fourthLayer->getSecond());
 							}
 						}
 						//checks to see if any of the children are visible, if the count = 0, that means no children are visible
@@ -59,12 +60,14 @@ public:
 		default:
 			//non-grant
 			//traverse the tree
+			
 			for (auto &firstLayer : *root->getChildren()){
 				for (auto &secondLayer : *firstLayer->getChildren()){
 					if ((secondLayer->getSecond() < low) || (secondLayer->getSecond() > high)){
 						//outside of the filter
 						secondLayer->setVisible("count", false);
 						firstLayer->setSecond(firstLayer->getSecond() - secondLayer->getSecond());
+						root->setSecond(root->getSecond() - secondLayer->getSecond());
 					}
 				}
 				//checks to see if any of the children are visible, if the count = 0, that means no children are visible
@@ -90,6 +93,7 @@ public:
 								thirdLayer->setSecond(thirdLayer->getSecond() + fourthLayer->getSecond());
 								secondLayer->setSecond(secondLayer->getSecond() + fourthLayer->getSecond());
 								firstLayer->setSecond(firstLayer->getSecond() + fourthLayer->getSecond());
+								root->setSecond(root->getSecond() + fourthLayer->getSecond());
 							}
 						}
 						if (thirdLayer->getSecond() != 0){
@@ -114,6 +118,7 @@ public:
 						//outside of the filter
 						secondLayer->setVisible("count", true);
 						firstLayer->setSecond(firstLayer->getSecond() + secondLayer->getSecond());
+						root->setSecond(root->getSecond() + secondLayer->getSecond());
 					}
 				}
 				if (firstLayer->getSecond() != 0){

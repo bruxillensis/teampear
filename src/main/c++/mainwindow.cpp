@@ -28,6 +28,7 @@
 #include "node.h"
 #include "helpdialog.h"
 #include "countFilter.h"
+#include "hourFilter.h"
 
 MainWindow::MainWindow(QWidget *parent) :
 QMainWindow(parent),
@@ -386,6 +387,10 @@ void MainWindow::on_addFilter_clicked()
 	if (d->isCountChecked()){
 		countFilter* filter = new countFilter(d);
 		filter->applyFilter(this->rootNode, this->type);
+	}
+	if (d->isHoursChecked()){
+		hourFilter* filter = new hourFilter(d);
+		filter->applyFilter(this->rootNode, this->data);
 	}
 	if (this->list != NULL){
 		delete this->list;
