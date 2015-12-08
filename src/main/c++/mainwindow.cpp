@@ -50,7 +50,7 @@ ui(new Ui::MainWindow)
 	new QShortcut(QKeySequence(Qt::Key_Control + Qt::Key_C), this, SLOT(on_actionGenerate_Pie_Chart_triggered()));
 	new QShortcut(QKeySequence(Qt::Key_Control + Qt::Key_B), this, SLOT(on_actionGenerate_Bar_Graph_triggered()));
 	new QShortcut(QKeySequence(Qt::Key_Control + Qt::Key_S), this, SLOT(on_actionSave_Graph_triggered()));
-	new QShortcut(QKeySequence(Qt::ALT + Qt::Key_H), this, SLOT(on_actionOpen_Help()));
+	new QShortcut(QKeySequence(Qt::Key_Control + Qt::Key_H), this, SLOT(on_actionOpen_Help()));
 }
 
 

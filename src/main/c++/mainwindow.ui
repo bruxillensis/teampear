@@ -168,7 +168,7 @@
              <string>Open Help</string>
          </property>
          <property name="shortcut">
-             <string>Alt+H</string>
+             <string>Ctrl+H</string>
          </property>
      </action></widget>
  <layoutdefault spacing="6" margin="11"/>
