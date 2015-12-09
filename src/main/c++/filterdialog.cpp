@@ -15,8 +15,8 @@ filterDialog::filterDialog(QWidget *parent) :
     countFilterChecked = false;
 
     //set initial values for user input variables
-    startingDate = QDate(); //constructs a null date, null dates are invalid
-    endDate = QDate();
+	startingDate = QDate(2000, 1, 1);
+	endDate = QDate(2000, 1, 1);
     domainSelected = "";
     startingAmount = 0;
     endAmount = 0;

@@ -39,6 +39,13 @@ public:
 							if ((fourthLayer->getSecond() < low) || (fourthLayer->getSecond() > high)){
 								//outside of the filter
 								if (fourthLayer->getVisible() == true){
+									//update funding numbers
+									thirdLayer->setFourth(thirdLayer->getFourth() - fourthLayer->getFourth());
+									secondLayer->setFourth(secondLayer->getFourth() - fourthLayer->getFourth());
+									firstLayer->setFourth(firstLayer->getFourth() - fourthLayer->getFourth());
+									root->setFourth(root->getFourth() - fourthLayer->getFourth());
+									
+									//update count number
 									thirdLayer->setSecond(thirdLayer->getSecond() - fourthLayer->getSecond());
 									secondLayer->setSecond(secondLayer->getSecond() - fourthLayer->getSecond());
 									firstLayer->setSecond(firstLayer->getSecond() - fourthLayer->getSecond());
@@ -66,12 +73,19 @@ public:
 		default:
 			//non-grant
 			//traverse the tree
-			
 			for (auto &firstLayer : *root->getChildren()){
 				for (auto &secondLayer : *firstLayer->getChildren()){
 					if ((secondLayer->getSecond() < low) || (secondLayer->getSecond() > high)){
 						//outside of the filter
+
 						if (secondLayer->getVisible() == true){
+							if (type == professorMap::profType::Teaching){
+								//update hours numbers
+								firstLayer->setFourth(firstLayer->getFourth() - secondLayer->getFourth());
+								root->setFourth(root->getFourth() - secondLayer->getFourth());
+							}
+
+							//update count numbers
 							firstLayer->setSecond(firstLayer->getSecond() - secondLayer->getSecond());
 							root->setSecond(root->getSecond() - secondLayer->getSecond());
 						}
@@ -100,6 +114,13 @@ public:
 								fourthLayer->setVisible("count", true);
 
 								if (fourthLayer->getVisible() == true){
+									//update funding numbers
+									thirdLayer->setFourth(thirdLayer->getFourth() + fourthLayer->getFourth());
+									secondLayer->setFourth(secondLayer->getFourth() + fourthLayer->getFourth());
+									firstLayer->setFourth(firstLayer->getFourth() + fourthLayer->getFourth());
+									root->setFourth(root->getFourth() + fourthLayer->getFourth());
+
+									//update count number
 									thirdLayer->setSecond(thirdLayer->getSecond() + fourthLayer->getSecond());
 									secondLayer->setSecond(secondLayer->getSecond() + fourthLayer->getSecond());
 									firstLayer->setSecond(firstLayer->getSecond() + fourthLayer->getSecond());
@@ -107,17 +128,11 @@ public:
 								}
 							}
 						}
-						if (thirdLayer->getSecond() != 0){
 							thirdLayer->setVisible("count", true);
-						}
 					}
-					if (secondLayer->getSecond() != 0){
 						secondLayer->setVisible("count", true);
-					}
 				}
-				if (firstLayer->getSecond() != 0){
 					firstLayer->setVisible("count", true);
-				}
 			}
 			break;
 		default:
@@ -130,14 +145,20 @@ public:
 						secondLayer->setVisible("count", true);
 						
 						if (secondLayer->getVisible() == true){
+							if (type == professorMap::profType::Teaching){
+								//update hours numbers
+								firstLayer->setFourth(firstLayer->getFourth() + secondLayer->getFourth());
+								root->setFourth(root->getFourth() + secondLayer->getFourth());
+							}
+
+							//update count numbers
 							firstLayer->setSecond(firstLayer->getSecond() + secondLayer->getSecond());
 							root->setSecond(root->getSecond() + secondLayer->getSecond());
 						}
 					}
 				}
-				if (firstLayer->getSecond() != 0){
-					firstLayer->setVisible("count", true);
-				}
+				firstLayer->setVisible("count", true);
+				
 			}
 			break;
 		}

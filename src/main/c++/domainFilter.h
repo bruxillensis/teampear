@@ -114,34 +114,26 @@ public:
 								//outside of the filter
 								fourthLayer->setVisible("domain", true);
 
-								//update numbers
-								thirdLayer->setFourth(thirdLayer->getFourth() + fourthLayer->getFourth());
-								secondLayer->setFourth(secondLayer->getFourth() + fourthLayer->getFourth());
-								firstLayer->setFourth(firstLayer->getFourth() + fourthLayer->getFourth());
-								root->setFourth(root->getFourth() + fourthLayer->getFourth());
+								if (fourthLayer->getVisible() == true){
+									//update numbers
+									thirdLayer->setFourth(thirdLayer->getFourth() + fourthLayer->getFourth());
+									secondLayer->setFourth(secondLayer->getFourth() + fourthLayer->getFourth());
+									firstLayer->setFourth(firstLayer->getFourth() + fourthLayer->getFourth());
+									root->setFourth(root->getFourth() + fourthLayer->getFourth());
 
-								//update count numbers
-								thirdLayer->setSecond(thirdLayer->getSecond() + fourthLayer->getSecond());
-								secondLayer->setSecond(secondLayer->getSecond() + fourthLayer->getSecond());
-								firstLayer->setSecond(firstLayer->getSecond() + fourthLayer->getSecond());
-								root->setSecond(root->getSecond() + fourthLayer->getSecond());
-
+									//update count numbers
+									thirdLayer->setSecond(thirdLayer->getSecond() + fourthLayer->getSecond());
+									secondLayer->setSecond(secondLayer->getSecond() + fourthLayer->getSecond());
+									firstLayer->setSecond(firstLayer->getSecond() + fourthLayer->getSecond());
+									root->setSecond(root->getSecond() + fourthLayer->getSecond());
+								}
 							}
 						}
-						//checks to see if any of the children are visible, if the count = 0, that means no children are visible
-						if (thirdLayer->getSecond() != 0){
-							thirdLayer->setVisible("domain", true);
-						}
+						thirdLayer->setVisible("count", true);
 					}
-					//checks to see if any of the children are visible, if the count = 0, that means no children are visible
-					if (secondLayer->getSecond() != 0){
-						secondLayer->setVisible("domain", true);
-					}
+					secondLayer->setVisible("count", true);
 				}
-				//checks to see if any of the children are visible, if the count = 0, that means no children are visible
-				if (firstLayer->getSecond() != 0){
-					firstLayer->setVisible("domain", true);
-				}
+				firstLayer->setVisible("count", true);
 			}
 			break;
 		default:
@@ -154,21 +146,20 @@ public:
 						//outside of the filter
 						secondLayer->setVisible("domain", true);
 
-						if (type == professorMap::profType::Teaching){
-							//update hours numbers
-							firstLayer->setFourth(firstLayer->getFourth() + secondLayer->getFourth());
-							root->setFourth(root->getFourth() + secondLayer->getFourth());
-						}
+						if (secondLayer->getVisible() == true){
+							if (type == professorMap::profType::Teaching){
+								//update hours numbers
+								firstLayer->setFourth(firstLayer->getFourth() + secondLayer->getFourth());
+								root->setFourth(root->getFourth() + secondLayer->getFourth());
+							}
 
-						//update count numbers
-						firstLayer->setSecond(firstLayer->getSecond() + secondLayer->getSecond());
-						root->setSecond(root->getSecond() + secondLayer->getSecond());
+							//update count numbers
+							firstLayer->setSecond(firstLayer->getSecond() + secondLayer->getSecond());
+							root->setSecond(root->getSecond() + secondLayer->getSecond());
+						}
 					}
 				}
-				//checks to see if any of the children are visible, if the count = 0, that means no children are visible
-				if (firstLayer->getSecond() != 0){
-					firstLayer->setVisible("domain", true);
-				}
+				firstLayer->setVisible("domain", true);
 			}
 			break;
 		}

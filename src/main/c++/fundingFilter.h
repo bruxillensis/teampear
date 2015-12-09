@@ -37,19 +37,22 @@ public:
 						for (auto &fourthLayer : *thirdLayer->getChildren()){
 							if ((fourthLayer->getFourth() < low) || (fourthLayer->getFourth() > high)){
 								//outside of the filter
+
+								if (fourthLayer->getVisible() == true){
+									//update numbers
+									thirdLayer->setFourth(thirdLayer->getFourth() - fourthLayer->getFourth());
+									secondLayer->setFourth(secondLayer->getFourth() - fourthLayer->getFourth());
+									firstLayer->setFourth(firstLayer->getFourth() - fourthLayer->getFourth());
+									root->setFourth(root->getFourth() - fourthLayer->getFourth());
+
+									//update count numbers
+									thirdLayer->setSecond(thirdLayer->getSecond() - fourthLayer->getSecond());
+									secondLayer->setSecond(secondLayer->getSecond() - fourthLayer->getSecond());
+									firstLayer->setSecond(firstLayer->getSecond() - fourthLayer->getSecond());
+									root->setSecond(root->getSecond() - fourthLayer->getSecond());
+								}
+
 								fourthLayer->setVisible("funding", false);
-
-								//update funding numbers
-								thirdLayer->setFourth(thirdLayer->getFourth() - fourthLayer->getFourth());
-								secondLayer->setFourth(secondLayer->getFourth() - fourthLayer->getFourth());
-								firstLayer->setFourth(firstLayer->getFourth() - fourthLayer->getFourth());
-								root->setFourth(root->getFourth() - fourthLayer->getFourth());
-
-								//update count numbers
-								thirdLayer->setSecond(thirdLayer->getSecond() - fourthLayer->getSecond());
-								secondLayer->setSecond(secondLayer->getSecond() - fourthLayer->getSecond());
-								firstLayer->setSecond(firstLayer->getSecond() - fourthLayer->getSecond());
-								root->setSecond(root->getSecond() - fourthLayer->getSecond());
 							}
 						}
 						//checks to see if any of the children are visible, if the count = 0, that means no children are visible
@@ -86,33 +89,26 @@ public:
 								//outside of the filter
 								fourthLayer->setVisible("funding", true);
 
-								//update funding numbers
-								thirdLayer->setFourth(thirdLayer->getFourth() + fourthLayer->getFourth());
-								secondLayer->setFourth(secondLayer->getFourth() + fourthLayer->getFourth());
-								firstLayer->setFourth(firstLayer->getFourth() + fourthLayer->getFourth());
-								root->setFourth(root->getFourth() + fourthLayer->getFourth());
+								if (fourthLayer->getVisible() == true){
+									//update numbers
+									thirdLayer->setFourth(thirdLayer->getFourth() + fourthLayer->getFourth());
+									secondLayer->setFourth(secondLayer->getFourth() + fourthLayer->getFourth());
+									firstLayer->setFourth(firstLayer->getFourth() + fourthLayer->getFourth());
+									root->setFourth(root->getFourth() + fourthLayer->getFourth());
 
-								//update count numbers
-								thirdLayer->setSecond(thirdLayer->getSecond() + fourthLayer->getSecond());
-								secondLayer->setSecond(secondLayer->getSecond() + fourthLayer->getSecond());
-								firstLayer->setSecond(firstLayer->getSecond() + fourthLayer->getSecond());
-								root->setSecond(root->getSecond() + fourthLayer->getSecond());
+									//update count numbers
+									thirdLayer->setSecond(thirdLayer->getSecond() + fourthLayer->getSecond());
+									secondLayer->setSecond(secondLayer->getSecond() + fourthLayer->getSecond());
+									firstLayer->setSecond(firstLayer->getSecond() + fourthLayer->getSecond());
+									root->setSecond(root->getSecond() + fourthLayer->getSecond());
+								}
 							}
 						}
-						//checks to see if any of the children are visible, if the count = 0, that means no children are visible
-						if (thirdLayer->getSecond() != 0){
-							thirdLayer->setVisible("funding", true);
-						}
+						thirdLayer->setVisible("count", true);
 					}
-					//checks to see if any of the children are visible, if the count = 0, that means no children are visible
-					if (secondLayer->getSecond() != 0){
-						secondLayer->setVisible("funding", true);
-					}
+					secondLayer->setVisible("count", true);
 				}
-				//checks to see if any of the children are visible, if the count = 0, that means no children are visible
-				if (firstLayer->getSecond() != 0){
-					firstLayer->setVisible("funding", true);
-				}
+				firstLayer->setVisible("count", true);
 			}
 			break;
 		default:

@@ -30,6 +30,7 @@
 #include "countFilter.h"
 #include "hourFilter.h"
 #include "domainFilter.h"
+#include "dateFilter.h"
 #include "fundingFilter.h"
 
 MainWindow::MainWindow(QWidget *parent) :
@@ -69,7 +70,7 @@ void MainWindow::on_actionImport_CSV_triggered()
 {
 	// Refresh the subWindows each time a new CSV is imported
 	refreshSubWindows();
-
+	
 	QString filename = QFileDialog::getOpenFileName(
 		this,
 		tr("Open File"),
@@ -77,6 +78,9 @@ void MainWindow::on_actionImport_CSV_triggered()
 		"CSV files (*.csv)"
 		);
 	file_name = filename.toStdString();
+
+	//empty filters
+	this->filters = new vector<filter*>();
 
 	if (!(file_name.empty())){
 		//import the csv file and get the professor type
@@ -417,6 +421,7 @@ void MainWindow::printList(QPrinter* printer)
 
 void MainWindow::on_addFilter_clicked()
 {
+	int i;
 	for (auto d : *filters){
 		d->removeFilter();
 	}
@@ -443,6 +448,11 @@ void MainWindow::on_addFilter_clicked()
 	}
 	if (d->isDomainChecked()){
 		domainFilter* filter = new domainFilter(d);
+		filter->applyFilter(this->rootNode, this->type, this->data);
+		filters->push_back(filter);
+	}
+	if (d->isDateChecked()){
+		dateFilter* filter = new dateFilter(d);
 		filter->applyFilter(this->rootNode, this->type, this->data);
 		filters->push_back(filter);
 	}

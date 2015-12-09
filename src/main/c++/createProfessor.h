@@ -192,7 +192,7 @@ public:
 				errorHandling::checkRow(csv[i], csv[0], vector<string>(manFields.begin() + 2, manFields.end()));
 				//Create vector will all necessary information
 				auto e = new vector<boost::variant<int, float, string, bool, boost::gregorian::date>>{
-					csv[i][headerNumbers[1]], csv[i][headerNumbers[2]],
+					csv[i][headerNumbers[2]], csv[i][headerNumbers[3]],
 					csv[i][headerNumbers[4]], errorHandling::checkYear(csv[i][headerNumbers[5]]) };
 				//Add entry to prof
 				prof->addEntry(e);
