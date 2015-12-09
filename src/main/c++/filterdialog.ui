@@ -193,7 +193,7 @@
          <item>
           <widget class="QDoubleSpinBox" name="startDoubleSpinBox">
            <property name="maximum">
-            <double>1000000000.000000000000000</double>
+            <double>100000000000000000000.000000000000000</double>
            </property>
           </widget>
          </item>
@@ -224,7 +224,7 @@
          <item>
           <widget class="QDoubleSpinBox" name="endDoubleSpinBox">
            <property name="maximum">
-            <double>1000000000.000000000000000</double>
+            <double>100000000000000000000.000000000000000</double>
            </property>
           </widget>
          </item>
@@ -273,7 +273,7 @@
          <item>
           <widget class="QSpinBox" name="startHourSpinBox">
            <property name="maximum">
-            <number>10000</number>
+            <number>1000000000</number>
            </property>
           </widget>
          </item>
@@ -304,7 +304,7 @@
          <item>
           <widget class="QSpinBox" name="endHourSpinBox">
            <property name="maximum">
-            <number>10000</number>
+            <number>1000000000</number>
            </property>
           </widget>
          </item>
@@ -353,7 +353,7 @@
          <item>
           <widget class="QSpinBox" name="startCountSpinBox">
            <property name="maximum">
-            <number>10000</number>
+            <number>1000000000</number>
            </property>
           </widget>
          </item>
@@ -384,7 +384,7 @@
          <item>
           <widget class="QSpinBox" name="endCountSpinBox">
            <property name="maximum">
-            <number>10000</number>
+            <number>1000000000</number>
            </property>
           </widget>
          </item>
