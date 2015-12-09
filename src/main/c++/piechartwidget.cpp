@@ -11,6 +11,7 @@
 #define C_VAL		240			//Pie slice lightness
 #define DEGREES		360			//multiplier to convert pie slices to degrees
 #define EDGE		10			//white space between pie chart and edge of window
+#define MAX_NODES	20			//Max amount of pie chart nodes on screen
 
 using namespace std;
 
@@ -20,7 +21,8 @@ PieChartWidget::PieChartWidget(QWidget *parent): QWidget(parent)
 
 void PieChartWidget::paintEvent(QPaintEvent *)
 {
-    int i, current, total;
+    int i, j, c_inc;
+	float current, total, other;
     QPainter painter(this);
     QRectF size = QRectF(EDGE, EDGE, this->width()-EDGE, this->width()-EDGE);
 	int hue = 0, last_slice = 0;
@@ -28,23 +30,63 @@ void PieChartWidget::paintEvent(QPaintEvent *)
 
 	//check if csv data is of grants and clinical funding type
 	bool money = false;
-	if (data->getFourth() > 0)
+
+	if (data->getFourth() != 0)
 		money = true;
 
 	QColor color;
 
 	vector<node*> *children = data->getChildren();
+	vector<node*> *top_nodes = new vector<node*>();
 
     //get total for pie chart
-	total = data->getSecond();
-	
+	if (money)
+		total = data->getFourth();
+	else
+		total = data->getSecond();
+
+	for (i = 0; i < children->size(); i++){
+		if (top_nodes->size() >= MAX_NODES)
+		{
+			for (j = 0; j < top_nodes->size(); j++)
+			{
+				if ((children->at(i)->getSecond()>top_nodes->at(j)->getSecond() && !money) 
+					|| (children->at(i)->getFourth()>top_nodes->at(j)->getFourth() && money))
+				{
+					if (money)
+						other += top_nodes->at(j)->getFourth();
+					else
+						other += top_nodes->at(j)->getSecond();
+
+					top_nodes->at(j) = children->at(i);
+
+				}
+			}
+		}
+		else
+		{
+			top_nodes->push_back(children->at(i));
+		}
+	}
+
+
 	//color increment
-	int c_inc = HUE_MAX / children->size();
+	if (top_nodes->size() < 20)
+		c_inc = HUE_MAX / top_nodes->size();
+	else
+		c_inc = HUE_MAX / MAX_NODES + 1;
+	
 
     //for loop to gen pie slices
-    for(i=0; i < children->size(); i++){
+    for(i=0; i < top_nodes->size(); i++){
 		//get current pie slice size
-		current = children->at(i)->getSecond();
+		if (money)
+			current = top_nodes->at(i)->getFourth();
+		else
+			current = top_nodes->at(i)->getSecond();
+
+		cout << current << endl;
+
         if(current > 0){
 	
             color.setHsv(hue,C_SAT,C_VAL);						//gen new color
@@ -52,9 +94,9 @@ void PieChartWidget::paintEvent(QPaintEvent *)
             current_slice = nearbyint(((double)current/(double)total)*DEGREES);					//generate slice
 
 			//
-			if (i == children->size()-1 && (current_slice + last_slice) < 360){
-				current_slice += 360 - (current_slice + last_slice);
-			}
+			/*if (i == top_nodes->size()-1 && (current_slice + last_slice) < DEGREES){
+				current_slice += DEGREES - (current_slice + last_slice);
+			}*/
 
 			painter.drawPie(size, last_slice*PIE_MULT, (int)current_slice*PIE_MULT);	//draw slice
             last_slice += current_slice;		//increment tracker of last slice place
