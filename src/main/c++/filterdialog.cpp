@@ -64,16 +64,16 @@ void filterDialog::on_countCheckBox_clicked(bool checked)
     countFilterChecked = checked;
 }
 
-void filterDialog::on_startDateEdit_editingFinished()
-{
+//void filterDialog::on_startDateEdit_editingFinished()
+//{
 
-startingDate = ui->startDateEdit->date();
-}
+//startingDate = ui->startDateEdit->date();
+//}
 
-void filterDialog::on_endDateEdit_editingFinished()
-{
-endDate = ui->endDateEdit->date();
-}
+//void filterDialog::on_endDateEdit_editingFinished()
+//{
+//endDate = ui->endDateEdit->date();
+//}
 
 void filterDialog::on_comboBox_currentIndexChanged(const QString &arg1)
 {
@@ -166,4 +166,13 @@ bool filterDialog::isHoursChecked(){
 
 bool filterDialog::isCountChecked(){
 	return countFilterChecked;
+}
+void filterDialog::on_startDateEdit_dateChanged(const QDate &date)
+{
+startingDate = date;
+}
+
+void filterDialog::on_endDateEdit_dateChanged(const QDate &date)
+{
+endDate = date;
 }

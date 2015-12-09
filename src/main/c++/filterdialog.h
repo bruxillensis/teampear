@@ -46,9 +46,9 @@ private slots:
 
     void on_countCheckBox_clicked(bool checked);
 
-    void on_startDateEdit_editingFinished();
+   // void on_startDateEdit_editingFinished();
 
-    void on_endDateEdit_editingFinished();
+    //void on_endDateEdit_editingFinished();
 
     void on_comboBox_currentIndexChanged(const QString &arg1);
 
@@ -63,6 +63,10 @@ private slots:
     void on_startCountSpinBox_valueChanged(int arg1);
 
     void on_endCountSpinBox_valueChanged(int arg1);
+
+    void on_startDateEdit_dateChanged(const QDate &date);
+
+    void on_endDateEdit_dateChanged(const QDate &date);
 
 private:
     Ui::filterDialog *ui;
