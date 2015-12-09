@@ -111,6 +111,7 @@ void MainWindow::on_actionImport_CSV_triggered()
 			msg.showMessage(QString("Mandatory headers not found. There are spelling errors in the column names."));
 			msg.exec();
 			cerr << e.what();
+			this->rootNode=NULL;
 		}
 	}
 	else

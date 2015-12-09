@@ -34,6 +34,7 @@ public:
 			//Sum statistics and add to tree
 			vector<pair<int, float>> count(8, pair<int, float>(0, 0));
 			vector<vector<string>> titles(8, vector<string>());
+			vector<vector<float>> amounts(8, vector<float>());
 			for (int i = 0; i < it.second->getNumberOfEntries(); i++){
 				int j;
 				//Grants
@@ -62,14 +63,15 @@ public:
 					count[j].first++;
 					count[j].second += boost::get<float>(it.second->getField(10)->at(i));
 					titles[j].push_back(boost::get<string>(it.second->getField(7)->at(i)));
+					amounts[j].push_back(boost::get<float>(it.second->getField(10)->at(i)));
 				}
 				catch (const std::out_of_range& oor) { std::cerr << "Out of Range error: " << oor.what() << '\n'; }
 			}
 			for (int i = 0; i < count.size(); i++){
 				if (count[i].first != 0){
 					node* prof = new node(it.first, count[i].first, 0, count[i].second);
-					for (auto& k : titles[i])
-						prof->addChild(new node(k, 0, 0, 0));
+					for (int j = 0; j < titles[i].size(); j++)
+						prof->addChild(new node(titles[i][j], 1, 0, amounts[i][j]));
 					root->getChildren()->at((i & 0x4) >> 2)
 						->getChildren()->at((i & 0x2) >> 1)
 						->getChildren()->at(i & 0x1)
@@ -77,32 +79,7 @@ public:
 				}
 			}
 		}
-		for (auto &i : *root->getChildren()){
-			int fCount = 0;
-			float fFunding = 0;
-			for (auto &j : *i->getChildren()){
-				int sCount = 0;
-				float sFunding = 0;
-				for (auto &k : *j->getChildren()){
-					int tCount = 0;
-					float tFunding = 0;
-					for (auto &l : *k->getChildren()){
-						tCount += l->getSecond();
-						tFunding += l->getFourth();
-					}
-					k->setSecond(tCount);
-					k->setFourth(tFunding);
-					sCount += tCount;
-					sFunding += tFunding;
-				}
-				j->setSecond(sCount);
-				j->setFourth(sFunding);
-				fCount += sCount;
-				fFunding += sFunding;
-			}
-			i->setSecond(fCount);
-			i->setFourth(fFunding);
-		}
+		this->getTotals();
 	}
 	void addFilter() override {}
 	void removeFilter() override {}

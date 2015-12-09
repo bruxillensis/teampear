@@ -24,6 +24,7 @@ public:
 		for (auto& it : *professors) {
 			//Sum statistics and add to tree
 			vector<int> typeCount(teachTypes.size(), 0);
+			vector<float> hourCount(teachTypes.size(), 0);
 			//Iterator through class entries
 			for (int i = 0; i < it.second->getNumberOfEntries(); i++){
 				//Try to find teaching type in teachTypes
@@ -33,12 +34,14 @@ public:
 				if (ti == teachTypes.end()){
 					teachTypes.push_back(boost::get<string>(it.second->getField(2)->at(i)));
 					typeCount.push_back(1);
+					hourCount.push_back(boost::get<float>(it.second->getField(7)->at(i)));
 					root->addChild(new node(teachTypes.back(), 0, 0, 0));
 				}
 				//Else increment count of that type
 				else{
 					//Should be added to proper "date" node
 					typeCount[std::distance(teachTypes.begin(), ti)]++;
+					hourCount[std::distance(teachTypes.begin(), ti)] += boost::get<float>(it.second->getField(7)->at(i));
 				}
 			}
 			//Add the professor stats to the tree
@@ -46,21 +49,13 @@ public:
 				int j = std::distance(teachTypes.begin(),
 					std::find(teachTypes.begin(), teachTypes.end(), root->getChildren()->at(i)->getFirst()));
 				if (typeCount[j]){
-					node* prof = new node(it.first, typeCount[j], 0, 0);
+					node* prof = new node(it.first, typeCount[j], 0, hourCount[j]);
 					root->getChildren()->at(i)->addChild(prof);
 				}
 			}
 		}
 		//For non-leaf nodes, iterate through tree and count up stats to create totals for inner leaves
-		int fCount = 0;
-		for (auto &i : *root->getChildren()){
-			int sCount = 0;
-			for (auto &j : *i->getChildren()){
-				sCount += j->getSecond();
-			}
-			i->setSecond(sCount);
-		}
-		root->setSecond(fCount);
+		this->getTotals();
 	}
 	void addFilter() override {}
 	void removeFilter() override {}

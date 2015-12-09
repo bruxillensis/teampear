@@ -52,22 +52,13 @@ public:
 				if (typeCount[j]){
 					node* prof = new node(it.first, typeCount[j], 0, 0);
 					for (auto& k : titles[j])
-						prof->addChild(new node(k, 0, 0, 0));
+						prof->addChild(new node(k, 1, 0, 0));
 					root->getChildren()->at(i)->addChild(prof);
 				}
 			}
 		}
 		//For non-leaf nodes, iterate through tree and count up stats to create totals for inner leaves
-		int fCount = 0;
-		for (auto &i : *root->getChildren()){
-			int sCount = 0;
-			for (auto &j : *(i->getChildren())){
-				sCount += j->getSecond();
-			}
-			i->setSecond(sCount);
-			fCount += sCount;
-		}
-		root->setSecond(fCount);
+		this->getTotals();
 	}
 	void addFilter() override {}
 	void removeFilter() override {}
