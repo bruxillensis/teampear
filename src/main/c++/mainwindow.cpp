@@ -420,6 +420,7 @@ void MainWindow::on_addFilter_clicked()
 	for (auto d : *filters){
 		d->removeFilter();
 	}
+	filters->clear();
 
 	filterDialog* d = new filterDialog();
 	d->setModal(true);

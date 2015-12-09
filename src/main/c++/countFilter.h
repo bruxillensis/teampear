@@ -38,11 +38,13 @@ public:
 						for (auto &fourthLayer : *thirdLayer->getChildren()){
 							if ((fourthLayer->getSecond() < low) || (fourthLayer->getSecond() > high)){
 								//outside of the filter
-								fourthLayer->setVisible("count",false);
-								thirdLayer->setSecond(thirdLayer->getSecond() - fourthLayer->getSecond());
-								secondLayer->setSecond(secondLayer->getSecond() - fourthLayer->getSecond());
-								firstLayer->setSecond(firstLayer->getSecond() - fourthLayer->getSecond());
-								root->setSecond(root->getSecond() - fourthLayer->getSecond());
+								if (fourthLayer->getVisible() == true){
+									thirdLayer->setSecond(thirdLayer->getSecond() - fourthLayer->getSecond());
+									secondLayer->setSecond(secondLayer->getSecond() - fourthLayer->getSecond());
+									firstLayer->setSecond(firstLayer->getSecond() - fourthLayer->getSecond());
+									root->setSecond(root->getSecond() - fourthLayer->getSecond());
+								}
+								fourthLayer->setVisible("count", false);
 							}
 						}
 						//checks to see if any of the children are visible, if the count = 0, that means no children are visible
@@ -69,9 +71,11 @@ public:
 				for (auto &secondLayer : *firstLayer->getChildren()){
 					if ((secondLayer->getSecond() < low) || (secondLayer->getSecond() > high)){
 						//outside of the filter
+						if (secondLayer->getVisible() == true){
+							firstLayer->setSecond(firstLayer->getSecond() - secondLayer->getSecond());
+							root->setSecond(root->getSecond() - secondLayer->getSecond());
+						}
 						secondLayer->setVisible("count", false);
-						firstLayer->setSecond(firstLayer->getSecond() - secondLayer->getSecond());
-						root->setSecond(root->getSecond() - secondLayer->getSecond());
 					}
 				}
 				//checks to see if any of the children are visible, if the count = 0, that means no children are visible
@@ -94,10 +98,13 @@ public:
 							if ((fourthLayer->getSecond() < low) || (fourthLayer->getSecond() > high)){
 								//outside of the filter
 								fourthLayer->setVisible("count", true);
-								thirdLayer->setSecond(thirdLayer->getSecond() + fourthLayer->getSecond());
-								secondLayer->setSecond(secondLayer->getSecond() + fourthLayer->getSecond());
-								firstLayer->setSecond(firstLayer->getSecond() + fourthLayer->getSecond());
-								root->setSecond(root->getSecond() + fourthLayer->getSecond());
+
+								if (fourthLayer->getVisible() == true){
+									thirdLayer->setSecond(thirdLayer->getSecond() + fourthLayer->getSecond());
+									secondLayer->setSecond(secondLayer->getSecond() + fourthLayer->getSecond());
+									firstLayer->setSecond(firstLayer->getSecond() + fourthLayer->getSecond());
+									root->setSecond(root->getSecond() + fourthLayer->getSecond());
+								}
 							}
 						}
 						if (thirdLayer->getSecond() != 0){
@@ -121,8 +128,11 @@ public:
 					if ((secondLayer->getSecond() < low) || (secondLayer->getSecond() > high)){
 						//outside of the filter
 						secondLayer->setVisible("count", true);
-						firstLayer->setSecond(firstLayer->getSecond() + secondLayer->getSecond());
-						root->setSecond(root->getSecond() + secondLayer->getSecond());
+						
+						if (secondLayer->getVisible() == true){
+							firstLayer->setSecond(firstLayer->getSecond() + secondLayer->getSecond());
+							root->setSecond(root->getSecond() + secondLayer->getSecond());
+						}
 					}
 				}
 				if (firstLayer->getSecond() != 0){

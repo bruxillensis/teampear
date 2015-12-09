@@ -86,7 +86,7 @@ void ListView::populateList(node* root, QTreeWidgetItem* parent)
 	}
 	if (root->getFourth() != NULL)
 	{
-		itm->setText(2, QString::number((ulong) root->getFourth()));
+		itm->setText(2, QString::number(root->getFourth(), 'f',0));
 	}
 	
 	if (root->getVisible())
