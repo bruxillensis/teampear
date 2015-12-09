@@ -158,6 +158,8 @@ public:
 		}
 		return true;
 	}
+	const string const_getFirst() const{ return first; }
+	const node* const_getParent() const{ return parent; }
 };
 
 inline bool operator==(node& lhs, node& rhs){
