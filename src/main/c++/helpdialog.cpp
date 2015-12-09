@@ -6,6 +6,7 @@ helpDialog::helpDialog(QWidget *parent) :
     ui(new Ui::helpDialog)
 {
     ui->setupUi(this);
+	this->setFixedSize(this->size());
 	QString appDir = QApplication::applicationDirPath();
 	QPalette pal;
 	pal.setBrush(ui->textBrowser->viewport()->backgroundRole(), QBrush(QImage(appDir + "/resources/helpdialog.png")));
