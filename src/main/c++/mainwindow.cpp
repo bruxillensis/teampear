@@ -71,8 +71,6 @@ void MainWindow::on_actionImport_CSV_triggered()
 		"C://",
 		"CSV files (*.csv)"
 		);
-
-	QMessageBox::information(this, tr("File Name"), filename);
 	file_name = filename.toStdString();
 
 	if (!(file_name.empty())){
@@ -130,7 +128,7 @@ void MainWindow::on_actionGenerate_Bar_Graph_triggered()
 		//display the right subwindow
 		this->pie->hide();
 		this->bar->setVisible(true);
-		this->bar->setGeometry(rec.width() / 2, 0, rec.width() / 2, rec.height() - 120);
+		this->bar->setGeometry(rec.width() / 2 - 11, 0, rec.width() / 2 - 11, rec.height() - 165);
 		int extra = this->barPlot->plotBar(this->rootNode);
 		this->bar->setWidget(this->barPlot);
 
@@ -158,7 +156,7 @@ void MainWindow::on_actionGenerate_Pie_Chart_triggered()
 		// display the right subwindow
 		this->bar->hide();
 		this->pie->setVisible(true);
-		this->pie->setGeometry(rec.width() / 2, 0, rec.width() / 2, rec.height() - 120);
+		this->pie->setGeometry(rec.width() / 2 - 11, 0, rec.width() / 2 - 11, rec.height() - 165);
 		//draw piechart and legend
 		this->pieChart->setData(this->rootNode);
 		this->legend->drawLegend(this->rootNode);
@@ -190,7 +188,7 @@ void MainWindow::generateList(node* root)
 	}
 	this->tree->setVisible(true);
 	this->tree->setWidget(this->list);
-	this->tree->setGeometry(0, 0, rec.width() / 2, rec.height() - 120);
+	this->tree->setGeometry(0, 0, rec.width() / 2 - 11, rec.height() - 165);
 
 }
 
@@ -201,7 +199,7 @@ void MainWindow::on_actionSave_Graph_triggered()
 	if (this->bar->isVisible()){
 		this->bar->setGeometry(rec.width(), 0, rec.width(), rec.height()); //fullscreen
 		originalPixmap = QPixmap::grabWidget(this->bar);
-		this->bar->setGeometry(rec.width() / 2, 0, rec.width() / 2, rec.height() - 120); //resize back to original
+		this->bar->setGeometry(rec.width() / 2 - 11, 0, rec.width() / 2 - 11, rec.height() - 165); //resize back to original
 	}
 	if (this->pie->isVisible()){
 		originalPixmap = QPixmap::grabWidget(this->pie);
@@ -316,7 +314,7 @@ void MainWindow::print(QPrinter* printer)
 	if (this->bar->isVisible()){
 		this->bar->setGeometry(rec.width(), 0, rec.width(), rec.height()); //fullscreen
 		printPixmap = QPixmap::grabWidget(this->bar);
-		this->bar->setGeometry(rec.width() / 2, 0, rec.width() / 2, rec.height() - 120); //resize back to original
+		this->bar->setGeometry(rec.width() / 2 - 11, 0, rec.width() / 2 - 11, rec.height() - 165); //resize back to original
 	}
 
 	if (this->pie->isVisible()){
@@ -414,8 +412,12 @@ void MainWindow::on_updateGraph_clicked()
 	position->pop_back();
 	for (vector<int>::reverse_iterator it = position->rbegin(); it != position->rend(); ++it)
 		val = val->getChildren()->at(*it);
-	if (this->barPlot != NULL)
+	if (this->barPlot != NULL){
+		delete this->barPlot;
+		this->barPlot = new BarPlot(this);
 		this->barPlot->plotBar(val);
+		this->bar->setWidget(this->barPlot);
+	}
 	if (this->pieChart != NULL){
 		this->pieChart->setData(val);
 		this->legend->drawLegend(val);
