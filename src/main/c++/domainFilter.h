@@ -13,12 +13,18 @@ using namespace std;
 class domainFilter : public filter{
 private:
 	string domain;
+	node* root;
+	professorMap::profType type;
+	professorMap* map;
 public:
 	domainFilter(filterDialog* d){
 		domain = (d->getDomain()).toStdString();
 	}
 
-	void applyFilter(node* root, professorMap::profType type, professorMap* map){
+	void applyFilter(node* rootX, professorMap::profType typeX, professorMap* mapX){
+		this->root = rootX;
+		this->type = typeX;
+		this->map = mapX;
 		switch (type){
 		case professorMap::profType::GrantClinical:
 			//traverse the tree
@@ -91,7 +97,7 @@ public:
 		}
 	}
 
-	void removeFilter(node* root, professorMap::profType type, professorMap* map){
+	void removeFilter() override{
 		switch (type){
 		case professorMap::profType::GrantClinical:
 			//traverse the tree

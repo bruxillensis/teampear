@@ -15,6 +15,8 @@ class hourFilter : public filter{
 private:
 	float low;
 	float high;
+	professorMap::profType type;
+	node* root;
 public:
 	hourFilter(filterDialog* d){
 		low = d->getStartHours();
@@ -27,7 +29,9 @@ public:
 	}
 
 
-	void applyFilter(node* root, professorMap::profType type){
+	void applyFilter(node* rootX, professorMap::profType typeX){
+		this->root = rootX;
+		this->type = typeX;
 		switch (type){
 		case professorMap::profType::Teaching:
 			//traverse the tree
@@ -59,7 +63,7 @@ public:
 		}
 	}
 
-	void removeFilter(node* root, professorMap::profType type){
+	void removeFilter() override{
 		switch (type){
 		case professorMap::profType::Teaching:
 			//traverse the tree

@@ -13,6 +13,8 @@ class countFilter : public filter{
 private:
 	double low;
 	double high;
+	professorMap::profType type;
+	node* root;
 public:
 	countFilter(filterDialog* d){
 		low = d->getStartCount();
@@ -24,7 +26,9 @@ public:
 		this->high = high;
 	}
 
-	void applyFilter(node* root, professorMap::profType type){
+	void applyFilter(node* rootX, professorMap::profType typeX){
+		this->root = rootX;
+		this->type = typeX;
 		switch (type){
 		case professorMap::profType::GrantClinical:
 			//traverse the tree
@@ -79,7 +83,7 @@ public:
 		}
 	}
 
-	void removeFilter(node* root, professorMap::profType type){
+	void removeFilter() override{
 		switch (type){
 		case professorMap::profType::GrantClinical:
 			//traverse the tree

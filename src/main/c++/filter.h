@@ -8,5 +8,5 @@ private:
 	
 public:
 	void applyFilter(node* root);
-	void removeFilter(node* root);
+	virtual void removeFilter(){}
 };
