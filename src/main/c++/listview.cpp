@@ -49,7 +49,7 @@ void ListView::makeList(node * root)
 	else if (strcmp(root->getFirst().c_str(), "Programs") == 0)
 	{
 		this->setColumnCount(2);
-		this->setHeaderLabels(QStringList() << "Name" << "Hour" );
+		this->setHeaderLabels(QStringList() << "Name" << "Count" << "Hours" );
 		
 		itm->setText(0, "\t\t\t\t\t");
 		itm->setExpanded(true);
@@ -82,11 +82,11 @@ void ListView::populateList(node* root, QTreeWidgetItem* parent)
 
 	if (root->getThird() != NULL)
 	{
-		itm->setText(2, QString::number(root->getThird()));
+		itm->setText(2, QString::number((double) root->getThird()));
 	}
 	if (root->getFourth() != NULL)
 	{
-		itm->setText(2, QString::number(root->getFourth()));
+		itm->setText(2, QString::number((ulong) root->getFourth()));
 	}
 	
 	if (root->getVisible())
