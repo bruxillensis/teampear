@@ -90,6 +90,7 @@ private:
 	LegendWidget* legend;
 	BarPlot* barPlot;
 	professorMap::profType type;
+	vector<filter*>* filters;
 };
 
 #endif // MAINWINDOW_H

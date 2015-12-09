@@ -41,6 +41,7 @@ ui(new Ui::MainWindow)
 	rec = QApplication::desktop()->screenGeometry();
 	this->setFixedSize(rec.size());
 	this->m_area = new QMdiArea;
+	this->filters = new vector<filter*>();
 	//this->setCentralWidget(m_area);
 	this->rootNode = NULL;
 	this->bar = NULL;
@@ -416,28 +417,33 @@ void MainWindow::printList(QPrinter* printer)
 
 void MainWindow::on_addFilter_clicked()
 {
+	for (auto d : *filters){
+		d->removeFilter();
+	}
+
 	filterDialog* d = new filterDialog();
 	d->setModal(true);
 	d->exec();
-	//d.findChild<QCheckBox*>("dateCheckBox")->isChecked();
-	//d.findChild<QCheckBox*>("domainCheckBox")->isChecked();
-	//d.findChild<QCheckBox*>("fundingCheckBox")->isChecked();
-	//d.findChild<QCheckBox*>("hourCheckBox")->isChecked();
+
 	if (d->isCountChecked()){
 		countFilter* filter = new countFilter(d);
 		filter->applyFilter(this->rootNode, this->type);
+		filters->push_back(filter);
 	}
 	if (d->isHoursChecked()){
 		hourFilter* filter = new hourFilter(d);
 		filter->applyFilter(this->rootNode, this->type);
+		filters->push_back(filter);
 	}
 	if (d->isFundingChecked()){
 		fundingFilter* filter = new fundingFilter(d);
 		filter->applyFilter(this->rootNode, this->type);
+		filters->push_back(filter);
 	}
 	if (d->isDomainChecked()){
 		domainFilter* filter = new domainFilter(d);
 		filter->applyFilter(this->rootNode, this->type, this->data);
+		filters->push_back(filter);
 	}
 	if (this->list != NULL){
 		delete this->list;
