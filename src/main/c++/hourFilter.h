@@ -27,43 +27,67 @@ public:
 	}
 
 
-	void applyFilter(node* root, professorMap* map){
-		//only for teaching
-		//traverse the tree
-		for (auto &firstLayer : *root->getChildren()){
-			for (auto &secondLayer : *firstLayer->getChildren()){
-				const vector<boost::variant<int, float, string, bool, boost::gregorian::date>>* hours = map->getProfessor(secondLayer->getFirst())->getField(7);
-				if ((boost::get<float>(hours->at(0)) < low) || (boost::get<float>(hours->at(0)) > high)){
-					//outside of the filter
-					secondLayer->setVisible("hours", false);
-					firstLayer->setSecond(firstLayer->getSecond() - secondLayer->getSecond());
-					root->setSecond(root->getSecond() - secondLayer->getSecond());					
+	void applyFilter(node* root, professorMap::profType type){
+		switch (type){
+		case professorMap::profType::Teaching:
+			//traverse the tree
+			for (auto &firstLayer : *root->getChildren()){
+				for (auto &secondLayer : *firstLayer->getChildren()){
+					if ((secondLayer->getFourth() < low) || (secondLayer->getFourth() > high)){
+						//outside of the filter
+						secondLayer->setVisible("hours", false);
+
+						//update hours numbers
+						firstLayer->setFourth(firstLayer->getFourth() - secondLayer->getFourth());
+						root->setFourth(root->getFourth() - secondLayer->getFourth());
+
+						//update count numbers
+						firstLayer->setSecond(firstLayer->getSecond() - secondLayer->getSecond());
+						root->setSecond(root->getSecond() - secondLayer->getSecond());
+					}
+				}
+			
+				//checks to see if any of the children are visible, if the count = 0, that means no children are visible
+				if (firstLayer->getSecond() == 0){
+					firstLayer->setVisible("hours", false);
 				}
 			}
-			//parent node checks if the children are visible
-			if (firstLayer->getSecond() == 0){
-				firstLayer->setVisible("hours", false);
-			}
+			break;
+		default:
+			//non-teaching
+			break;
 		}
 	}
 
-	void removeFilter(node* root, professorMap* map){
-		//only for teaching
-		//traverse the tree
-		for (auto &firstLayer : *root->getChildren()){
-			for (auto &secondLayer : *firstLayer->getChildren()){
-				const vector<boost::variant<int, float, string, bool, boost::gregorian::date>>* hours = map->getProfessor(secondLayer->getFirst())->getField(7);
-				if ((boost::get<float>(hours->at(0)) < low) || (boost::get<float>(hours->at(0)) > high)){
-					//outside of the filter
-					secondLayer->setVisible("hours", true);
-					firstLayer->setSecond(firstLayer->getSecond() + secondLayer->getSecond());
-					root->setSecond(root->getSecond() + secondLayer->getSecond());
+	void removeFilter(node* root, professorMap::profType type){
+		switch (type){
+		case professorMap::profType::Teaching:
+			//traverse the tree
+			for (auto &firstLayer : *root->getChildren()){
+				for (auto &secondLayer : *firstLayer->getChildren()){
+					if ((secondLayer->getFourth() < low) || (secondLayer->getFourth() > high)){
+						//outside of the filter
+						secondLayer->setVisible("hours", true);
+
+						//update hours numbers
+						firstLayer->setFourth(firstLayer->getFourth() + secondLayer->getFourth());
+						root->setFourth(root->getFourth() + secondLayer->getFourth());
+
+						//update count numbers
+						firstLayer->setSecond(firstLayer->getSecond() + secondLayer->getSecond());
+						root->setSecond(root->getSecond() + secondLayer->getSecond());
+					}
+				}
+
+				//checks to see if any of the children are visible, if the count = 0, that means no children are visible
+				if (firstLayer->getSecond() != 0){
+					firstLayer->setVisible("hours", true);
 				}
 			}
-			//parent node checks if the children are visible
-			if (firstLayer->getSecond() == 0){
-				firstLayer->setVisible("hours", true);
-			}
+			break;
+		default:
+			//non-teaching
+			break;
 		}
 	}
 };

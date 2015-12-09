@@ -29,6 +29,8 @@
 #include "helpdialog.h"
 #include "countFilter.h"
 #include "hourFilter.h"
+#include "domainFilter.h"
+#include "fundingFilter.h"
 
 MainWindow::MainWindow(QWidget *parent) :
 QMainWindow(parent),
@@ -427,7 +429,15 @@ void MainWindow::on_addFilter_clicked()
 	}
 	if (d->isHoursChecked()){
 		hourFilter* filter = new hourFilter(d);
-		filter->applyFilter(this->rootNode, this->data);
+		filter->applyFilter(this->rootNode, this->type);
+	}
+	if (d->isFundingChecked()){
+		fundingFilter* filter = new fundingFilter(d);
+		filter->applyFilter(this->rootNode, this->type);
+	}
+	if (d->isDomainChecked()){
+		domainFilter* filter = new domainFilter(d);
+		filter->applyFilter(this->rootNode, this->type, this->data);
 	}
 	if (this->list != NULL){
 		delete this->list;

@@ -7,6 +7,7 @@
 #include "createProfessor.h"
 #include "professor.h"
 #include "boost/date_time/gregorian/gregorian.hpp"
+#include "filterdialog.h"
 
 using namespace std;
 
@@ -15,7 +16,9 @@ private:
 	boost::gregorian::date low;
 	boost::gregorian::date high;
 public:
-	dateFilter(){
+	dateFilter(filterDialog* d){
+		low = d->getStartAmount();
+		high = d->getEndAmount();
 	}
 
 	dateFilter(boost::gregorian::date low, boost::gregorian::date high){
