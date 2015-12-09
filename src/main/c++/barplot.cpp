@@ -22,6 +22,9 @@ BarPlot::BarPlot(QWidget *parent) : QCustomPlot(parent)
 
 int BarPlot::plotBar(node *root)
 {	
+	this->clearPlottables();
+	this->clearGraphs();
+
 	Node = root; // Data is passed through as a node
 
 	string dataType = Node->getFirst();
@@ -34,7 +37,7 @@ int BarPlot::plotBar(node *root)
 	// Note the type is not always going to be the within the children of the node (depending on what node is passed)
 	// It will be possible to pass in a different node (say a publication type node) when implemented
 	vector<node*> types;
-	if (Node->getParent() == NULL){
+	if ((Node->getParent() == NULL ) || (grantType)){
 		vector<node*>* temptypes = Node->getChildren();
 		for (int i = 0; i < temptypes->size(); i++){
 			if (temptypes->at(i)->getSecond() > 0)
@@ -94,10 +97,13 @@ int BarPlot::plotBar(node *root)
 		// this would affect the labels (prof names)
 		for (int j = 0; j < types.at(i)->getChildren()->size(); j++){
 			int pos = labels.indexOf(QString::fromStdString(types.at(i)->getChildren()->at(j)->getFirst()));
-			if (grantType)
-				data[pos] = types.at(i)->getChildren()->at(j)->getFourth();
-			else
-				data[pos]= types.at(i)->getChildren()->at(j)->getSecond();
+			if (grantType){
+				data[i] = types.at(i)->getFourth();
+			}
+			else{
+				int pos = labels.indexOf(QString::fromStdString(types.at(i)->getChildren()->at(j)->getFirst()));
+				data[pos] = types.at(i)->getChildren()->at(j)->getSecond();
+			}
 		}
 		QCPBars *temp = new QCPBars(this->xAxis, this->yAxis);
 
@@ -106,7 +112,7 @@ int BarPlot::plotBar(node *root)
 				othersData[j] += count[j];
 		}
 		else{
-			temp->setName(QString::fromStdString(types.at(i)->getFirst()));
+				temp->setName(QString::fromStdString(types.at(i)->getFirst()));
 			temp->setData(ticks, count);
 			bars.push_back(temp);
 			this->addPlottable(temp);
