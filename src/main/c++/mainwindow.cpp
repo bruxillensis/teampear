@@ -113,6 +113,13 @@ void MainWindow::on_actionImport_CSV_triggered()
 			cerr << e.what();
 			this->rootNode=NULL;
 		}
+		catch (typeNotRecognizedException& e){
+			QErrorMessage msg;
+			msg.showMessage(QString(e.what()));
+			msg.exec();
+			cerr << e.what();
+			this->rootNode = NULL;
+		}
 	}
 	else
 	{

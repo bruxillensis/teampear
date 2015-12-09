@@ -172,6 +172,10 @@ public:
 			}
 		}
 
+		if (type != Teaching || type != Publication || type != GrantClinical || type != Presentation){
+			throw typeNotRecognizedException();
+		}
+
 		map<string, vector<vector<string> > >* orgCSV = new map<string, vector<vector<string> > >();
 
 		//Find the index of the Member Name

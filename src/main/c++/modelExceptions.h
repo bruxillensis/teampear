@@ -32,4 +32,9 @@ class failedTypeChangeException : public exception {
 public:
 	virtual const char* what() const throw() { return "Type could not be converted from string"; }
 };
+
+class typeNotRecognizedException : public exception {
+public:
+	virtual const char* what() const throw() { return "CSV type not recognized."; }
+};
 //CAN ADD ALL EXCEPTION CLASSES HERE
