@@ -146,6 +146,11 @@
              <string>Psychiatry</string>
             </property>
            </item>
+           <item>
+            <property name="text">
+             <string>Medical Imaging</string>
+            </property>
+           </item>
           </widget>
          </item>
         </layout>
