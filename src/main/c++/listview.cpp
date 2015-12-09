@@ -48,7 +48,7 @@ void ListView::makeList(node * root)
 	}
 	else if (strcmp(root->getFirst().c_str(), "Programs") == 0)
 	{
-		this->setColumnCount(2);
+		this->setColumnCount(3);
 		this->setHeaderLabels(QStringList() << "Name" << "Count" << "Hours" );
 		
 		itm->setText(0, "\t\t\t\t\t");
