@@ -30,10 +30,12 @@ void LegendWidget::drawLegend(node* root)
 
 	if (root->getFourth())
 		money = true;
-	if (money)
+
+	/*if (money)
 		model->setHeaderData(0, Qt::Horizontal, tr("$"));
-	else
-		model->setHeaderData(0, Qt::Horizontal, tr("#"));
+	else*/
+	
+	model->setHeaderData(0, Qt::Horizontal, tr("#"));
 
 	vector<node*> *children = root->getChildren();
 	vector<node*> *top_nodes = new vector<node*>();
@@ -111,14 +113,17 @@ void LegendWidget::drawLegend(node* root)
 		}
 	}
 
-	color.setHsv(hue, C_SAT, C_VAL);
-	model->setItem(rows, 1, new QStandardItem(QString::fromStdString("Other")));
+	if (other > 0){
+		color.setHsv(hue, C_SAT, C_VAL);
+		model->setItem(rows, 1, new QStandardItem(QString::fromStdString("Other")));
 
-	model->setItem(rows, 0, new QStandardItem(QString::fromStdString(to_string(other))));
+		model->setItem(rows, 0, new QStandardItem(QString::fromStdString(to_string(other))));
 
-	model->item(rows, 0)->setData(QBrush(color), Qt::BackgroundRole);
+		model->item(rows, 0)->setData(QBrush(color), Qt::BackgroundRole);
+		rows++;
+	}
 
-	model->setRowCount(rows+1);
+	model->setRowCount(rows);
 
 	this->setModel(model);
 	this->setColumnWidth(0, 30);
