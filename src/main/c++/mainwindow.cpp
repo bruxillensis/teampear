@@ -41,6 +41,8 @@ ui(new Ui::MainWindow)
 	this->m_area = new QMdiArea;
 	//this->setCentralWidget(m_area);
 	this->rootNode = NULL;
+	this->bar = NULL;
+	this->pie = NULL;
 	this->barPlot = NULL;
 	this->pieChart = NULL;
 	this->legend = NULL;
@@ -203,7 +205,12 @@ void MainWindow::generateList(node* root)
 void MainWindow::on_actionSave_Graph_triggered()
 {
 	QPixmap originalPixmap;
-
+	if (this->bar == NULL && this->pie==NULL){
+		QErrorMessage* noCSV = new QErrorMessage();;
+		noCSV->showMessage(QString("ERROR: No graph to save."));
+		noCSV->exec();
+		return;
+	}
 	if (this->bar->isVisible()){
 		this->bar->setGeometry(rec.width(), 0, rec.width(), rec.height()); //fullscreen
 		originalPixmap = QPixmap::grabWidget(this->bar);
@@ -281,6 +288,12 @@ void MainWindow::on_actionOpen_Help_triggered(){
 
 void MainWindow::on_actionPrint_Graph_triggered()
 {
+	if (this->bar == NULL && this->pie == NULL){
+		QErrorMessage* noCSV = new QErrorMessage();;
+		noCSV->showMessage(QString("ERROR: No graph to print."));
+		noCSV->exec();
+		return;
+	}
 	// display print dialog and if accepted print
 	QPrinter       printer(QPrinter::HighResolution);
 	QPrintDialog   dialog(&printer, this);
@@ -289,6 +302,12 @@ void MainWindow::on_actionPrint_Graph_triggered()
 
 void MainWindow::on_actionPrint_Graph_Preview_triggered()
 {
+	if (this->bar == NULL && this->pie == NULL){
+		QErrorMessage* noCSV = new QErrorMessage();;
+		noCSV->showMessage(QString("ERROR: No graph to print."));
+		noCSV->exec();
+		return;
+	}
 	// display print preview dialog
 	QPrinter             printer(QPrinter::HighResolution);
 	QPrintPreviewDialog  preview(&printer, this);
@@ -336,6 +355,12 @@ void MainWindow::print(QPrinter* printer)
 
 void MainWindow::on_actionPrint_List_triggered()
 {
+	if (this->list == NULL){
+		QErrorMessage* noCSV = new QErrorMessage();;
+		noCSV->showMessage(QString("ERROR: No list to print."));
+		noCSV->exec();
+		return;
+	}
 	// display print dialog and if accepted print
 	QPrinter       printer(QPrinter::ScreenResolution);
 	QPrintDialog   dialog(&printer, this);
@@ -344,6 +369,12 @@ void MainWindow::on_actionPrint_List_triggered()
 
 void MainWindow::on_actionPrint_List_Preview_triggered()
 {
+	if (this->list == NULL){
+		QErrorMessage* noCSV = new QErrorMessage();;
+		noCSV->showMessage(QString("ERROR: No list to print."));
+		noCSV->exec();
+		return;
+	}
 	// display print preview dialog
 	QPrinter             printer(QPrinter::ScreenResolution);
 	QPrintPreviewDialog  preview(&printer, this);

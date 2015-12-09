@@ -171,8 +171,7 @@ public:
 				}
 			}
 		}
-
-		if (type != Teaching || type != Publication || type != GrantClinical || type != Presentation){
+		if (type != Teaching && type != Publication && type != GrantClinical && type != Presentation){
 			throw typeNotRecognizedException();
 		}
 
