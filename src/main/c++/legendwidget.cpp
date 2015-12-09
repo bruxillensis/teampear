@@ -22,7 +22,7 @@ void LegendWidget::drawLegend(node* root)
 	//resize legend
 	this->setMinimumWidth(270);
 	//create model for holding data
-	QStandardItemModel *model = new QStandardItemModel(100, 2, this);
+	QStandardItemModel *model = new QStandardItemModel(21, 2, this);
 	//set headers of table
 	model->setHeaderData(1, Qt::Horizontal, tr(root->getFirst().c_str()));
 
@@ -40,9 +40,15 @@ void LegendWidget::drawLegend(node* root)
 
 
 	int i, j, rows = 0, hue = 0, c_inc;
-	float current, other;
+	float current, other = 0, total;
 
 	QColor color;
+
+	//get total for pie chart
+	if (money)
+		total = root->getFourth();
+	else
+		total = root->getSecond();
 
 	for (i = 0; i < children->size(); i++){
 		if (top_nodes->size() >= MAX_NODES)
@@ -58,13 +64,22 @@ void LegendWidget::drawLegend(node* root)
 						other += top_nodes->at(j)->getSecond();
 
 					top_nodes->at(j) = children->at(i);
+					break;
 
 				}
 			}
 		}
 		else
 		{
-			top_nodes->push_back(children->at(i));
+			if (((children->at(i)->getSecond() / total) * 360 < 4 && !money)
+				|| ((children->at(i)->getFourth() / total) * 360 < 4 && money)){
+				if (money)
+					other += children->at(i)->getFourth();
+				else
+					other += children->at(i)->getSecond();
+			}
+			else
+				top_nodes->push_back(children->at(i));
 		}
 	}
 
@@ -96,7 +111,14 @@ void LegendWidget::drawLegend(node* root)
 		}
 	}
 
-	model->setRowCount(rows);
+	color.setHsv(hue, C_SAT, C_VAL);
+	model->setItem(rows, 1, new QStandardItem(QString::fromStdString("Other")));
+
+	model->setItem(rows, 0, new QStandardItem(QString::fromStdString(to_string(other))));
+
+	model->item(rows, 0)->setData(QBrush(color), Qt::BackgroundRole);
+
+	model->setRowCount(rows+1);
 
 	this->setModel(model);
 	this->setColumnWidth(0, 30);

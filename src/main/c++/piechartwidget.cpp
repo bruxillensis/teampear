@@ -22,7 +22,7 @@ PieChartWidget::PieChartWidget(QWidget *parent): QWidget(parent)
 void PieChartWidget::paintEvent(QPaintEvent *)
 {
     int i, j, c_inc;
-	float current, total, other;
+	float current, total, other = 0;
     QPainter painter(this);
     QRectF size = QRectF(EDGE, EDGE, this->width()-EDGE, this->width()-EDGE);
 	int hue = 0, last_slice = 0;
@@ -59,13 +59,21 @@ void PieChartWidget::paintEvent(QPaintEvent *)
 						other += top_nodes->at(j)->getSecond();
 
 					top_nodes->at(j) = children->at(i);
+					break;
 
 				}
 			}
 		}
 		else
 		{
-			top_nodes->push_back(children->at(i));
+			if (((children->at(i)->getSecond()/ total)*360 < 4 && !money)
+				||((children->at(i)->getFourth() / total) * 360 < 1 && money)){
+				if (money)
+					other += children->at(i)->getFourth();
+				else
+					other += children->at(i)->getSecond();
+			} else
+				top_nodes->push_back(children->at(i));
 		}
 	}
 
@@ -90,22 +98,28 @@ void PieChartWidget::paintEvent(QPaintEvent *)
         if(current > 0){
 	
             color.setHsv(hue,C_SAT,C_VAL);						//gen new color
-            painter.setBrush(color);									//set brush as new color
-            current_slice = nearbyint(((double)current/(double)total)*DEGREES);					//generate slice
+            painter.setBrush(color);							//set brush as new color
+            current_slice =(current/total)*DEGREES;				//generate slice
 
-			//
-			/*if (i == top_nodes->size()-1 && (current_slice + last_slice) < DEGREES){
+			if (i == top_nodes->size()-1 && (current_slice + last_slice) < DEGREES && top_nodes->size() <= 20){
 				current_slice += DEGREES - (current_slice + last_slice);
-			}*/
+			}
 
 			painter.drawPie(size, last_slice*PIE_MULT, (int)current_slice*PIE_MULT);	//draw slice
-            last_slice += current_slice;		//increment tracker of last slice place
+            last_slice += current_slice;	//increment tracker of last slice place
 
-            hue += c_inc;				//increment hue
+            hue += c_inc;					//increment hue
         }
     }
 
+	if (other > 0){
+		color.setHsv(hue, C_SAT, C_VAL);
+		painter.setBrush(color);
+		current_slice = (other / total)*DEGREES;
+		current_slice += DEGREES - (current_slice + last_slice);
 
+		painter.drawPie(size, last_slice*PIE_MULT, (int)current_slice*PIE_MULT);
+	}
 
 }
 
