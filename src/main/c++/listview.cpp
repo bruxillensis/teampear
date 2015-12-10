@@ -87,7 +87,7 @@ void ListView::populateList(node* root, QTreeWidgetItem* parent)
 	}
 	if (root->getFourth() != NULL)
 	{
-		itm->setText(2, QLocale().toCurrencyString(root->getFourth()));
+		itm->setText(2, QLocale(QLocale::English).toString(root->getFourth(),'f',0));
 	}
 	
 	if (root->getVisible())
