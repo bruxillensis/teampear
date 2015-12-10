@@ -21,7 +21,8 @@ public:
 	explicit BarPlot(QWidget *parent);
 	int plotBar(node* root);
 	int plotOther();
-	int plotGrantTeach();
+	int plotGrant();
+	bool checkGrant(const node*);
 
 private:
     Ui::BarPlot *ui;

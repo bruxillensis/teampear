@@ -27,10 +27,10 @@ public:
 			for (int i = 0; i < it.second->getNumberOfEntries(); i++){
 				//Try to find presentation in presTypes
 				vector<string>::iterator ti = std::find(presTypes.begin(), presTypes.end(), boost::get<string>
-					(it.second->getField(1)->at(i)));
+					(it.second->getField(0)->at(i)));
 				//If not found, add new entry to pubTypes, tree and count
 				if (ti == presTypes.end()){
-					presTypes.push_back(boost::get<string>(it.second->getField(1)->at(i)));
+					presTypes.push_back(boost::get<string>(it.second->getField(0)->at(i)));
 					typeCount.push_back(1);
 					titles.push_back(vector<string>(1, boost::get<string>(it.second->getField(2)->at(i))));
 					root->addChild(new node(presTypes.back(), 0, 0, 0));

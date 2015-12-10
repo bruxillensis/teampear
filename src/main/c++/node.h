@@ -128,19 +128,19 @@ public:
 	//set visibility of the node
 	//Visible (count, date, domain, funding, hours)
 	void setVisible(string filterType, bool visible){
-		if (filterType.compare("count")){
+		if (filterType.compare("count") == 0){
 			this->visible->at(0) = visible;
 		}
-		else if (filterType.compare("date")){
+		else if (filterType.compare("date") == 0){
 			this->visible->at(1) = visible;
 		}
-		else if (filterType.compare("domain")){
+		else if (filterType.compare("domain") == 0){
 			this->visible->at(2) = visible;
 		}
-		else if (filterType.compare("funding")){
+		else if (filterType.compare("funding") == 0){
 			this->visible->at(3) = visible;
 		}
-		else if (filterType.compare("hours")){
+		else if (filterType.compare("hours") == 0){
 			this->visible->at(4) = visible;
 		}
 	}
@@ -158,6 +158,8 @@ public:
 		}
 		return true;
 	}
+	const string const_getFirst() const{ return first; }
+	const node* const_getParent() const{ return parent; }
 };
 
 inline bool operator==(node& lhs, node& rhs){

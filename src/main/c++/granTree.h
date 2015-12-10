@@ -39,23 +39,23 @@ public:
 				int j;
 				//Grants
 				if (boost::get<string>(it.second->getField(2)->at(i)) == "Clinical Trials"){
-					if (!boost::get<bool>(it.second->getField(4)->at(i))){
-						if (boost::get<bool>(it.second->getField(5)->at(i))){ j = 0; }
+					if (boost::get<bool>(it.second->getField(4)->at(i))){
+						if (!boost::get<bool>(it.second->getField(5)->at(i))){ j = 0; }
 						else												{ j = 1; }
 					}
 					else{
-						if (boost::get<bool>(it.second->getField(5)->at(i))){ j = 2; }
+						if (!boost::get<bool>(it.second->getField(5)->at(i))){ j = 2; }
 						else												{ j = 3; }
 					}
 				}
 				//Clinical funding
 				else{
-					if (!boost::get<bool>(it.second->getField(4)->at(i))){
-						if (boost::get<bool>(it.second->getField(5)->at(i))){ j = 4; }
+					if (boost::get<bool>(it.second->getField(4)->at(i))){
+						if (!boost::get<bool>(it.second->getField(5)->at(i))){ j = 4; }
 						else												{ j = 5; }
 					}
 					else{
-						if (boost::get<bool>(it.second->getField(5)->at(i))){ j = 6; }
+						if (!boost::get<bool>(it.second->getField(5)->at(i))){ j = 6; }
 						else												{ j = 7; }
 					}
 				}

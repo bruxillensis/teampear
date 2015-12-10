@@ -26,17 +26,16 @@ int BarPlot::plotBar(node *root)
 	this->clearGraphs();
 
 	Node = root; // Data is passed through as a node
-	bool grantType = false;
-	if (Node->getFourth() > 0.0)
-		grantType = true;
+	const node* type = root;
+	bool grantType = checkGrant(type);
 
 	if (grantType)
-		return plotGrantTeach();
+		return plotGrant();
 	else
 		return plotOther();
 }
 
-int BarPlot::plotGrantTeach()
+int BarPlot::plotGrant()
 {
 	string dataType = Node->getFirst();
 	// Get the types
@@ -113,7 +112,7 @@ int BarPlot::plotGrantTeach()
 	// prepare y axis:
 	this->yAxis->setTickStep(5);
 	this->yAxis->setPadding(5); // a bit more space to the left border
-	this->yAxis->setLabel("Amount");
+	this->yAxis->setLabel("Amount ($)");
 	this->yAxis->grid()->setSubGridVisible(true);
 	QPen gridPen;
 	gridPen.setStyle(Qt::SolidLine);
@@ -185,6 +184,9 @@ int BarPlot::plotOther()
 	if (types.size() > COUNT_MAX){
 		vector<double> typeSumCounts;
 		for (int i = 0; i < types.size(); i++){
+			if (Node->getFourth() > 0.0)
+				typeSumCounts.push_back(types.at(i)->getFourth());
+			else
 				typeSumCounts.push_back(types.at(i)->getSecond());
 		}
 		while (types.size() - othersNdx.size() > COUNT_MAX){
@@ -209,7 +211,10 @@ int BarPlot::plotOther()
 		// this would affect the labels (prof names)
 		for (int j = 0; j < types.at(i)->getChildren()->size(); j++){
 			int pos = labels.indexOf(QString::fromStdString(types.at(i)->getChildren()->at(j)->getFirst()));
-			data[pos] = types.at(i)->getChildren()->at(j)->getSecond();
+			if (Node->getFourth() > 0.0)
+				data[pos] = types.at(i)->getChildren()->at(j)->getFourth();
+			else
+				data[pos] = types.at(i)->getChildren()->at(j)->getSecond();
 		}
 
 
@@ -272,7 +277,10 @@ int BarPlot::plotOther()
 	// prepare y axis:
 	this->yAxis->setTickStep(5);
 	this->yAxis->setPadding(5); // a bit more space to the left border
-	this->yAxis->setLabel("Count");
+	if (Node->getFourth() > 0.0)
+		this->yAxis->setLabel("Hours");
+	else
+		this->yAxis->setLabel("Count");
 	this->yAxis->grid()->setSubGridVisible(true);
 	QPen gridPen;
 	gridPen.setStyle(Qt::SolidLine);
@@ -313,4 +321,18 @@ int BarPlot::plotOther()
 	}
 	else
 		return 0;
+}
+
+bool BarPlot::checkGrant(const node* n)
+{
+	if (n->const_getParent() == NULL){
+		if (n->const_getFirst() == "Grants and Clinical Funding")
+			return true;
+		else
+			return false;
+	}
+
+	while (n->const_getParent() != NULL){
+		return checkGrant(n->const_getParent());
+	}
 }

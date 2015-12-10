@@ -5,6 +5,7 @@
 #include <QMessageBox>
 #include <QTreeWidget>
 #include "listview.h"
+#include <QLocale>
 #include "pubTree.h"
 #include <QPainter>
 #include <vector>
@@ -86,7 +87,7 @@ void ListView::populateList(node* root, QTreeWidgetItem* parent)
 	}
 	if (root->getFourth() != NULL)
 	{
-		itm->setText(2, QString::number(root->getFourth(), 'f',0));
+		itm->setText(2, QLocale(QLocale::English).toString(root->getFourth(),'f',0));
 	}
 	
 	if (root->getVisible())

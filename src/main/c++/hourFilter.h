@@ -39,15 +39,17 @@ public:
 				for (auto &secondLayer : *firstLayer->getChildren()){
 					if ((secondLayer->getFourth() < low) || (secondLayer->getFourth() > high)){
 						//outside of the filter
+
+						if (secondLayer->getVisible() == true){
+							//update hours numbers
+							firstLayer->setFourth(firstLayer->getFourth() - secondLayer->getFourth());
+							root->setFourth(root->getFourth() - secondLayer->getFourth());
+
+							//update count numbers
+							firstLayer->setSecond(firstLayer->getSecond() - secondLayer->getSecond());
+							root->setSecond(root->getSecond() - secondLayer->getSecond());
+						}
 						secondLayer->setVisible("hours", false);
-
-						//update hours numbers
-						firstLayer->setFourth(firstLayer->getFourth() - secondLayer->getFourth());
-						root->setFourth(root->getFourth() - secondLayer->getFourth());
-
-						//update count numbers
-						firstLayer->setSecond(firstLayer->getSecond() - secondLayer->getSecond());
-						root->setSecond(root->getSecond() - secondLayer->getSecond());
 					}
 				}
 			
@@ -73,20 +75,18 @@ public:
 						//outside of the filter
 						secondLayer->setVisible("hours", true);
 
-						//update hours numbers
-						firstLayer->setFourth(firstLayer->getFourth() + secondLayer->getFourth());
-						root->setFourth(root->getFourth() + secondLayer->getFourth());
+						if (secondLayer->getVisible() == true){
+							//update hours numbers
+							firstLayer->setFourth(firstLayer->getFourth() + secondLayer->getFourth());
+							root->setFourth(root->getFourth() + secondLayer->getFourth());
 
-						//update count numbers
-						firstLayer->setSecond(firstLayer->getSecond() + secondLayer->getSecond());
-						root->setSecond(root->getSecond() + secondLayer->getSecond());
+							//update count numbers
+							firstLayer->setSecond(firstLayer->getSecond() + secondLayer->getSecond());
+							root->setSecond(root->getSecond() + secondLayer->getSecond());
+						}
 					}
 				}
-
-				//checks to see if any of the children are visible, if the count = 0, that means no children are visible
-				if (firstLayer->getSecond() != 0){
-					firstLayer->setVisible("hours", true);
-				}
+				firstLayer->setVisible("hours", true);
 			}
 			break;
 		default:
