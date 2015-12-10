@@ -23,16 +23,21 @@ centralWidget{
 }
 
 QMenu{
-	background: QLinearGradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #eef, stop: 1 #ccf);
+	background:#99C;
 }
 
 QToolBar{
-	background: QLinearGradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #eef, stop: 1 #ccf);
+	background: #ccf;
 }
 
 QMenuBar{
-	background: QLinearGradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #eef, stop: 1 #ccf);
+	background:QLinearGradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #eef, stop: 1 #ccf);
 }
+
+QAction{
+	background:QLinearGradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #eef, stop: 1 #ccf);
+}
+
 
 QPushButton {
 color: white;
@@ -126,6 +131,9 @@ max-height: 13px;
     <addaction name="actionSave_Graph"/>
    </widget>
    <widget class="QMenu" name="menuHelp">
+    <property name="styleSheet">
+     <string notr="true"/>
+    </property>
     <property name="title">
      <string>Help</string>
     </property>
