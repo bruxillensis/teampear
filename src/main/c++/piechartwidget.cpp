@@ -67,7 +67,7 @@ void PieChartWidget::paintEvent(QPaintEvent *)
 		else
 		{
 			if (((children->at(i)->getSecond()/ total)*360 < 4 && !money)
-				||((children->at(i)->getFourth() / total) * 360 < 1 && money)){
+				||((children->at(i)->getFourth() / total) * 360 < 4 && money)){
 				if (money)
 					other += children->at(i)->getFourth();
 				else
