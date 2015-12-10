@@ -46,15 +46,8 @@ public:
 					int inProgram = 0;
 					for (int i = 0; i < date->size(); i++){
 						//check the type to see if it's the same
-						string temp = boost::get<string>(type->at(i));
-						string temp2 = firstLayer->getFirst();
 						if (boost::get<string>(type->at(i)).compare(firstLayer->getFirst()) == 0){
-
-							secondLayer->setSecond(secondLayer->getSecond() - 1);
-							firstLayer->setSecond(firstLayer->getSecond() - 1);
-							root->setSecond(root->getSecond() - 1);
-
-							/*inProgram++;
+							inProgram++;
 							dateString = to_iso_string(boost::get<boost::gregorian::date>(date->at(i)));
 							if (((dateString < low) || (dateString > high))){
 								//outside the filter
@@ -65,7 +58,7 @@ public:
 									firstLayer->setSecond(firstLayer->getSecond() - 1);
 									root->setSecond(root->getSecond() - 1);
 								}
-							}*/
+							}
 						}
 
 					}
@@ -139,8 +132,8 @@ public:
 							const vector<boost::variant<int, float, string, bool, boost::gregorian::date>>* industry;
 							industry = map->getProfessor(fourthLayer->getFirst())->getField(5);
 
-							const vector<boost::variant<int, float, string, bool, boost::gregorian::date>>* profHours;
-							profHours = map->getProfessor(fourthLayer->getFirst())->getField(7);
+							const vector<boost::variant<int, float, string, bool, boost::gregorian::date>>* funding;
+							funding = map->getProfessor(fourthLayer->getFirst())->getField(10);
 
 							//get date from gregorian date
 							string startDateString;
@@ -148,29 +141,33 @@ public:
 							int outsideCount = 0; 
 							int inProgram = 0;
 							for (int i = 0; i < startDate->size(); i++){
-								if ((firstLayer->getFirst().compare("Clinical Funding") == 0) && (secondLayer->getFirst().compare("Peer Reviewed") == 0) && (thirdLayer->getFirst().compare("Non-Industry Sponsored") == 0) && (fourthLayer->getFirst().compare("Larson, Gary") == 0))
-									inProgram = 1;
 								//check the type to see if it's the same
-								if ((boost::get<string>(grant->at(i)).compare(firstLayer->getFirst()) == 0)){
+								if ((boost::get<string>(grant->at(i)).find(firstLayer->getFirst().substr(0,5)) != string::npos)){
 									//then check to see if peer or non-peer is the same
 									bool check = boost::get<bool>(peer->at(i));
-									if ((check && (secondLayer->getFirst().compare("Peer Reviewed") == 0)) || (!check && (secondLayer->getFirst().compare("Non-Peer Reviewed") == 0))){
+									if ((check && (secondLayer->getFirst().find("Peer") == 0)) || (!check && (secondLayer->getFirst().find("Peer") != 0))){
 										//then check to see if industry or non-industry sponsored is the same
 										check = boost::get<bool>(industry->at(i));
-										if ((check && (thirdLayer->getFirst().compare("Industry Sponsored") == 0)) || (!check && (thirdLayer->getFirst().compare("Non-Industry Sponsored") == 0))){
-											inProgram = 0;
+										if ((check && (thirdLayer->getFirst().find("Industry") == 0)) || (!check && (thirdLayer->getFirst().find("Industry") != 0))){
+											inProgram++;
 											startDateString = to_iso_string(boost::get<boost::gregorian::date>(startDate->at(i)));
 											endDateString = to_iso_string(boost::get<boost::gregorian::date>(endDate->at(i)));
 											if (((startDateString < low) || (startDateString > high)) && ((endDateString < low) || (endDateString > high))){
 												//outside the filter
-												/*outsideCount++;
+												outsideCount++;
+												/*
+												for (auto &fifthLayer : *fourthLayer->getChildren()){
+													if (fifthLayer->getFourth() == boost::get<float>(funding->at(i)))
+														fifthLayer->setVisible("date", false);
+												}
 												if (fourthLayer->getVisible() == true){
 													//update hours
-													fourthLayer->setFourth(fourthLayer->getFourth() - boost::get<float>(profHours->at(i)));
-													thirdLayer->setFourth(thirdLayer->getFourth() - boost::get<float>(profHours->at(i)));
-													secondLayer->setFourth(secondLayer->getFourth() - boost::get<float>(profHours->at(i)));
-													firstLayer->setFourth(firstLayer->getFourth() - boost::get<float>(profHours->at(i)));
-													root->setFourth(root->getFourth() - boost::get<float>(profHours->at(i)));
+													fourthLayer->setFourth(fourthLayer->getFourth() - boost::get<float>(funding->at(i)));
+													thirdLayer->setFourth(thirdLayer->getFourth() - boost::get<float>(funding->at(i)));
+													secondLayer->setFourth(secondLayer->getFourth() - boost::get<float>(funding->at(i)));
+													firstLayer->setFourth(firstLayer->getFourth() - boost::get<float>(funding->at(i)));
+													root->setFourth(root->getFourth() - boost::get<float>(funding->at(i)));
+													
 													//update count numbers
 													fourthLayer->setSecond(fourthLayer->getSecond() - 1);
 													thirdLayer->setSecond(thirdLayer->getSecond() - 1);
@@ -178,18 +175,32 @@ public:
 													firstLayer->setSecond(firstLayer->getSecond() - 1);
 													root->setSecond(root->getSecond() - 1);
 												}*/
-												fourthLayer->setSecond(fourthLayer->getSecond() - 1);
-												thirdLayer->setSecond(thirdLayer->getSecond() - 1);
-												secondLayer->setSecond(secondLayer->getSecond() - 1);
-												firstLayer->setSecond(firstLayer->getSecond() - 1);
-												root->setSecond(root->getSecond() - 1);
+												for (auto &fifthLayer : *fourthLayer->getChildren()){
+													if (fifthLayer->getFourth() == boost::get<float>(funding->at(i)))
+														fifthLayer->setVisible("date", false);
+												}
+												if (fourthLayer->getVisible() == true){
+													//update hours
+													fourthLayer->setFourth(fourthLayer->getFourth() - boost::get<float>(funding->at(i)));
+													thirdLayer->setFourth(thirdLayer->getFourth() - boost::get<float>(funding->at(i)));
+													secondLayer->setFourth(secondLayer->getFourth() - boost::get<float>(funding->at(i)));
+													firstLayer->setFourth(firstLayer->getFourth() - boost::get<float>(funding->at(i)));
+													root->setFourth(root->getFourth() - boost::get<float>(funding->at(i)));
+
+													//update count numbers
+													fourthLayer->setSecond(fourthLayer->getSecond() - 1);
+													thirdLayer->setSecond(thirdLayer->getSecond() - 1);
+													secondLayer->setSecond(secondLayer->getSecond() - 1);
+													firstLayer->setSecond(firstLayer->getSecond() - 1);
+													root->setSecond(root->getSecond() - 1);
+												}
 											}
-											if (outsideCount == startDate->size())
-												fourthLayer->setVisible("date", false);
 										}
 									}
 								}
 							}
+							if (outsideCount == inProgram)
+								fourthLayer->setVisible("date", false);
 						}
 						//checks to see if any of the children are visible, if the count = 0, that means no children are visible
 						if (thirdLayer->getSecond() == 0){
@@ -263,28 +274,64 @@ public:
 
 	void removeFilter() override{
 		switch (type){
-		case professorMap::profType::Publication:
 		case professorMap::profType::Presentation:
 			//traverse the tree
 			for (auto &firstLayer : *root->getChildren()){
 				for (auto &secondLayer : *firstLayer->getChildren()){
 					const vector<boost::variant<int, float, string, bool, boost::gregorian::date>>* date;
-					if (type = professorMap::profType::Publication)
-						date = map->getProfessor(secondLayer->getFirst())->getField(6);
-					else
-						//presentation
-						date = map->getProfessor(secondLayer->getFirst())->getField(3);
+					date = map->getProfessor(secondLayer->getFirst())->getField(3);
+
+					const vector<boost::variant<int, float, string, bool, boost::gregorian::date>>* type;
+					type = map->getProfessor(secondLayer->getFirst())->getField(0);
 
 					//get date from gregorian date
-					string dateString = to_iso_string(boost::get<boost::gregorian::date>(date->at(0)));
+					string dateString;
+					for (int i = 0; i < date->size(); i++){
+						//check the type to see if it's the same
+						if (boost::get<string>(type->at(i)).compare(firstLayer->getFirst()) == 0){
+							dateString = to_iso_string(boost::get<boost::gregorian::date>(date->at(i)));
+							if (((dateString < low) || (dateString > high))){
+								//outside the filter
+								secondLayer->setVisible("date", true);
+								if (secondLayer->getVisible() == true){
+									//update count numbers
+									secondLayer->setSecond(secondLayer->getSecond() + 1);
+									firstLayer->setSecond(firstLayer->getSecond() + 1);
+									root->setSecond(root->getSecond() + 1);
+								}
+							}
+						}
+					}
+				}
+				firstLayer->setVisible("date", true);
+			}
+			break;
+		case professorMap::profType::Publication:
+			//traverse the tree
+			for (auto &firstLayer : *root->getChildren()){
+				for (auto &secondLayer : *firstLayer->getChildren()){
+					const vector<boost::variant<int, float, string, bool, boost::gregorian::date>>* date;
+					date = map->getProfessor(secondLayer->getFirst())->getField(2);
 
-					if (((dateString < low) || (dateString > high))){
+					const vector<boost::variant<int, float, string, bool, boost::gregorian::date>>* type;
+					type = map->getProfessor(secondLayer->getFirst())->getField(1);
 
-						secondLayer->setVisible("date", true);
-						if (secondLayer->getVisible() == true){
-							//update count numbers
-							firstLayer->setSecond(firstLayer->getSecond() + secondLayer->getSecond());
-							root->setSecond(root->getSecond() + secondLayer->getSecond());
+					//get date from gregorian date
+					string dateString;
+					for (int i = 0; i < date->size(); i++){
+						//check the type to see if it's the same
+						if (boost::get<string>(type->at(i)).compare(firstLayer->getFirst()) == 0){
+							dateString = to_iso_string(boost::get<boost::gregorian::date>(date->at(i)));
+							if (((dateString < low) || (dateString > high))){
+								//outside the filter
+								secondLayer->setVisible("date", true);
+								if (secondLayer->getVisible() == true){
+									//update count numbers
+									secondLayer->setSecond(secondLayer->getSecond() + 1);
+									firstLayer->setSecond(firstLayer->getSecond() + 1);
+									root->setSecond(root->getSecond() + 1);
+								}
+							}
 						}
 					}
 				}
@@ -300,31 +347,61 @@ public:
 						for (auto &fourthLayer : *thirdLayer->getChildren()){
 							const vector<boost::variant<int, float, string, bool, boost::gregorian::date>>* startDate;
 							const vector<boost::variant<int, float, string, bool, boost::gregorian::date>>* endDate;
-							startDate = map->getProfessor(secondLayer->getFirst())->getField(0);
-							endDate = map->getProfessor(secondLayer->getFirst())->getField(1);
+							startDate = map->getProfessor(fourthLayer->getFirst())->getField(0);
+							endDate = map->getProfessor(fourthLayer->getFirst())->getField(1);
+
+							const vector<boost::variant<int, float, string, bool, boost::gregorian::date>>* grant;
+							grant = map->getProfessor(fourthLayer->getFirst())->getField(2);
+
+							const vector<boost::variant<int, float, string, bool, boost::gregorian::date>>* peer;
+							peer = map->getProfessor(fourthLayer->getFirst())->getField(4);
+
+							const vector<boost::variant<int, float, string, bool, boost::gregorian::date>>* industry;
+							industry = map->getProfessor(fourthLayer->getFirst())->getField(5);
+
+							const vector<boost::variant<int, float, string, bool, boost::gregorian::date>>* funding;
+							funding = map->getProfessor(fourthLayer->getFirst())->getField(10);
 
 							//get date from gregorian date
-							string startDateString = to_iso_string(boost::get<boost::gregorian::date>(startDate->at(0)));
-							string endDateString = to_iso_string(boost::get<boost::gregorian::date>(endDate->at(0)));
+							string startDateString;
+							string endDateString;
+							for (int i = 0; i < startDate->size(); i++){
+								//check the type to see if it's the same
+								if ((boost::get<string>(grant->at(i)).find(firstLayer->getFirst().substr(0, 5)) != string::npos)){
+									//then check to see if peer or non-peer is the same
+									bool check = boost::get<bool>(peer->at(i));
+									if ((check && (secondLayer->getFirst().find("Peer") == 0)) || (!check && (secondLayer->getFirst().find("Peer") != 0))){
+										//then check to see if industry or non-industry sponsored is the same
+										check = boost::get<bool>(industry->at(i));
+										if ((check && (thirdLayer->getFirst().find("Industry") == 0)) || (!check && (thirdLayer->getFirst().find("Industry") != 0))){
+											startDateString = to_iso_string(boost::get<boost::gregorian::date>(startDate->at(i)));
+											endDateString = to_iso_string(boost::get<boost::gregorian::date>(endDate->at(i)));
+											if (((startDateString < low) || (startDateString > high)) && ((endDateString < low) || (endDateString > high))){
+												//outside the filter
 
-							if (((startDateString < low) || (startDateString > high)) && ((endDateString < low) || (endDateString > high))){
-								//outside of the filter
+												for (auto &fifthLayer : *fourthLayer->getChildren()){
+														fifthLayer->setVisible("date", true);
+												}
+												fourthLayer->setVisible("date", true);
+												if (fourthLayer->getVisible() == true){
+													//update hours
+													fourthLayer->setFourth(fourthLayer->getFourth() + boost::get<float>(funding->at(i)));
+													thirdLayer->setFourth(thirdLayer->getFourth() + boost::get<float>(funding->at(i)));
+													secondLayer->setFourth(secondLayer->getFourth() + boost::get<float>(funding->at(i)));
+													firstLayer->setFourth(firstLayer->getFourth() + boost::get<float>(funding->at(i)));
+													root->setFourth(root->getFourth() + boost::get<float>(funding->at(i)));
 
-								fourthLayer->setVisible("date", true);
-								if (fourthLayer->getVisible() == true){
-									//update numbers
-									thirdLayer->setFourth(thirdLayer->getFourth() + fourthLayer->getFourth());
-									secondLayer->setFourth(secondLayer->getFourth() + fourthLayer->getFourth());
-									firstLayer->setFourth(firstLayer->getFourth() + fourthLayer->getFourth());
-									root->setFourth(root->getFourth() + fourthLayer->getFourth());
-
-									//update count numbers
-									thirdLayer->setSecond(thirdLayer->getSecond() + fourthLayer->getSecond());
-									secondLayer->setSecond(secondLayer->getSecond() + fourthLayer->getSecond());
-									firstLayer->setSecond(firstLayer->getSecond() + fourthLayer->getSecond());
-									root->setSecond(root->getSecond() + fourthLayer->getSecond());
+													//update count numbers
+													fourthLayer->setSecond(fourthLayer->getSecond() + 1);
+													thirdLayer->setSecond(thirdLayer->getSecond() + 1);
+													secondLayer->setSecond(secondLayer->getSecond() + 1);
+													firstLayer->setSecond(firstLayer->getSecond() + 1);
+													root->setSecond(root->getSecond() + 1);
+												}
+											}
+										}
+									}
 								}
-
 							}
 						}
 						thirdLayer->setVisible("date", true);
@@ -343,20 +420,34 @@ public:
 					startDate = map->getProfessor(secondLayer->getFirst())->getField(0);
 					endDate = map->getProfessor(secondLayer->getFirst())->getField(1);
 
-					//get date from gregorian date
-					string startDateString = to_iso_string(boost::get<boost::gregorian::date>(startDate->at(0)));
-					string endDateString = to_iso_string(boost::get<boost::gregorian::date>(endDate->at(0)));
+					const vector<boost::variant<int, float, string, bool, boost::gregorian::date>>* program;
+					program = map->getProfessor(secondLayer->getFirst())->getField(2);
 
-					if (((startDateString < low) || (startDateString > high)) && ((endDateString < low) || (endDateString > high))){
-						//outside the filter
-						secondLayer->setVisible("date", true);
-						if (secondLayer->getVisible() == true){
-							//update hours
-							firstLayer->setFourth(firstLayer->getFourth() + secondLayer->getFourth());
-							root->setFourth(root->getFourth() + secondLayer->getFourth());
-							//update count numbers
-							firstLayer->setSecond(firstLayer->getSecond() + secondLayer->getSecond());
-							root->setSecond(root->getSecond() + secondLayer->getSecond());
+					const vector<boost::variant<int, float, string, bool, boost::gregorian::date>>* profHours;
+					profHours = map->getProfessor(secondLayer->getFirst())->getField(7);
+
+					//get date from gregorian date
+					string startDateString;
+					string endDateString;
+					for (int i = 0; i < startDate->size(); i++){
+						//check the type to see if it's the same
+						if (boost::get<string>(program->at(i)).compare(firstLayer->getFirst()) == 0){
+							startDateString = to_iso_string(boost::get<boost::gregorian::date>(startDate->at(i)));
+							endDateString = to_iso_string(boost::get<boost::gregorian::date>(endDate->at(i)));
+							if (((startDateString < low) || (startDateString > high)) && ((endDateString < low) || (endDateString > high))){
+								//outside the filter
+								secondLayer->setVisible("date", true);
+								if (secondLayer->getVisible() == true){
+									//update hours
+									secondLayer->setFourth(secondLayer->getFourth() + boost::get<float>(profHours->at(i)));
+									firstLayer->setFourth(firstLayer->getFourth() + boost::get<float>(profHours->at(i)));
+									root->setFourth(root->getFourth() + boost::get<float>(profHours->at(i)));
+									//update count numbers
+									secondLayer->setSecond(secondLayer->getSecond() + 1);
+									firstLayer->setSecond(firstLayer->getSecond() + 1);
+									root->setSecond(root->getSecond() + 1);
+								}
+							}
 						}
 					}
 				}

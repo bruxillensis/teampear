@@ -37,25 +37,33 @@ public:
 			vector<vector<float>> amounts(8, vector<float>());
 			for (int i = 0; i < it.second->getNumberOfEntries(); i++){
 				int j;
-				//Grants
+				//Clinical Funding
 				if (boost::get<string>(it.second->getField(2)->at(i)) == "Clinical Trials"){
-					if (boost::get<bool>(it.second->getField(4)->at(i))){
-						if (!boost::get<bool>(it.second->getField(5)->at(i))){ j = 0; }
+					//peer
+					if (!boost::get<bool>(it.second->getField(4)->at(i))){
+						//industry
+						if (boost::get<bool>(it.second->getField(5)->at(i))){ j = 0; }
+						//non-industry
 						else												{ j = 1; }
 					}
+					//non-peer
 					else{
-						if (!boost::get<bool>(it.second->getField(5)->at(i))){ j = 2; }
+						if (boost::get<bool>(it.second->getField(5)->at(i))){ j = 2; }
 						else												{ j = 3; }
 					}
 				}
-				//Clinical funding
+				//Grants
 				else{
-					if (boost::get<bool>(it.second->getField(4)->at(i))){
-						if (!boost::get<bool>(it.second->getField(5)->at(i))){ j = 4; }
+					//peer
+					if (!boost::get<bool>(it.second->getField(4)->at(i))){
+						//industry
+						if (boost::get<bool>(it.second->getField(5)->at(i))){ j = 4; }
+						//non-industry
 						else												{ j = 5; }
 					}
+					//non-peer
 					else{
-						if (!boost::get<bool>(it.second->getField(5)->at(i))){ j = 6; }
+						if (boost::get<bool>(it.second->getField(5)->at(i))){ j = 6; }
 						else												{ j = 7; }
 					}
 				}
