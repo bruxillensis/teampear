@@ -43,7 +43,7 @@ ui(new Ui::MainWindow)
 	this->setFixedSize(rec.size());
 	this->m_area = new QMdiArea;
 	this->filters = new vector<filter*>();
-	//this->setCentralWidget(m_area);
+	this->m_area->setBackground(QBrush(QColor(Qt::white)));
 	this->rootNode = NULL;
 	this->bar = NULL;
 	this->pie = NULL;
@@ -465,28 +465,46 @@ void MainWindow::on_addFilter_clicked()
 
 void MainWindow::on_updateGraph_clicked()
 {
-	QTreeWidgetItem* n = this->list->currentItem();
-	if (n->parent() == NULL || n->childCount() == 0)
+	if (rootNode == NULL){
+		QErrorMessage* noCSV = new QErrorMessage();;
+		noCSV->showMessage(QString("ERROR: No CSV has been imported."));
+		noCSV->exec();
 		return;
-	vector<int>* position = new vector<int>();
+	}
 
-	if (n->parent() != NULL){
-		position->push_back(n->parent()->indexOfChild(n));
-		findPosition(n->parent(), position);
-	}
-	node* val = this->rootNode;
-	position->pop_back();
-	for (vector<int>::reverse_iterator it = position->rbegin(); it != position->rend(); ++it)
-		val = val->getChildren()->at(*it);
-	if (this->barPlot != NULL){
-		delete this->barPlot;
-		this->barPlot = new BarPlot(this);
-		this->barPlot->plotBar(val);
-		this->bar->setWidget(this->barPlot);
-	}
-	if (this->pieChart != NULL){
-		this->pieChart->setData(val);
-		this->legend->drawLegend(val);
+	else{
+		if (this->bar->isVisible() || this->pie->isVisible()){
+			QTreeWidgetItem* n = this->list->currentItem();
+			if (n->parent() == NULL || n->childCount() == 0)
+				return;
+			vector<int>* position = new vector<int>();
+
+			if (n->parent() != NULL){
+				position->push_back(n->parent()->indexOfChild(n));
+				findPosition(n->parent(), position);
+			}
+			node* val = this->rootNode;
+			position->pop_back();
+			for (vector<int>::reverse_iterator it = position->rbegin(); it != position->rend(); ++it)
+				val = val->getChildren()->at(*it);
+			if (this->barPlot != NULL){
+				delete this->barPlot;
+				this->barPlot = new BarPlot(this);
+				this->barPlot->plotBar(val);
+				this->bar->setWidget(this->barPlot);
+			}
+			if (this->pieChart != NULL){
+				this->pieChart->setData(val);
+				this->legend->drawLegend(val);
+			}
+		}
+		
+		else{
+			QErrorMessage* noCSV = new QErrorMessage();;
+			noCSV->showMessage(QString("ERROR: No graph has been generated."));
+			noCSV->exec();
+			return;
+		}
 	}
 }
 
