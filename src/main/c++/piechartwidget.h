@@ -2,18 +2,19 @@
 #define PIECHARTWIDGET_H
 
 #include <QWidget>
+#include "node.h"
 
 class PieChartWidget : public QWidget
 {
     Q_OBJECT
 public:
     explicit PieChartWidget(QWidget *parent = 0);
-    void setData(std::vector<std::pair<std::string,std::vector<std::pair<std::string,std::string> > > >);
+    void setData(node* root);
 protected:
     void paintEvent(QPaintEvent * );
 
 private:
-    std::vector<std::pair<std::string,std::vector<std::pair<std::string,std::string> > > > data;
+    node* data;
 };
 
 #endif // PIECHARTWIDGET_H

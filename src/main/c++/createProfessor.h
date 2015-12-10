@@ -1,69 +1,234 @@
 #pragma once
 #include <string>
 #include <vector>
-#include "pubProfessor.h"
+#include <QErrorMessage>
+#include <QString>
 #include "errorHandling.h"
-/** Not currently implemented
-#include "granProfessor.h"
-#include "teacProfessor.h"
-#include "presProfessor.h"
-*/
+#include "professor.h"
+#include "modelExceptions.h"
+#include "boost/variant.hpp"
+#include "boost/date_time/gregorian/gregorian.hpp"
 
 using namespace std;
 
-template<class T>
 class createProfessor {
 public:
-	//Create professor object, filling in all information and pass reference back
-	//This function should retrieve all relivant rows from csv 2D array and pass to appropriate private construct function
-	static T* createNewProfessor(vector<vector<string>>& csv) {
-		//If type is of pubProfessor do
-		//Requires C++11 to use is_same
-		if (std::is_same<T, pubProfessor>::value) {
-			return createNewPubProfessor(csv);
-		}
-		//If type is of teachProfessor do
-
-		//If type is of granProfessor do
-
-		//If type is of presProfessor do
-
-	}
-private:
-	//Should create professor objects of particular professor type and return a professor of that type
-	static pubProfessor* createNewPubProfessor(vector<vector<string>>& csv) {
-		pubProfessor* newProf = new pubProfessor(csv[1][4], csv[1][5]);
-		int entries = csv.size();//Total number of entries in csv
-		int currLine = 1; //current line being checked
-
-		vector<string> manFields = { "Member Name", "Primary Domain", "Publication Status", "Type", "Status Date", "Role", "Journal Name | Published In | Book Title | etc.", "Author(s)", "Title" };
-
-		while (currLine < entries) { //Search every entry of csv
-									 //Get all the values for the entry method from csv
-									 //if (!checkRow(csv[currLine], csv[0], manFields))
-									 //	continue;
-			string pubStatus, pubType, pubRole, pubName, pubAuthors, pubTitle;
-			pubStatus = csv[currLine][6];
-			pubType = csv[currLine][8];
-			pubRole = csv[currLine][11];
-			pubName = csv[currLine][15];
-			pubAuthors = csv[currLine][37];
-			pubTitle = csv[currLine][38];
-			int pubDate = errorHandling::checkYear(csv[currLine][10]);
-			//Add the new entry to the prof
-			newProf->addEntry(pubStatus, pubType, pubRole, pubName, pubAuthors, pubTitle, pubDate);
-
-			//Move to the next entry
-			currLine++;
-		}
-		//Return the new professor after all entries have been added
-		return newProf;
-
-	}
-
-	/** Not currently implemented//
-	static granProfessor* createNewGrantProfessor(string professorName, vector<vector<string>>& csv);
-	static teacProfessor* createNewTeachingProfessor(string professorName, vector<vector<string>>& csv);
-	static presProfessor* createNewPresProfessor(string professorName, vector<vector<string>>& csv);
+	/* Fields
+		Publication Status: String
+		Type			  : String
+		Role			  : String
+		Publication Name  : String
+		Title			  :	String
+		Authors			  : String
+		Date			  : Boost::Gregorian::Date
 	*/
+	static pair<professor*, int> createNewPubProfessor(vector<vector<string>>& csv) {
+		//Define manditory fields for a publication csv
+		vector<string> manFields = {"Member Name", "Primary Domain", "Publication Status", "Type", "Status Date",
+			"Role", "Journal Name | Published In | Book Title | etc.", "Author(s)", "Title" };
+		vector<int> headerNumbers = findHeaders(manFields, csv[0]);
+		int count = 0;
+		//Create professor
+		professor* prof = new professor(findValue(csv, headerNumbers[0]), findValue(csv, headerNumbers[1]), 7);
+		for (int i = 1; i < csv.size(); i++) {
+			//Add the new entry to the prof
+			try {
+				//Check row for manditory fields
+				errorHandling::checkRow(csv[i], csv[0], vector<string>(manFields.begin()+2, manFields.end()));
+				//Create vector will all necessary information
+				auto e = new vector<boost::variant<int, float, string, bool, boost::gregorian::date>>{
+					csv[i][headerNumbers[2]], csv[i][headerNumbers[3]],
+					errorHandling::checkYear(csv[i][headerNumbers[4]]),
+					csv[i][headerNumbers[5]], csv[i][headerNumbers[6]],
+					csv[i][headerNumbers[7]], csv[i][headerNumbers[8]] };
+				//Add entry to prof
+				prof->addEntry(e);
+				//Clean up
+				delete e;
+			}
+			catch (emptyManditoryCellException& e){
+				count++;
+				cerr << e.what();
+			}
+			catch (manditoryHeaderNotFoundException& e){
+				throw manditoryHeaderNotFoundException();
+			}
+			catch (invalidDateException& e){
+				count++;
+				cerr << e.what();
+			}
+		}
+		return pair<professor*, int>(prof,count);
+	}
+	/* Fields
+		Start Date		  : Boost::Gregorian::Date
+		End Date		  : Boost::Gregorian::Date
+		Type			  : String
+		Grant Status	  : String
+		Peer Reviewed	  : Boolean
+		Industry Grant	  : Boolean
+		Role			  : String
+		Title			  : String
+		Principal Inv.	  : String
+		Co-Investigators  : String
+		Funding Amount	  : Float
+	*/
+	static pair<professor*,int> createNewGranProfessor(vector<vector<string>>& csv){
+		//Define manditory fields for a grantclinical csv
+		vector<string> manFields = { "Member Name", "Primary Domain", "Start Date", "End Date", "Funding Type", "Status",
+			"Peer Reviewed?", "Industry Grant?", "Role", "Title",
+			"Principal Investigator", "Co-Investigators", "Total Amount" };
+		vector<int> headerNumbers = findHeaders(manFields, csv[0]);
+		int count = 0;
+		//Create professor
+		professor* prof = new professor(findValue(csv, headerNumbers[0]), findValue(csv, headerNumbers[1]), 11);
+		for (int i = 1; i < csv.size(); i++) {
+			//Add the new entry to the prof
+			try{
+				//Check row for manditory fields
+				errorHandling::checkRow(csv[i], csv[0], vector<string>(manFields.begin() + 2, manFields.end()));
+				//Create vector will all necessary information
+				auto e = new vector<boost::variant<int, float, string, bool, boost::gregorian::date>>{
+					errorHandling::checkYear(csv[i][headerNumbers[2]]),
+					errorHandling::checkYear(csv[i][headerNumbers[3]]),
+					csv[i][headerNumbers[4]], csv[i][headerNumbers[5]],
+					errorHandling::toBool(csv[i][headerNumbers[6]]),
+					errorHandling::toBool(csv[i][headerNumbers[7]]),
+					csv[i][headerNumbers[8]], csv[i][headerNumbers[9]],
+					csv[i][headerNumbers[10]], csv[i][headerNumbers[11]],
+					errorHandling::toFloat(csv[i][headerNumbers[12]]) };
+				//Add entry to prof
+				prof->addEntry(e);
+				//Clean up
+				delete e;
+			}
+			catch (emptyManditoryCellException& e){
+				count++;
+				cerr << e.what();
+			}
+			catch (manditoryHeaderNotFoundException& e){
+				throw manditoryHeaderNotFoundException();
+			}
+			catch (failedTypeChangeException& e){
+				count++;
+				cerr << e.what();
+			}
+			catch (invalidDateException& e){
+				count++;
+				cerr << e.what();
+			}
+		}
+		return pair<professor*, int>(prof, count);
+	}
+	/* Fields
+		Start Date		  : Boost::Gregorian::Date
+		End Date		  : Boost::Gregorian::Date
+		Program 		  : String
+		Course Type		  : String
+		Geographical Scope:	String
+		Hours per Session : Float
+		Number of Sessions: Int
+		Total Hours		  : Float
+	*/
+	static pair<professor*, int> createNewTeacProfessor(vector<vector<string>>& csv){
+		//Define manditory fields for a teaching csv
+		vector<string> manFields = { "Member Name", "Primary Domain", "Start Date", "End Date", "Program", "Type of Course / Activity",
+			"Course / Activity", "Geographical Scope", "Hours per Teaching Session or Week",
+			"Number of Teaching Sessions or Weeks", "Total Hours" };
+		vector<int> headerNumbers = findHeaders(manFields, csv[0]);
+		int count = 0;
+		//Create professor
+		professor* prof = new professor(findValue(csv, headerNumbers[0]), findValue(csv, headerNumbers[1]), 9);
+		for (int i = 1; i < csv.size(); i++) {
+			//Add the new entry to the prof
+			try{
+				//Check row for manditory fields
+				errorHandling::checkRow(csv[i], csv[0], vector<string>(manFields.begin() + 2, manFields.end()));
+				//Create vector will all necessary information
+				auto e = new vector<boost::variant<int, float, string, bool, boost::gregorian::date>>{
+					errorHandling::checkYear(csv[i][headerNumbers[2]]),
+					errorHandling::checkYear(csv[i][headerNumbers[3]]),
+					csv[i][headerNumbers[4]], csv[i][headerNumbers[5]],
+					csv[i][headerNumbers[6]], csv[i][headerNumbers[7]],
+					errorHandling::toFloat(csv[i][headerNumbers[8]]),
+					errorHandling::toFloat(csv[i][headerNumbers[9]]),
+					errorHandling::toFloat(csv[i][headerNumbers[10]]) };
+				//Add entry to prof
+				prof->addEntry(e);
+				//Clean up
+				delete e;
+			}
+			catch (emptyManditoryCellException& e){
+				count++;
+				cerr << e.what();
+			}
+			catch (manditoryHeaderNotFoundException& e){
+				throw manditoryHeaderNotFoundException();
+			}
+			catch (failedTypeChangeException& e){
+				count++;
+				cerr << e.what();
+			}
+		}
+		return pair<professor*, int>(prof, count);
+	}
+	/* Fields
+		Type			  : String
+		Role			  : String
+		Title			  : String
+		Date			  : Boost::Gregorian::Date
+	*/
+	static pair<professor*, int> createNewPresProfessor(vector<vector<string>>& csv){
+		//Define manditory fields for a presentation csv
+		vector<string> manFields = { "Member Name", "Primary Domain", "Type", "Role", "Title", "Date" };
+		vector<int> headerNumbers = findHeaders(manFields, csv[0]);
+		int count = 0;
+		//Create professor
+		professor* prof = new professor(findValue(csv, headerNumbers[0]), findValue(csv, headerNumbers[1]), 4);
+		for (int i = 1; i < csv.size(); i++) {
+			//Add the new entry to the prof
+			try{
+				//Check row for manditory fields
+				errorHandling::checkRow(csv[i], csv[0], vector<string>(manFields.begin() + 2, manFields.end()));
+				//Create vector will all necessary information
+				auto e = new vector<boost::variant<int, float, string, bool, boost::gregorian::date>>{
+					csv[i][headerNumbers[2]], csv[i][headerNumbers[3]],
+					csv[i][headerNumbers[4]], errorHandling::checkYear(csv[i][headerNumbers[5]]) };
+				//Add entry to prof
+				prof->addEntry(e);
+				//Clean up
+				delete e;
+			}
+			catch (emptyManditoryCellException& e){
+				count++;
+				cerr << e.what();
+			}
+			catch (manditoryHeaderNotFoundException& e){
+				throw manditoryHeaderNotFoundException();
+			}
+			catch (failedTypeChangeException& e){
+				count++;
+				cerr << e.what();
+			}
+		}
+		return pair<professor*, int>(prof,count);
+	}
+
+	//Find headers given string values
+	static vector<int> findHeaders(vector<string> manFields, vector<string> headers){
+		vector<int> returnVec;
+		for (int i = 0; i < manFields.size(); i++){
+			auto& it = std::find(headers.begin(), headers.end(), manFields[i]);
+			if (it!=headers.end())
+				returnVec.push_back(std::distance(headers.begin(), it));
+		}
+		return returnVec;
+	}
+	static string findValue(vector<vector<string>>& csv, int j){
+		for (int i = 1; i < csv.size();i++){
+			if (csv[i][j] != "")
+				return csv[i][j];
+		}
+		throw new emptyManditoryCellException();
+	}
 };

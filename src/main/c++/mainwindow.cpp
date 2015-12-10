@@ -1,159 +1,516 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
+#include "pubTree.h"
 #include <utility>
 #include <string>
 #include <vector>
-#include <stdlib.h>
-#include <stdio.h>
 #include <QTCore>
 #include <QtGui>
 #include <QDialog>
 #include <QFileDialog>
 #include <QMessageBox>
-#include "piedialog.h"
-#include "qdebug.h"
 #include <iostream>
+#include <QRect>
+#include <QObject>
+#include <QErrorMessage>
+#include <QPrinter>
+#include <QPrintPreviewDialog>
+#include <QPrintDialog>
 
-using namespace std;
+#include "granTree.h"
+#include "teacTree.h"
+#include "presTree.h"
+#include "listview.h"
+#include "piechartwidget.h"
+#include "legendwidget.h"
+#include "barplot.h"
+#include "filterdialog.h"
+#include "node.h"
+#include "helpdialog.h"
+#include "countFilter.h"
+#include "hourFilter.h"
+#include "domainFilter.h"
+#include "dateFilter.h"
+#include "fundingFilter.h"
 
-MainWindow::MainWindow(QWidget *parent=0) :
-    QMainWindow(parent),
-    ui(new Ui::MainWindow)
+MainWindow::MainWindow(QWidget *parent) :
+QMainWindow(parent),
+ui(new Ui::MainWindow)
 {
-    ui->setupUi(this);
+	ui->setupUi(this);
+	this->showMaximized();
+	rec = QApplication::desktop()->screenGeometry();
+	this->setFixedSize(rec.size());
+	this->m_area = new QMdiArea;
+	this->filters = new vector<filter*>();
+	this->m_area->setBackground(QBrush(QColor(Qt::white)));
+	this->rootNode = NULL;
+	this->bar = NULL;
+	this->pie = NULL;
+	this->barPlot = NULL;
+	this->pieChart = NULL;
+	this->legend = NULL;
+	this->list = NULL;
+	this->ui->verticalLayout_2->addWidget(this->m_area);
+    //set up hotkeys
+    new QShortcut(QKeySequence(Qt::Key_Control + Qt::Key_I), this, SLOT(on_actionImport_CSV_triggered()));
+	new QShortcut(QKeySequence(Qt::Key_Control + Qt::Key_C), this, SLOT(on_actionGenerate_Pie_Chart_triggered()));
+	new QShortcut(QKeySequence(Qt::Key_Control + Qt::Key_B), this, SLOT(on_actionGenerate_Bar_Graph_triggered()));
+	new QShortcut(QKeySequence(Qt::Key_Control + Qt::Key_S), this, SLOT(on_actionSave_Graph_triggered()));
+	new QShortcut(QKeySequence(Qt::Key_Control + Qt::Key_H), this, SLOT(on_actionOpen_Help()));
 }
 
-MainWindow::MainWindow(QWidget *parent, std::vector<std::pair<std::string,std::vector<std::pair<std::string,int> > > > q) :
-    QMainWindow(parent),
-    ui(new Ui::MainWindow)
-{
-    vector = q;
-    ui->setupUi(this);
-
-    //std::pair<String,Vector<pair<String,int>>> pair;
-    int g = q.size();
-    for(int i=0; i<g; i++){
-        std::pair<std::string,std::vector<std::pair<std::string,int> > > a;
-
-        std::vector<std::pair<std::string,int> > a2;
-        std::pair<std::string,int> b;
-        std::cout << q.size() <<" "<< i <<std::endl;
-        if(q.size() > 0)
-        {
-        a =  q.back();
-        q.pop_back();
-        a2 = a.second;
-        if(a2.size() > 0)
-        {
-            b = a2.back();
-            a2.pop_back();
-        }
-        }
-   // pair.first="Max Ingram";
-   // pair.second = "17";
-    QString qw = QString::fromStdString(b.first + "  " + std::to_string(b.second));
-    std::cout << a.first << " " << b.first << " " << b.second << std::endl;
-    //QTreeWidget * tree = ui->treeWidget;
-    std::string pubType = a.first;
-std::cout << pubType << std::endl;
-    //std::cout << qw;
-QTreeWidgetItem *t = new QTreeWidgetItem();
-
-       t->setText(0,qw);
-
-
-
-//ui->treeWidget->itemAt(0,0)->addChild(t);
-
-    // FIX
-    if(!pubType.compare("Book Chapters"))
-        ui->treeWidget->itemAt(0,0)->addChild(t);
-
-    else if(!pubType.compare("Book"))
-        ui->treeWidget->itemAt(0,15)->addChild(t);
-    else if(!pubType.compare("Books Edited"))
-        ui->treeWidget->itemAt(0,30)->addChild(t);
-    else if(!pubType.compare("Case Reports"))
-        ui->treeWidget->itemAt(0,45)->addChild(t);
-    else if(!pubType.compare("Clinical Care Guidelines"))
-        ui->treeWidget->itemAt(0,60)->addChild(t);
-    else if(!pubType.compare("Commentaries"))
-        ui->treeWidget->itemAt(0,75)->addChild(t);
-    else if(!pubType.compare("Conference Precedings"))
-        ui->treeWidget->itemAt(0,90)->addChild(t);
-    else if(!pubType.compare("Editorials"))
-        ui->treeWidget->itemAt(0,105)->addChild(t);
-    else if(!pubType.compare("Invited Articles"))
-        ui->treeWidget->itemAt(0,120)->addChild(t);
-    else if(!pubType.compare("Journal Article"))
-        ui->treeWidget->itemAt(0,135)->addChild(t);
-    else if(!pubType.compare("Letters to Editor"))
-        ui->treeWidget->itemAt(0,150)->addChild(t);
-    else if(!pubType.compare("Magazine Entries"))
-        ui->treeWidget->itemAt(0,165)->addChild(t);
-    else if(!pubType.compare("Manuals"))
-        ui->treeWidget->itemAt(0,180)->addChild(t);
-    else if(!pubType.compare("Monographs"))
-        ui->treeWidget->itemAt(0,195)->addChild(t);
-    else if(!pubType.compare("Multimedia"))
-        ui->treeWidget->itemAt(0,210)->addChild(t);
-    else if(!pubType.compare("Newsletter Articles"))
-        ui->treeWidget->itemAt(0,225)->addChild(t);
-    else if(!pubType.compare("Newspaper Articles"))
-        ui->treeWidget->itemAt(0,240)->addChild(t);
-    else if(!pubType.compare("Published Abstract"))
-        ui->treeWidget->itemAt(0,255)->addChild(t);
-    else if(!pubType.compare("Supervised Student Publications"))
-        ui->treeWidget->itemAt(0,270)->addChild(t);
-    else if(!pubType.compare("Websites / Videos"))
-        ui->treeWidget->itemAt(0,285)->addChild(t);
-    else if(!pubType.compare("Working Papers"))
-        ui->treeWidget->itemAt(0,300)->addChild(t);
-
-  }
-}
 
 MainWindow::~MainWindow()
 {
-    delete ui;
-}
-
-void MainWindow::on_treeWidget_itemClicked(QTreeWidgetItem *item, int column)
-{
-    //ui->treeWidget->
-
-
-    //qDebug()<<"Item clicked "+item;
-}
-
-void MainWindow::on_pushButton_clicked()
-{
-    pair<string, string> output;
-    output.first = ui->startDate->text().toLocal8Bit().constData();
-    output.second = ui->endDate->text().toLocal8Bit().constData();
-}
-
-void MainWindow::on_actionPie_Chart_triggered()
-{
-    PieDialog d(this, vector);
-    d.exec();
+	delete ui;
 }
 
 void MainWindow::on_actionImport_CSV_triggered()
 {
-    QString filename = QFileDialog::getOpenFileName(
-                this,
-                tr("Open File"),
-                "C://",
-                "CSV files (*.csv)"
-                );
+	// Refresh the subWindows each time a new CSV is imported
+	refreshSubWindows();
+	
+	QString filename = QFileDialog::getOpenFileName(
+		this,
+		tr("Open File"),
+		"C://",
+		"CSV files (*.csv)"
+		);
+	file_name = filename.toStdString();
 
-    QMessageBox::information(this, tr("File Name"), filename);
-    file_name = filename.toStdString();
+	//empty filters
+	this->filters = new vector<filter*>();
+
+	if (!(file_name.empty())){
+		//import the csv file and get the professor type
+		statisticsTree* tree;
+		if (this->rootNode != NULL){
+			delete this->rootNode;
+			delete this->data;
+			this->addModel(new professorMap());
+		}
+		
+		try{
+			csv = true;
+			this->type = this->data->importCSV(file_name);
+
+			switch (this->type){
+			case professorMap::profType::Publication:
+				tree = new pubTree(this->data);
+				break;
+			case professorMap::profType::Presentation:
+				tree = new presTree(this->data);
+				break;
+			case professorMap::profType::GrantClinical:
+				tree = new granTree(this->data);
+				break;
+			case professorMap::profType::Teaching:
+				tree = new teacTree(this->data);
+				break;
+			default:
+				//didn't find the type of professor
+				break;
+			}
+			this->rootNode = tree->getStatistics();
+			generateList(this->rootNode); // generate tree with the data
+		}
+		catch (manditoryHeaderNotFoundException& e){
+			QErrorMessage msg;
+			msg.showMessage(QString("Mandatory headers not found. There are spelling errors in the column names."));
+			msg.exec();
+			cerr << e.what();
+			this->rootNode=NULL;
+		}
+		catch (typeNotRecognizedException& e){
+			QErrorMessage msg;
+			msg.showMessage(QString(e.what()));
+			msg.exec();
+			cerr << e.what();
+			this->rootNode = NULL;
+		}
+	}
+	else
+	{
+		QErrorMessage* noCSV = new QErrorMessage();;
+		noCSV->showMessage(QString("ERROR: No CSV was chosen."));
+	}
 }
 
-string getFileName()
+//make widget that appears in mdiarea of the tab
+void MainWindow::on_actionGenerate_Bar_Graph_triggered()
 {
-    string h;
-    return h;
+	if (csv){
+		this->barPlot = new BarPlot(this);
+		//display the right subwindow
+		this->pie->hide();
+		this->bar->setVisible(true);
+		this->bar->setGeometry(rec.width() / 2 - 11, 0, rec.width() / 2 - 11, rec.height() - 165);
+		int extra = this->barPlot->plotBar(this->rootNode);
+		this->bar->setWidget(this->barPlot);
+
+		if (extra == 1){
+			QErrorMessage* noCSV = new QErrorMessage();;
+			noCSV->showMessage(QString("Due to the large number of different types, only the 20 greatest ones are shown.\
+									   The rest have been compiled into 'Others'."));
+		}
+	}
+	else
+	{
+		QErrorMessage* noCSV = new QErrorMessage();;
+		noCSV->showMessage(QString("ERROR: Cannot generate bar graph. No data has been loaded."));
+	}
+}
+
+//make widget that appears in mdiarea of the tab
+void MainWindow::on_actionGenerate_Pie_Chart_triggered()
+{
+	if (csv){
+		this->pieChart = new PieChartWidget;
+		this->legend = new LegendWidget;
+		QSplitter *splitter = new QSplitter;
+
+		// display the right subwindow
+		this->bar->hide();
+		this->pie->setVisible(true);
+		this->pie->setGeometry(rec.width() / 2 - 11, 0, rec.width() / 2 - 11, rec.height() - 165);
+		//draw piechart and legend
+		this->pieChart->setData(this->rootNode);
+		this->legend->drawLegend(this->rootNode);
+
+		// add a plottable area and legend
+		splitter->addWidget(this->pieChart);
+		splitter->addWidget(this->legend);
+		splitter->setStretchFactor(0, 0);
+		splitter->setStretchFactor(1, 2);
+		this->pie->setWidget(splitter);
+	}
+	else
+	{
+		QErrorMessage* noCSV = new QErrorMessage();;
+		noCSV->showMessage(QString("ERROR: Cannot generate pie chart. No data has been loaded."));
+	}
+}
+
+void MainWindow::generateList(node* root)
+{
+	//create a new list view
+	this->list = new ListView(this);
+	this->list->makeList(root);
+	// call the thing that populates it
+	int i;
+	for (i = 0; i < this->list->columnCount(); i++)
+	{
+		this->list->resizeColumnToContents(i);
+	}
+	this->tree->setVisible(true);
+	this->tree->setWidget(this->list);
+	this->tree->setGeometry(0, 0, rec.width() / 2 - 11, rec.height() - 165);
+
+}
+
+void MainWindow::on_actionSave_Graph_triggered()
+{
+	QPixmap originalPixmap;
+	if (this->bar == NULL && this->pie==NULL){
+		QErrorMessage* noCSV = new QErrorMessage();;
+		noCSV->showMessage(QString("ERROR: No graph to save."));
+		noCSV->exec();
+		return;
+	}
+	if (this->bar->isVisible()){
+		this->bar->setGeometry(rec.width(), 0, rec.width(), rec.height()); //fullscreen
+		originalPixmap = QPixmap::grabWidget(this->bar);
+		this->bar->setGeometry(rec.width() / 2 - 11, 0, rec.width() / 2 - 11, rec.height() - 165); //resize back to original
+	}
+	if (this->pie->isVisible()){
+		originalPixmap = QPixmap::grabWidget(this->pie);
+	}
+
+	QString fileName = QFileDialog::getSaveFileName(
+		this,
+		tr("Save File"),
+		"C://",
+		tr("Image Files(*.png *.jpg *.bmp)")
+		);
+	originalPixmap.save(fileName);
+	
+}
+
+void MainWindow::refreshSubWindows()
+{
+	if (this->m_area->subWindowList().size() > 0){
+		this->m_area->closeAllSubWindows();
+		if (this->list != NULL){
+			delete this->list;
+			this->list = NULL;
+		}
+		if (this->barPlot != NULL){
+			delete this->barPlot;
+			this->barPlot = NULL;
+		}
+		if (this->pieChart != NULL){
+			delete this->pieChart;
+			delete this->legend;
+			this->pieChart = NULL;
+			this->legend = NULL;
+		}
+	}
+
+	this->m_area->setTabsMovable(false);
+	// create three subwindows for (bar graph, pie chart, tree widget)
+	// remove their window flags, set fixed dimensions
+	this->tree = new QMdiSubWindow(m_area);
+	this->tree->setWindowFlags(Qt::CustomizeWindowHint | Qt::FramelessWindowHint);
+
+	this->bar = new QMdiSubWindow(m_area);
+	this->bar->setWindowFlags(Qt::CustomizeWindowHint | Qt::FramelessWindowHint);
+
+	this->pie = new QMdiSubWindow(m_area);
+	this->pie->setWindowFlags(Qt::CustomizeWindowHint | Qt::FramelessWindowHint);
+
+	//hide subwindows until called on plot
+	this->tree->hide();
+	this->bar->hide();
+	this->pie->hide();
+
+	// prevent user from moving the windows
+	//this->tree->setDisabled(true);
+	//this->bar->setDisabled(true);
+	//this->pie->setDisabled(true);
+}
+
+void MainWindow::on_actionData_Filter_Options_triggered()
+{
+	filterDialog d;
+	d.setModal(true);
+	d.exec();
+}
+
+void MainWindow::on_actionOpen_Help_triggered(){
+	helpDialog d;
+	d.setModal(true);
+	d.exec();
+}
+
+void MainWindow::on_actionPrint_Graph_triggered()
+{
+	if (this->bar == NULL && this->pie == NULL){
+		QErrorMessage* noCSV = new QErrorMessage();;
+		noCSV->showMessage(QString("ERROR: No graph to print."));
+		noCSV->exec();
+		return;
+	}
+	// display print dialog and if accepted print
+	QPrinter       printer(QPrinter::HighResolution);
+	QPrintDialog   dialog(&printer, this);
+	if (dialog.exec() == QDialog::Accepted) print(&printer);
+}
+
+void MainWindow::on_actionPrint_Graph_Preview_triggered()
+{
+	if (this->bar == NULL && this->pie == NULL){
+		QErrorMessage* noCSV = new QErrorMessage();;
+		noCSV->showMessage(QString("ERROR: No graph to print."));
+		noCSV->exec();
+		return;
+	}
+	// display print preview dialog
+	QPrinter             printer(QPrinter::HighResolution);
+	QPrintPreviewDialog  preview(&printer, this);
+	connect(&preview, SIGNAL(paintRequested(QPrinter*)), SLOT(print(QPrinter*)));
+	preview.exec();
+}
+
+void MainWindow::print(QPrinter* printer)
+{
+	// create painter for drawing print page
+	QPainter painter;
+	int      w = printer->pageRect().width();
+	int      h = printer->pageRect().height();
+	QRect    page(0, 0, w, h);
+
+	// create a font appropriate to page size
+	QFont    font = painter.font();
+	font.setPixelSize((w + h) / 100);
+	painter.setFont(font);
+	painter.begin(printer);
+
+	// draw labels in corners of page
+	painter.drawText(page, Qt::AlignTop | Qt::AlignLeft, QString::fromStdString(rootNode->getFirst()));
+	painter.drawText(page, Qt::AlignBottom | Qt::AlignLeft, QString(getenv("USER")));
+	painter.drawText(page, Qt::AlignBottom | Qt::AlignRight,
+		QDateTime::currentDateTime().toString(Qt::DefaultLocaleShortDate));
+
+	// draw simulated landscape
+	page.adjust(w / 20, h / 20, -w / 20, -h / 20);
+	QPixmap printPixmap;
+	if (this->bar->isVisible()){
+		this->bar->setGeometry(rec.width(), 0, rec.width(), rec.height()); //fullscreen
+		printPixmap = QPixmap::grabWidget(this->bar);
+		this->bar->setGeometry(rec.width() / 2 - 11, 0, rec.width() / 2 - 11, rec.height() - 165); //resize back to original
+	}
+
+	if (this->pie->isVisible()){
+		printPixmap = QPixmap::grabWidget(this->pie);
+	}
+	printPixmap = printPixmap.scaled(w, h, Qt::KeepAspectRatio);
+	painter.drawPixmap(0, 100, printPixmap);
+	painter.end();
+	
+}
+
+void MainWindow::on_actionPrint_List_triggered()
+{
+	if (this->list == NULL){
+		QErrorMessage* noCSV = new QErrorMessage();;
+		noCSV->showMessage(QString("ERROR: No list to print."));
+		noCSV->exec();
+		return;
+	}
+	// display print dialog and if accepted print
+	QPrinter       printer(QPrinter::ScreenResolution);
+	QPrintDialog   dialog(&printer, this);
+	if (dialog.exec() == QDialog::Accepted) printList(&printer);
+}
+
+void MainWindow::on_actionPrint_List_Preview_triggered()
+{
+	if (this->list == NULL){
+		QErrorMessage* noCSV = new QErrorMessage();;
+		noCSV->showMessage(QString("ERROR: No list to print."));
+		noCSV->exec();
+		return;
+	}
+	// display print preview dialog
+	QPrinter             printer(QPrinter::ScreenResolution);
+	QPrintPreviewDialog  preview(&printer, this);
+	connect(&preview, SIGNAL(paintRequested(QPrinter*)), SLOT(printList(QPrinter*)));
+	preview.exec();
+}
+
+void MainWindow::printList(QPrinter* printer)
+{
+	// create painter for drawing print page
+	QPainter painter;
+	int      w = printer->pageRect().width();
+	int      h = printer->pageRect().height();
+	QRect    page(0, 0, w, h);
+
+	// create a font appropriate to page size
+	QFont    font = painter.font();
+	font.setPixelSize((w + h) / 100);
+	painter.setFont(font);
+	painter.begin(printer);
+
+	// draw labels in corners of page
+	painter.drawText(page, Qt::AlignTop | Qt::AlignLeft, QString::fromStdString(rootNode->getFirst()));
+	painter.drawText(page, Qt::AlignBottom | Qt::AlignLeft, QString(getenv("USER")));
+	painter.drawText(page, Qt::AlignBottom | Qt::AlignRight,
+		QDateTime::currentDateTime().toString(Qt::DefaultLocaleShortDate));
+
+	// draw simulated landscape
+	page.adjust(w / 20, h / 20, -w / 20, -h / 20);
+	QPixmap printPixmap;
+	printPixmap = QPixmap::grabWidget(this->tree);
+
+	printPixmap = printPixmap.scaled(w, h, Qt::KeepAspectRatio);
+	painter.drawPixmap(0, 100, printPixmap);
+	painter.end();
+}
+
+void MainWindow::on_addFilter_clicked()
+{
+	int i;
+	for (auto d : *filters){
+		d->removeFilter();
+	}
+	filters->clear();
+
+	filterDialog* d = new filterDialog();
+	d->setModal(true);
+	d->exec();
+
+	if (d->isCountChecked()){
+		countFilter* filter = new countFilter(d);
+		filter->applyFilter(this->rootNode, this->type);
+		filters->push_back(filter);
+	}
+	if (d->isHoursChecked()){
+		hourFilter* filter = new hourFilter(d);
+		filter->applyFilter(this->rootNode, this->type);
+		filters->push_back(filter);
+	}
+	if (d->isFundingChecked()){
+		fundingFilter* filter = new fundingFilter(d);
+		filter->applyFilter(this->rootNode, this->type);
+		filters->push_back(filter);
+	}
+	if (d->isDomainChecked()){
+		domainFilter* filter = new domainFilter(d);
+		filter->applyFilter(this->rootNode, this->type, this->data);
+		filters->push_back(filter);
+	}
+	if (d->isDateChecked()){
+		dateFilter* filter = new dateFilter(d);
+		filter->applyFilter(this->rootNode, this->type, this->data);
+		filters->push_back(filter);
+	}
+	if (this->list != NULL){
+		delete this->list;
+		this->generateList(this->rootNode);
+	}
+	delete d;
+}
+
+void MainWindow::on_updateGraph_clicked()
+{
+	if (rootNode == NULL){
+		QErrorMessage* noCSV = new QErrorMessage();;
+		noCSV->showMessage(QString("ERROR: No CSV has been imported."));
+		noCSV->exec();
+		return;
+	}
+
+	else{
+		if (this->bar->isVisible() || this->pie->isVisible()){
+			QTreeWidgetItem* n = this->list->currentItem();
+			if (n->parent() == NULL || n->childCount() == 0)
+				return;
+			vector<int>* position = new vector<int>();
+
+			if (n->parent() != NULL){
+				position->push_back(n->parent()->indexOfChild(n));
+				findPosition(n->parent(), position);
+			}
+			node* val = this->rootNode;
+			position->pop_back();
+			for (vector<int>::reverse_iterator it = position->rbegin(); it != position->rend(); ++it)
+				val = val->getChildren()->at(*it);
+			if (this->barPlot != NULL){
+				delete this->barPlot;
+				this->barPlot = new BarPlot(this);
+				this->barPlot->plotBar(val);
+				this->bar->setWidget(this->barPlot);
+			}
+			if (this->pieChart != NULL){
+				this->pieChart->setData(val);
+				this->legend->drawLegend(val);
+			}
+		}
+		
+		else{
+			QErrorMessage* noCSV = new QErrorMessage();;
+			noCSV->showMessage(QString("ERROR: No graph has been generated."));
+			noCSV->exec();
+			return;
+		}
+	}
+}
+
+void MainWindow::findPosition(QTreeWidgetItem* n, vector<int>* position){
+	if (n->parent() != NULL){
+		position->push_back(n->parent()->indexOfChild(n));
+		findPosition(n->parent(), position);
+	}
 }
